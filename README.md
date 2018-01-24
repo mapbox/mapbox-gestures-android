@@ -64,7 +64,7 @@ As an example, let's say that we want to make it harder to trigger rotate gestur
 Each gesture that supports velocity animators (`RotateGestureDetector` and `ShoveGestureDetector` at the moment) have a callback that will be invoked for a certain period of time after the fingers are lifted simulating a velocity stimulated progress of a gesture that will fade away with a provided [Interpolator](https://developer.android.com/reference/android/view/animation/Interpolator.html).
 
 ## Detectors
-Using this library you will be able to recognize gestures using detectors shipped with the Support Library and more!
+With this library you will be able to recognize gestures using detectors provided by the Support Library and more.
 
 #### StandardGestureDetector
 Wraps [GestureDetectorCompat](https://developer.android.com/reference/android/support/v4/view/GestureDetectorCompat.html) exposed via the Support Library that recognizes gestures like tap, double tap or scroll.
