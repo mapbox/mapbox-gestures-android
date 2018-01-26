@@ -72,7 +72,7 @@ public class AndroidGesturesManager {
    * Creates a new instance of the {@link AndroidGesturesManager}.
    *
    * @param context                   Activity's context
-   * @param mutuallyExclusiveGestures a number of sets of {@link GestureType}s that <b>should not</b> be invoke at the same.
+   * @param mutuallyExclusiveGestures a number of sets of {@link GestureType}s that <b>should not</b> be invoked at the same.
    *                                  This means that when a set contains a {@link ProgressiveGesture} and this gestures
    *                                  is in progress no other gestures from the set will be invoked.
    *                                  <p>
@@ -88,7 +88,7 @@ public class AndroidGesturesManager {
    * Creates a new instance of the {@link AndroidGesturesManager}.
    *
    * @param context                   Activity's context
-   * @param mutuallyExclusiveGestures a list of sets of {@link GestureType}s that <b>should not</b> be invoke at the same.
+   * @param mutuallyExclusiveGestures a list of sets of {@link GestureType}s that <b>should not</b> be invoked at the same.
    *                                  This means that when a set contains a {@link ProgressiveGesture} and this gestures
    *                                  is in progress no other gestures from the set will be invoked.
    *                                  <p>
@@ -271,7 +271,7 @@ public class AndroidGesturesManager {
   /**
    * Sets a number of sets containing mutually exclusive gestures.
    *
-   * @param mutuallyExclusiveGestures a number of sets of {@link GestureType}s that <b>should not</b> be invoke at the same.
+   * @param mutuallyExclusiveGestures a number of sets of {@link GestureType}s that <b>should not</b> be invoked at the same.
    *                                  This means that when a set contains a {@link ProgressiveGesture} and this gestures
    *                                  is in progress no other gestures from the set will be invoked.
    *                                  <p>
@@ -286,7 +286,7 @@ public class AndroidGesturesManager {
   /**
    * Sets a list of sets containing mutually exclusive gestures.
    *
-   * @param mutuallyExclusiveGestures a list of sets of {@link GestureType}s that <b>should not</b> be invoke at the same.
+   * @param mutuallyExclusiveGestures a list of sets of {@link GestureType}s that <b>should not</b> be invoked at the same.
    *                                  This means that when a set contains a {@link ProgressiveGesture} and this gestures
    *                                  is in progress no other gestures from the set will be invoked.
    *                                  <p>
