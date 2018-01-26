@@ -1,10 +1,15 @@
 # Mapbox Gestures for Android
 This library wraps [GestureDetectorCompat](https://developer.android.com/reference/android/support/v4/view/GestureDetectorCompat.html) and [ScaleGestureDetector](https://developer.android.com/reference/android/view/ScaleGestureDetector.html) as well as introduces implementation of rotate, shove and tap gesture detectors.
 
+`Mapbox Gestures for Android` was inspired by [Android Gesture Detector Framework](https://github.com/Almeros/android-gesture-detectors) and offers the same functionality with some additional features on top.
+
+The library is implemented in the projects found below where you can head for more examples:
+- [Mapbox Maps SDK for Android](https://github.com/mapbox/mapbox-gl-native)
+- [Sample App](https://github.com/mapbox/mapbox-gestures-android/tree/master/TestApp) included in this repository
+
+Are you using the library in your project as well? Let us know or create a PR, we'll be more than happy to add it to the list!
+
 ## Usage
-This library was inspired by [Android Gesture Detector Framework](https://github.com/Almeros/android-gesture-detectors), offers the same functionality with some additional features on top.
-
-
 To start gestures processing you have to instantiate `AndroidGestureManager`, set any gesture listeners that you are interested in and pass all `MotionEvent` objects from your Activity/Fragment to `AndroidGestureManager#onTouchEvent()`.
 
 #### Mutually exclusive gestures
@@ -83,10 +88,3 @@ A detector that finds the angle difference between previous and current line mad
 
 #### ShoveGestureDetector
 Detects a vertical movement of two pointers if they are placed within a certain horizontal angle.
-
-## Library in action
-`Mapbox Gestures for Android` library is implemented in the projects found below where you can head for more examples:
-- Mapbox Maps SDK for Android
-- Test App included in this repository
-
-Are you using the library in your project as well? Let us know or create a PR, we'll be more than happy to add it to the list!
