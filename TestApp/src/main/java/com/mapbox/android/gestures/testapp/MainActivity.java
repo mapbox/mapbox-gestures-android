@@ -2,6 +2,10 @@ package com.mapbox.android.gestures.testapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -201,11 +205,41 @@ public class MainActivity extends AppCompatActivity {
     return androidGesturesManager.onTouchEvent(event) || super.onTouchEvent(event);
   }
 
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    MenuInflater inflater = getMenuInflater();
+    inflater.inflate(R.menu.menu, menu);
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    if (item.getItemId() == R.id.menu_help) {
+      HelpDialogFragment helpDialogFragment = (HelpDialogFragment) getFragmentManager().findFragmentByTag(HelpDialogFragment.TAG);
+      if (helpDialogFragment == null) {
+        helpDialogFragment = HelpDialogFragment.newInstance();
+        getFragmentManager()
+          .beginTransaction()
+          .add(helpDialogFragment, HelpDialogFragment.TAG)
+          .commit();
+      }
+      return true;
+    }
+    return false;
+  }
+
   private void rescaleIcon(float scaleFactor) {
+    DisplayMetrics metrics = new DisplayMetrics();
+    getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
     ViewGroup.LayoutParams layoutParams = icon.getLayoutParams();
-    layoutParams.width = (int) (layoutParams.width * scaleFactor);
-    layoutParams.height = (int) (layoutParams.height * scaleFactor);
-    icon.setLayoutParams(layoutParams);
+    int width = (int) (layoutParams.width * scaleFactor);
+    int height = (int) (layoutParams.height * scaleFactor);
+    if (width > 100 && height > 100 && width < metrics.widthPixels && height < metrics.heightPixels) {
+      layoutParams.width = width;
+      layoutParams.height = height;
+      icon.setLayoutParams(layoutParams);
+    }
   }
 
   private void setVelocityEnabled(boolean enabled) {

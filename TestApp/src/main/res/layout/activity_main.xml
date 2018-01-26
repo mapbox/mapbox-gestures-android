@@ -42,7 +42,7 @@
             android:background="?android:attr/selectableItemBackground"
             android:gravity="center"
             android:text="@string/velocity_off"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorAccent" />
 
     </LinearLayout>
 

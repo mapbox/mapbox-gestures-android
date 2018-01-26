@@ -3,4 +3,12 @@
     <string name="velocity_on">VELOCITY ON</string>
     <string name="velocity_off">VELOCITY OFF</string>
     <string name="mutually_exclusive">Mutually exclusive</string>
+    <string name="help">Help</string>
+
+    <string name="help_conf_button">GOT IT</string>
+    <string name="help_title">What can I do here?</string>
+    <string name="help_description">In this small demo of the Mapbox Gestures for Android library you can manipulate the Mapbox logo with gestures - rotate, scale, shove, scroll, double tap or two finger tap to move, rotate and resize the image.
+        \n\nPick any position from \'Mutually exclusive\' list to block any other listed gestures when progressive gesture (rotate, scale or shove) is executing.
+        \n\nSwitch on or off velocity animations that will continue to change the image after you lift off your fingers based on the gestures speed.
+        \n\nSet threshold for rotate or scale gestures with sliders below.</string>
 </resources>
