@@ -10,7 +10,8 @@ import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_MU
  * Gesture detector handling multi tap gesture.
  */
 @UiThread
-public class MultiFingerTapGestureDetector extends MultiFingerGesture<MultiFingerTapGestureDetector.OnMultiFingerTapGestureListener> {
+public class MultiFingerTapGestureDetector extends
+  MultiFingerGesture<MultiFingerTapGestureDetector.OnMultiFingerTapGestureListener> {
 
   /**
    * Maximum time in millis to lift the fingers to register a tap event.
@@ -66,7 +67,9 @@ public class MultiFingerTapGestureDetector extends MultiFingerGesture<MultiFinge
             break;
           }
         }
+        break;
 
+      default:
         break;
     }
 

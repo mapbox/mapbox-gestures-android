@@ -15,10 +15,10 @@ import java.util.NoSuchElementException;
 /**
  * Base class for all multi finger gesture detectors.
  *
- * @param <Listener> listener that will be called with gesture events/updates.
+ * @param <L> listener that will be called with gesture events/updates.
  */
 @UiThread
-public abstract class MultiFingerGesture<Listener> extends BaseGesture<Listener> {
+public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
 
   /**
    * This value is the threshold ratio between the previous combined pressure
@@ -34,8 +34,8 @@ public abstract class MultiFingerGesture<Listener> extends BaseGesture<Listener>
   private final float edgeSlop;
 
   /**
-   * A list that holds IDs of currently active pointers in an order of activation. First element is the oldest active pointer
-   * and last element is the most recently activated pointer.
+   * A list that holds IDs of currently active pointers in an order of activation.
+   * First element is the oldest active pointer and last element is the most recently activated pointer.
    */
   final List<Integer> pointerIdList = new ArrayList<>();
   final HashMap<PointerDistancePair, MultiFingerDistancesObject> pointersDistanceMap = new HashMap<>();
@@ -63,11 +63,16 @@ public abstract class MultiFingerGesture<Listener> extends BaseGesture<Listener>
         break;
 
       case MotionEvent.ACTION_MOVE:
-        if (pointerIdList.size() > 1 && getCurrentEvent().getPressure() / getPreviousEvent().getPressure() > PRESSURE_THRESHOLD) {
+        float currentPressure = getCurrentEvent().getPressure();
+        float previousPressure = getPreviousEvent().getPressure();
+        if (pointerIdList.size() > 1 && currentPressure / previousPressure > PRESSURE_THRESHOLD) {
           calculateDistances();
           focalPoint = Utils.determineFocalPoint(motionEvent);
           return analyzeMovement();
         }
+        break;
+
+      default:
         break;
     }
 

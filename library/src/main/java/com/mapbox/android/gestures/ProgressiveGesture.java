@@ -13,10 +13,10 @@ import java.util.Set;
 /**
  * Base class for all progressive gesture detectors.
  *
- * @param <Listener> listener that will be called with gesture events/updates.
+ * @param <L> listener that will be called with gesture events/updates.
  */
 @UiThread
-public abstract class ProgressiveGesture<Listener> extends MultiFingerGesture<Listener> {
+public abstract class ProgressiveGesture<L> extends MultiFingerGesture<L> {
 
   private final Set<Integer> handledTypes = provideHandledTypes();
 
@@ -74,6 +74,9 @@ public abstract class ProgressiveGesture<Listener> extends MultiFingerGesture<Li
             gestureStopped();
             return true;
           }
+          break;
+
+        default:
           break;
       }
     }

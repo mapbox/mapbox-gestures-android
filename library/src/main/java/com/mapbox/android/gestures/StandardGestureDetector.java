@@ -6,7 +6,15 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
-import static com.mapbox.android.gestures.AndroidGesturesManager.*;
+import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_DOUBLE_TAP;
+import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_DOUBLE_TAP_EVENT;
+import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_DOWN;
+import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_FLING;
+import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_LONG_PRESS;
+import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_SCROLL;
+import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_SHOW_PRESS;
+import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_SINGLE_TAP_CONFIRMED;
+import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_SINGLE_TAP_UP;
 
 /**
  * Detector that wraps {@link GestureDetectorCompat}.
@@ -75,9 +83,11 @@ public class StandardGestureDetector extends BaseGesture<StandardGestureDetector
   }
 
   /**
-   * Listener that merges {@link android.view.GestureDetector.OnGestureListener} and {@link android.view.GestureDetector.OnDoubleTapListener}.
+   * Listener that merges {@link android.view.GestureDetector.OnGestureListener}
+   * and {@link android.view.GestureDetector.OnDoubleTapListener}.
    */
-  public interface StandardOnGestureListener extends GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
+  public interface StandardOnGestureListener extends GestureDetector.OnGestureListener,
+    GestureDetector.OnDoubleTapListener {
   }
 
   /**
