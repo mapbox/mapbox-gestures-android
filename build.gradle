@@ -23,7 +23,6 @@ allprojects {
 
 subprojects {
     apply plugin: 'idea'
-    apply from: "${rootDir}/gradle/dependencies.gradle"
 }
 
 task clean(type: Delete) {
