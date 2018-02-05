@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
   private AndroidGesturesManager androidGesturesManager;
   private boolean velocityEnabled;
 
-  private final ExclusiveObject emptyExclusiveObject = new ExclusiveObject(-1); // (none)
+  private final ExclusiveSetSpinnerObject emptyExclusiveSetSpinnerObject = new ExclusiveSetSpinnerObject(-1); // (none)
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -54,21 +54,37 @@ public class MainActivity extends AppCompatActivity {
     icon = (ImageView) findViewById(R.id.icon);
 
     mutuallyExclusiveSpinner = (Spinner) findViewById(R.id.spinner_exclusives);
-    ArrayAdapter<ExclusiveObject> adapter = new ArrayAdapter<>(
+    ArrayAdapter<ExclusiveSetSpinnerObject> adapter = new ArrayAdapter<>(
       this,
       android.R.layout.simple_spinner_item,
-      new ExclusiveObject[] {
-        emptyExclusiveObject, // For (none)
-        new ExclusiveObject(AndroidGesturesManager.GESTURE_TYPE_SHOVE, AndroidGesturesManager.GESTURE_TYPE_SCROLL),
-        new ExclusiveObject(AndroidGesturesManager.GESTURE_TYPE_ROTATE, AndroidGesturesManager.GESTURE_TYPE_SCALE),
-        new ExclusiveObject(AndroidGesturesManager.GESTURE_TYPE_ROTATE, AndroidGesturesManager.GESTURE_TYPE_SCROLL),
-        new ExclusiveObject(AndroidGesturesManager.GESTURE_TYPE_ROTATE, AndroidGesturesManager.GESTURE_TYPE_SHOVE),
-        new ExclusiveObject(AndroidGesturesManager.GESTURE_TYPE_SCALE, AndroidGesturesManager.GESTURE_TYPE_SCROLL),
-        new ExclusiveObject(AndroidGesturesManager.GESTURE_TYPE_ROTATE, AndroidGesturesManager.GESTURE_TYPE_SCROLL,
+      new ExclusiveSetSpinnerObject[] {
+        emptyExclusiveSetSpinnerObject, // For (none)
+
+        new ExclusiveSetSpinnerObject(AndroidGesturesManager.GESTURE_TYPE_SHOVE,
+          AndroidGesturesManager.GESTURE_TYPE_SCROLL),
+
+        new ExclusiveSetSpinnerObject(AndroidGesturesManager.GESTURE_TYPE_ROTATE,
           AndroidGesturesManager.GESTURE_TYPE_SCALE),
-        new ExclusiveObject(AndroidGesturesManager.GESTURE_TYPE_ROTATE, AndroidGesturesManager.GESTURE_TYPE_SCROLL,
+
+        new ExclusiveSetSpinnerObject(AndroidGesturesManager.GESTURE_TYPE_ROTATE,
+          AndroidGesturesManager.GESTURE_TYPE_SCROLL),
+
+        new ExclusiveSetSpinnerObject(AndroidGesturesManager.GESTURE_TYPE_ROTATE,
           AndroidGesturesManager.GESTURE_TYPE_SHOVE),
-        new ExclusiveObject(AndroidGesturesManager.GESTURE_TYPE_SCALE, AndroidGesturesManager.GESTURE_TYPE_SCROLL,
+
+        new ExclusiveSetSpinnerObject(AndroidGesturesManager.GESTURE_TYPE_SCALE,
+          AndroidGesturesManager.GESTURE_TYPE_SCROLL),
+
+        new ExclusiveSetSpinnerObject(AndroidGesturesManager.GESTURE_TYPE_ROTATE,
+          AndroidGesturesManager.GESTURE_TYPE_SCROLL,
+          AndroidGesturesManager.GESTURE_TYPE_SCALE),
+
+        new ExclusiveSetSpinnerObject(AndroidGesturesManager.GESTURE_TYPE_ROTATE,
+          AndroidGesturesManager.GESTURE_TYPE_SCROLL,
+          AndroidGesturesManager.GESTURE_TYPE_SHOVE),
+
+        new ExclusiveSetSpinnerObject(AndroidGesturesManager.GESTURE_TYPE_SCALE,
+          AndroidGesturesManager.GESTURE_TYPE_SCROLL,
           AndroidGesturesManager.GESTURE_TYPE_SHOVE),
       });
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -76,11 +92,13 @@ public class MainActivity extends AppCompatActivity {
     mutuallyExclusiveSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        ExclusiveObject exclusiveObject = (ExclusiveObject) parent.getItemAtPosition(position);
-        if (exclusiveObject.equals(emptyExclusiveObject)) {
+        ExclusiveSetSpinnerObject exclusiveSetSpinnerObject =
+          (ExclusiveSetSpinnerObject) parent.getItemAtPosition(position);
+
+        if (exclusiveSetSpinnerObject.equals(emptyExclusiveSetSpinnerObject)) {
           androidGesturesManager.setMutuallyExclusiveGestures(new ArrayList<Set<Integer>>());
         } else {
-          androidGesturesManager.setMutuallyExclusiveGestures(exclusiveObject.getExclusivesList());
+          androidGesturesManager.setMutuallyExclusiveGestures(exclusiveSetSpinnerObject.getExclusiveSet());
         }
       }
 
@@ -268,11 +286,11 @@ public class MainActivity extends AppCompatActivity {
     }
   }
 
-  private class ExclusiveObject {
-    private final Set<Integer> exclusivesList = new LinkedHashSet<>();
+  private class ExclusiveSetSpinnerObject {
+    private final Set<Integer> exclusiveSet = new LinkedHashSet<>();
 
-    ExclusiveObject(Integer... exclusives) {
-      this.exclusivesList.addAll(Arrays.asList(exclusives));
+    ExclusiveSetSpinnerObject(Integer... exclusives) {
+      this.exclusiveSet.addAll(Arrays.asList(exclusives));
     }
 
     @Override
@@ -280,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
       StringBuilder builder = new StringBuilder();
       builder.append("(");
       boolean isNotFirst = false;
-      for (@AndroidGesturesManager.GestureType int gestureType : exclusivesList) {
+      for (@AndroidGesturesManager.GestureType int gestureType : exclusiveSet) {
         if (isNotFirst) {
           builder.append(", ");
         } else {
@@ -310,8 +328,8 @@ public class MainActivity extends AppCompatActivity {
       }
     }
 
-    Set<Integer> getExclusivesList() {
-      return exclusivesList;
+    Set<Integer> getExclusiveSet() {
+      return exclusiveSet;
     }
   }
 }

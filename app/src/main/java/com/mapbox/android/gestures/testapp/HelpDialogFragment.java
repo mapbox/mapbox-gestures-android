@@ -8,15 +8,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 public class HelpDialogFragment extends DialogFragment {
-  public static final String TAG = "help_dialog_fragment_tag";
+  static final String TAG = "help_dialog_fragment_tag";
 
   public HelpDialogFragment() {
     // Required empty public constructor
   }
 
   public static HelpDialogFragment newInstance() {
-    HelpDialogFragment fragment = new HelpDialogFragment();
-    return fragment;
+    return new HelpDialogFragment();
   }
 
   @Override
