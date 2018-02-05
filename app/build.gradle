@@ -9,12 +9,8 @@ android {
         minSdkVersion androidVersions.minSdkVersion
         targetSdkVersion androidVersions.targetSdkVersion
         versionCode 1
-        versionName "1.0.0"
+        versionName "0.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
-
-    testOptions {
-        unitTests.returnDefaultValues = true
     }
 
     compileOptions {
@@ -38,9 +34,9 @@ dependencies {
     implementation dependenciesList.supportAppcompatV7
     testImplementation dependenciesList.junit
     androidTestImplementation dependenciesList.testRunner
-    androidTestImplementation (dependenciesList.testEspressoCore, {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+    androidTestImplementation dependenciesList.testEspressoCore
+
+    implementation project(":library")
 }
 
 apply from: "${rootDir}/gradle/checkstyle.gradle"
