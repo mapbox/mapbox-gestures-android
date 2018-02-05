@@ -51,9 +51,9 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void setupViews() {
-    icon = findViewById(R.id.icon);
+    icon = (ImageView) findViewById(R.id.icon);
 
-    mutuallyExclusiveSpinner = findViewById(R.id.spinner_exclusives);
+    mutuallyExclusiveSpinner = (Spinner) findViewById(R.id.spinner_exclusives);
     ArrayAdapter<ExclusiveObject> adapter = new ArrayAdapter<>(
       this,
       android.R.layout.simple_spinner_item,
@@ -64,9 +64,12 @@ public class MainActivity extends AppCompatActivity {
         new ExclusiveObject(AndroidGesturesManager.GESTURE_TYPE_ROTATE, AndroidGesturesManager.GESTURE_TYPE_SCROLL),
         new ExclusiveObject(AndroidGesturesManager.GESTURE_TYPE_ROTATE, AndroidGesturesManager.GESTURE_TYPE_SHOVE),
         new ExclusiveObject(AndroidGesturesManager.GESTURE_TYPE_SCALE, AndroidGesturesManager.GESTURE_TYPE_SCROLL),
-        new ExclusiveObject(AndroidGesturesManager.GESTURE_TYPE_ROTATE, AndroidGesturesManager.GESTURE_TYPE_SCROLL, AndroidGesturesManager.GESTURE_TYPE_SCALE),
-        new ExclusiveObject(AndroidGesturesManager.GESTURE_TYPE_ROTATE, AndroidGesturesManager.GESTURE_TYPE_SCROLL, AndroidGesturesManager.GESTURE_TYPE_SHOVE),
-        new ExclusiveObject(AndroidGesturesManager.GESTURE_TYPE_SCALE, AndroidGesturesManager.GESTURE_TYPE_SCROLL, AndroidGesturesManager.GESTURE_TYPE_SHOVE),
+        new ExclusiveObject(AndroidGesturesManager.GESTURE_TYPE_ROTATE, AndroidGesturesManager.GESTURE_TYPE_SCROLL,
+          AndroidGesturesManager.GESTURE_TYPE_SCALE),
+        new ExclusiveObject(AndroidGesturesManager.GESTURE_TYPE_ROTATE, AndroidGesturesManager.GESTURE_TYPE_SCROLL,
+          AndroidGesturesManager.GESTURE_TYPE_SHOVE),
+        new ExclusiveObject(AndroidGesturesManager.GESTURE_TYPE_SCALE, AndroidGesturesManager.GESTURE_TYPE_SCROLL,
+          AndroidGesturesManager.GESTURE_TYPE_SHOVE),
       });
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     mutuallyExclusiveSpinner.setAdapter(adapter);
@@ -86,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
       }
     });
 
-    velocityButton = findViewById(R.id.button_velocity);
+    velocityButton = (Button) findViewById(R.id.button_velocity);
     velocityButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -94,8 +97,10 @@ public class MainActivity extends AppCompatActivity {
       }
     });
 
-    rotateThresholdProgress = findViewById(R.id.progress_threshold_rotate);
-    rotateThresholdProgress.setProgress((int) androidGesturesManager.getRotateGestureDetector().getDefaultAngleThreshold());
+    rotateThresholdProgress = (SeekBar) findViewById(R.id.progress_threshold_rotate);
+    rotateThresholdProgress.setProgress(
+      (int) androidGesturesManager.getRotateGestureDetector().getDefaultAngleThreshold());
+
     rotateThresholdProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
       @Override
       public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -111,8 +116,10 @@ public class MainActivity extends AppCompatActivity {
       }
     });
 
-    scaleThresholdProgress = findViewById(R.id.progress_threshold_scale);
-    scaleThresholdProgress.setProgress((int) androidGesturesManager.getStandardScaleGestureDetector().getDefaultSpanDeltaThreshold());
+    scaleThresholdProgress = (SeekBar) findViewById(R.id.progress_threshold_scale);
+    scaleThresholdProgress.setProgress(
+      (int) androidGesturesManager.getStandardScaleGestureDetector().getDefaultSpanDeltaThreshold());
+
     scaleThresholdProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
       @Override
       public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -132,32 +139,37 @@ public class MainActivity extends AppCompatActivity {
   private void setupGesturesManager() {
     androidGesturesManager = new AndroidGesturesManager(this);
 
-    androidGesturesManager.setStandardScaleGestureListener(new StandardScaleGestureDetector.SimpleStandardOnScaleGestureListener() {
-      @Override
-      public boolean onScale(StandardScaleGestureDetector detector) {
-        rescaleIcon(detector.getScaleFactor());
-        return true;
-      }
+    androidGesturesManager.setStandardScaleGestureListener(
+      new StandardScaleGestureDetector.SimpleStandardOnScaleGestureListener() {
 
-      @Override
-      public boolean scaleVelocityAnimator(StandardScaleGestureDetector detector, float velocityX, float velocityY, float scaleVelocityAnimatorValue) {
-        if (!velocityEnabled) {
-          return false;
+        @Override
+        public boolean onScale(StandardScaleGestureDetector detector) {
+          rescaleIcon(detector.getScaleFactor());
+          return true;
         }
-        rescaleIcon(scaleVelocityAnimatorValue);
-        return true;
-      }
-    });
+
+        @Override
+        public boolean scaleVelocityAnimator(StandardScaleGestureDetector detector, float velocityX, float velocityY,
+                                             float scaleVelocityAnimatorValue) {
+          if (!velocityEnabled) {
+            return false;
+          }
+          rescaleIcon(scaleVelocityAnimatorValue);
+          return true;
+        }
+      });
 
     androidGesturesManager.setRotateGestureListener(new RotateGestureDetector.SimpleOnRotateGestureListener() {
       @Override
-      public boolean onRotate(RotateGestureDetector detector, float rotationDegreesSinceLast, float rotationDegreesSinceFirst) {
+      public boolean onRotate(RotateGestureDetector detector, float rotationDegreesSinceLast,
+                              float rotationDegreesSinceFirst) {
         icon.setRotation(icon.getRotation() - rotationDegreesSinceLast);
         return true;
       }
 
       @Override
-      public boolean rotationVelocityAnimator(RotateGestureDetector detector, float velocityX, float velocityY, float rotationVelocityAnimatorValue) {
+      public boolean rotationVelocityAnimator(RotateGestureDetector detector, float velocityX, float velocityY,
+                                              float rotationVelocityAnimatorValue) {
         if (!velocityEnabled) {
           return false;
         }
@@ -181,15 +193,17 @@ public class MainActivity extends AppCompatActivity {
       }
     });
 
-    androidGesturesManager.setMultiFingerTapGestureListener(new MultiFingerTapGestureDetector.OnMultiFingerTapGestureListener() {
-      @Override
-      public boolean onMultiFingerTap(MultiFingerTapGestureDetector detector, int pointersCount) {
-        if (pointersCount == 2) {
-          rescaleIcon(0.65f);
+    androidGesturesManager.setMultiFingerTapGestureListener(
+      new MultiFingerTapGestureDetector.OnMultiFingerTapGestureListener() {
+
+        @Override
+        public boolean onMultiFingerTap(MultiFingerTapGestureDetector detector, int pointersCount) {
+          if (pointersCount == 2) {
+            rescaleIcon(0.65f);
+          }
+          return true;
         }
-        return true;
-      }
-    });
+      });
 
     androidGesturesManager.setShoveGestureListener(new ShoveGestureDetector.SimpleOnShoveGestureListener() {
       @Override
@@ -215,7 +229,9 @@ public class MainActivity extends AppCompatActivity {
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     if (item.getItemId() == R.id.menu_help) {
-      HelpDialogFragment helpDialogFragment = (HelpDialogFragment) getFragmentManager().findFragmentByTag(HelpDialogFragment.TAG);
+      HelpDialogFragment helpDialogFragment =
+        (HelpDialogFragment) getFragmentManager().findFragmentByTag(HelpDialogFragment.TAG);
+
       if (helpDialogFragment == null) {
         helpDialogFragment = HelpDialogFragment.newInstance();
         getFragmentManager()
