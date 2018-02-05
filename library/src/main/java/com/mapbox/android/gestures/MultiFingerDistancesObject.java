@@ -9,7 +9,8 @@ public class MultiFingerDistancesObject {
   private final float currFingersDiffX;
   private final float currFingersDiffY;
 
-  public MultiFingerDistancesObject(float prevFingersDiffX, float prevFingersDiffY, float currFingersDiffX, float currFingersDiffY) {
+  public MultiFingerDistancesObject(float prevFingersDiffX, float prevFingersDiffY,
+                                    float currFingersDiffX, float currFingersDiffY) {
     this.prevFingersDiffX = prevFingersDiffX;
     this.prevFingersDiffY = prevFingersDiffY;
     this.currFingersDiffX = currFingersDiffX;

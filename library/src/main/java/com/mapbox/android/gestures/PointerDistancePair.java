@@ -11,8 +11,9 @@ public class PointerDistancePair extends Pair<Integer, Integer> {
   @Override
   public boolean equals(Object o) {
     if (o instanceof PointerDistancePair) {
-      if ((this.first.equals(((PointerDistancePair) o).first) && this.second.equals(((PointerDistancePair) o).second))
-        || (this.first.equals(((PointerDistancePair) o).second) && this.second.equals(((PointerDistancePair) o).first))) {
+      PointerDistancePair otherPair = (PointerDistancePair) o;
+      if ((this.first.equals(otherPair.first) && this.second.equals(otherPair.second))
+        || (this.first.equals(otherPair.second) && this.second.equals(otherPair.first))) {
         return true;
       }
     }

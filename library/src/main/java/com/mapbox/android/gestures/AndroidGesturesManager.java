@@ -71,32 +71,34 @@ public class AndroidGesturesManager {
   /**
    * Creates a new instance of the {@link AndroidGesturesManager}.
    *
-   * @param context                   Activity's context
-   * @param mutuallyExclusiveGestures a number of sets of {@link GestureType}s that <b>should not</b> be invoked at the same.
-   *                                  This means that when a set contains a {@link ProgressiveGesture} and this gestures
-   *                                  is in progress no other gestures from the set will be invoked.
-   *                                  <p>
-   *                                  At the moment {@link #GESTURE_TYPE_SCROLL} is not interpreted as a progressive gesture
-   *                                  because it is not implemented this way by the {@link android.support.v4.view.GestureDetectorCompat}.
+   * @param context           Activity's context
+   * @param exclusiveGestures a number of sets of {@link GestureType}s that <b>should not</b> be invoked at the same.
+   *                          This means that when a set contains a {@link ProgressiveGesture} and this gestures
+   *                          is in progress no other gestures from the set will be invoked.
+   *                          <p>
+   *                          At the moment {@link #GESTURE_TYPE_SCROLL} is not interpreted as a progressive gesture
+   *                          because it is not implemented this way by the
+   *                          {@link android.support.v4.view.GestureDetectorCompat}.
    */
   @SafeVarargs
-  public AndroidGesturesManager(Context context, Set<Integer>... mutuallyExclusiveGestures) {
-    this(context, Arrays.asList(mutuallyExclusiveGestures));
+  public AndroidGesturesManager(Context context, Set<Integer>... exclusiveGestures) {
+    this(context, Arrays.asList(exclusiveGestures));
   }
 
   /**
    * Creates a new instance of the {@link AndroidGesturesManager}.
    *
-   * @param context                   Activity's context
-   * @param mutuallyExclusiveGestures a list of sets of {@link GestureType}s that <b>should not</b> be invoked at the same.
-   *                                  This means that when a set contains a {@link ProgressiveGesture} and this gestures
-   *                                  is in progress no other gestures from the set will be invoked.
-   *                                  <p>
-   *                                  At the moment {@link #GESTURE_TYPE_SCROLL} is not interpreted as a progressive gesture
-   *                                  because it is not implemented this way by the {@link android.support.v4.view.GestureDetectorCompat}.
+   * @param context           Activity's context
+   * @param exclusiveGestures a list of sets of {@link GestureType}s that <b>should not</b> be invoked at the same.
+   *                          This means that when a set contains a {@link ProgressiveGesture} and this gestures
+   *                          is in progress no other gestures from the set will be invoked.
+   *                          <p>
+   *                          At the moment {@link #GESTURE_TYPE_SCROLL} is not interpreted as a progressive gesture
+   *                          because it is not implemented this way by the
+   *                          {@link android.support.v4.view.GestureDetectorCompat}.
    */
-  public AndroidGesturesManager(Context context, List<Set<Integer>> mutuallyExclusiveGestures) {
-    this.mutuallyExclusiveGestures.addAll(mutuallyExclusiveGestures);
+  public AndroidGesturesManager(Context context, List<Set<Integer>> exclusiveGestures) {
+    this.mutuallyExclusiveGestures.addAll(exclusiveGestures);
 
     standardGestureDetector = new StandardGestureDetector(context, this);
     standardScaleGestureDetector = new StandardScaleGestureDetector(context, this);
@@ -139,7 +141,8 @@ public class AndroidGesturesManager {
   }
 
   /**
-   * Removes a listener for all the events normally returned by the {@link android.support.v4.view.GestureDetectorCompat}.
+   * Removes a listener for all the events normally returned by the
+   * {@link android.support.v4.view.GestureDetectorCompat}.
    */
   public void removeStandardGestureListener() {
     standardGestureDetector.removeListener();
@@ -271,31 +274,33 @@ public class AndroidGesturesManager {
   /**
    * Sets a number of sets containing mutually exclusive gestures.
    *
-   * @param mutuallyExclusiveGestures a number of sets of {@link GestureType}s that <b>should not</b> be invoked at the same.
-   *                                  This means that when a set contains a {@link ProgressiveGesture} and this gestures
-   *                                  is in progress no other gestures from the set will be invoked.
-   *                                  <p>
-   *                                  At the moment {@link #GESTURE_TYPE_SCROLL} is not interpreted as a progressive gesture
-   *                                  because it is not interpreted this way by the {@link android.support.v4.view.GestureDetectorCompat}.
+   * @param exclusiveGestures a number of sets of {@link GestureType}s that <b>should not</b> be invoked at the same.
+   *                          This means that when a set contains a {@link ProgressiveGesture} and this gestures
+   *                          is in progress no other gestures from the set will be invoked.
+   *                          <p>
+   *                          At the moment {@link #GESTURE_TYPE_SCROLL} is not interpreted as a progressive gesture
+   *                          because it is not interpreted this way by the
+   *                          {@link android.support.v4.view.GestureDetectorCompat}.
    */
   @SafeVarargs
-  public final void setMutuallyExclusiveGestures(Set<Integer>... mutuallyExclusiveGestures) {
-    setMutuallyExclusiveGestures(Arrays.asList(mutuallyExclusiveGestures));
+  public final void setMutuallyExclusiveGestures(Set<Integer>... exclusiveGestures) {
+    setMutuallyExclusiveGestures(Arrays.asList(exclusiveGestures));
   }
 
   /**
    * Sets a list of sets containing mutually exclusive gestures.
    *
-   * @param mutuallyExclusiveGestures a list of sets of {@link GestureType}s that <b>should not</b> be invoked at the same.
-   *                                  This means that when a set contains a {@link ProgressiveGesture} and this gestures
-   *                                  is in progress no other gestures from the set will be invoked.
-   *                                  <p>
-   *                                  At the moment {@link #GESTURE_TYPE_SCROLL} is not interpreted as a progressive gesture
-   *                                  because it is not interpreted this way by the {@link android.support.v4.view.GestureDetectorCompat}.
+   * @param exclusiveGestures a list of sets of {@link GestureType}s that <b>should not</b> be invoked at the same.
+   *                          This means that when a set contains a {@link ProgressiveGesture} and this gestures
+   *                          is in progress no other gestures from the set will be invoked.
+   *                          <p>
+   *                          At the moment {@link #GESTURE_TYPE_SCROLL} is not interpreted as a progressive gesture
+   *                          because it is not interpreted this way by the
+   *                          {@link android.support.v4.view.GestureDetectorCompat}.
    */
-  public void setMutuallyExclusiveGestures(List<Set<Integer>> mutuallyExclusiveGestures) {
+  public void setMutuallyExclusiveGestures(List<Set<Integer>> exclusiveGestures) {
     this.mutuallyExclusiveGestures.clear();
-    this.mutuallyExclusiveGestures.addAll(mutuallyExclusiveGestures);
+    this.mutuallyExclusiveGestures.addAll(exclusiveGestures);
   }
 
   public List<Set<Integer>> getMutuallyExclusiveGestures() {

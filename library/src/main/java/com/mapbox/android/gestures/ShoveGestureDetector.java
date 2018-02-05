@@ -39,7 +39,8 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
      * Indicates that the shove gesture started.
      *
      * @param detector this detector
-     * @return true if you want to receive subsequent {@link #onShove(ShoveGestureDetector, float, float)} callbacks, false if you want to ignore this gesture.
+     * @return true if you want to receive subsequent {@link #onShove(ShoveGestureDetector, float, float)} callbacks,
+     * false if you want to ignore this gesture.
      */
     boolean onShoveBegin(ShoveGestureDetector detector);
 
@@ -99,7 +100,9 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
 
   @Override
   protected boolean canExecute(int invokedGestureType) {
-    return verifyAngle() && Math.abs(deltaPixelsSinceStart) > pixelDeltaThreshold && super.canExecute(invokedGestureType);
+    return verifyAngle()
+      && Math.abs(deltaPixelsSinceStart) > pixelDeltaThreshold
+      && super.canExecute(invokedGestureType);
   }
 
   @Override
@@ -119,7 +122,9 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
       pointersDistanceMap.get(new PointerDistancePair(pointerIdList.get(0), pointerIdList.get(1)));
 
     // Takes values from 0 to 180
-    double angle = Math.toDegrees(Math.abs(Math.atan2(distancesObject.getCurrFingersDiffY(), distancesObject.getCurrFingersDiffX())));
+    double angle = Math.toDegrees(Math.abs(Math.atan2(
+      distancesObject.getCurrFingersDiffY(), distancesObject.getCurrFingersDiffX())));
+
     return angle <= maxShoveAngle || 180f - angle <= maxShoveAngle;
   }
 

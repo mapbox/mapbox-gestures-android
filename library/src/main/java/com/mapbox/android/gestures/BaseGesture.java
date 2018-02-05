@@ -9,10 +9,10 @@ import java.util.Set;
 /**
  * Base class for all of the gesture detectors.
  *
- * @param <Listener> listener that will be called with gesture events/updates.
+ * @param <L> listener that will be called with gesture events/updates.
  */
 @UiThread
-public abstract class BaseGesture<Listener> {
+public abstract class BaseGesture<L> {
   final Context context;
   private final AndroidGesturesManager gesturesManager;
   private MotionEvent currentEvent;
@@ -20,9 +20,9 @@ public abstract class BaseGesture<Listener> {
   private long gestureDuration;
 
   /**
-   * Listener that will be called with gesture events/updates.
+   * L that will be called with gesture events/updates.
    */
-  Listener listener;
+  L listener;
 
   public BaseGesture(Context context, AndroidGesturesManager gesturesManager) {
     this.context = context;
@@ -66,10 +66,12 @@ public abstract class BaseGesture<Listener> {
       if (exclusives.contains(invokedGestureType)) {
         for (@AndroidGesturesManager.GestureType int gestureType : exclusives) {
           for (BaseGesture detector : gesturesManager.getDetectors()) {
-            if (detector instanceof ProgressiveGesture
-              && ((ProgressiveGesture) detector).getHandledTypes().contains(gestureType)
-              && (((ProgressiveGesture) detector).isInProgress() || ((ProgressiveGesture) detector).isVelocityAnimating())) {
-              return false;
+            if (detector instanceof ProgressiveGesture) {
+              ProgressiveGesture progressiveDetector = (ProgressiveGesture) detector;
+              if (progressiveDetector.getHandledTypes().contains(gestureType)
+                && (progressiveDetector.isInProgress() || progressiveDetector.isVelocityAnimating())) {
+                return false;
+              }
             }
           }
         }
@@ -79,7 +81,7 @@ public abstract class BaseGesture<Listener> {
     return true;
   }
 
-  protected void setListener(Listener listener) {
+  protected void setListener(L listener) {
     this.listener = listener;
   }
 
@@ -91,8 +93,8 @@ public abstract class BaseGesture<Listener> {
    * Returns a difference in millis between {@link MotionEvent#getDownTime()} and {@link MotionEvent#getEventTime()}
    * (most recent event's time) associated with this gesture.
    * <p>
-   * This is a duration of the user's total interaction with the touch screen, accounting for the time before the gesture
-   * was recognized by the detector.
+   * This is a duration of the user's total interaction with the touch screen,
+   * accounting for the time before the gesture was recognized by the detector.
    *
    * @return duration of the gesture in millis.
    */
