@@ -72,7 +72,7 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="Rotate threshold" />
+                android:text="@string/rotate_threshold" />
 
         </RelativeLayout>
 
@@ -100,7 +100,7 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="Scale threshold" />
+                android:text="@string/scale_threshold" />
 
         </RelativeLayout>
 
