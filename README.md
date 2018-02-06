@@ -88,3 +88,21 @@ A detector that finds the angle difference between previous and current line mad
 
 #### ShoveGestureDetector
 Detects a vertical movement of two pointers if they are placed within a certain horizontal angle.
+
+## SNAPSHOTS
+There is no stable version release available yet. In the mean time, feel free to test out snapshots that are built with every new commit to the `master` branch.
+
+Add maven repository path
+```
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
+    }
+}
+```
+and include snapshot dependency
+```
+implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.1.0-SNAPSHOT'
+```
