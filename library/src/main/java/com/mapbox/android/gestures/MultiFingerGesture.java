@@ -33,7 +33,7 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
 
   private final float edgeSlop;
 
-  private float minSpanThreshold = Constants.DEFAULT_MULTI_FINGER_MIN_SPAN;
+  private float spanThreshold = Constants.DEFAULT_MULTI_FINGER_SPAN_THRESHOLD;
 
   /**
    * A list that holds IDs of currently active pointers in an order of activation.
@@ -90,7 +90,7 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
 
   private boolean checkSpanBelowThreshold() {
     for (MultiFingerDistancesObject distancesObject : pointersDistanceMap.values()) {
-      if (distancesObject.getCurrFingersDiffXY() < minSpanThreshold) {
+      if (distancesObject.getCurrFingersDiffXY() < spanThreshold) {
         return true;
       }
     }
@@ -362,26 +362,26 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
    *
    * @return minimum span
    */
-  public float getMinSpanThreshold() {
-    return minSpanThreshold;
+  public float getSpanThreshold() {
+    return spanThreshold;
   }
 
   /**
    * Set minimum span between any pair of finger that is required to pass motion events to this detector.
    *
-   * @param minSpanThreshold minimum span
+   * @param spanThreshold minimum span
    */
-  public void setMinSpanThreshold(float minSpanThreshold) {
-    this.minSpanThreshold = minSpanThreshold;
+  public void setSpanThreshold(float spanThreshold) {
+    this.spanThreshold = spanThreshold;
   }
 
   /**
    * Get default minimum span between any pair of finger that is required to pass motion events to this detector.
    *
    * @return default minimum span
-   * @see Constants#DEFAULT_MULTI_FINGER_MIN_SPAN
+   * @see Constants#DEFAULT_MULTI_FINGER_SPAN_THRESHOLD
    */
-  public float getDefaultMinSpanThreshold() {
-    return Constants.DEFAULT_MULTI_FINGER_MIN_SPAN;
+  public float getDefaultSpanThreshold() {
+    return Constants.DEFAULT_MULTI_FINGER_SPAN_THRESHOLD;
   }
 }
