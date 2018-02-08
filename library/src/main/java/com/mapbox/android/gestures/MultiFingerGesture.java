@@ -88,7 +88,7 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
     return currentPressure / previousPressure > PRESSURE_THRESHOLD;
   }
 
-  private boolean checkMinSpanBelowThreshold() {
+  private boolean checkSpanBelowThreshold() {
     for (MultiFingerDistancesObject distancesObject : pointersDistanceMap.values()) {
       if (distancesObject.getCurrFingersDiffXY() < minSpanThreshold) {
         return true;
@@ -132,7 +132,7 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
       }
     }
 
-    return checkMinSpanBelowThreshold();
+    return checkSpanBelowThreshold();
   }
 
   @Override
