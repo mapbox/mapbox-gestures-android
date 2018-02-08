@@ -33,6 +33,8 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
 
   private final float edgeSlop;
 
+  private float minSpanThreshold = Constants.DEFAULT_MULTI_FINGER_MIN_SPAN;
+
   /**
    * A list that holds IDs of currently active pointers in an order of activation.
    * First element is the oldest active pointer and last element is the most recently activated pointer.
@@ -63,17 +65,34 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
         break;
 
       case MotionEvent.ACTION_MOVE:
-        float currentPressure = getCurrentEvent().getPressure();
-        float previousPressure = getPreviousEvent().getPressure();
-        if (pointerIdList.size() > 1 && currentPressure / previousPressure > PRESSURE_THRESHOLD) {
+        if (pointerIdList.size() > 1 && checkPressure()) {
           calculateDistances();
-          focalPoint = Utils.determineFocalPoint(motionEvent);
-          return analyzeMovement();
+          if (!isSloppyGesture(getCurrentEvent())) {
+            focalPoint = Utils.determineFocalPoint(motionEvent);
+            return analyzeMovement();
+          }
+          return false;
         }
         break;
 
       default:
         break;
+    }
+
+    return false;
+  }
+
+  private boolean checkPressure() {
+    float currentPressure = getCurrentEvent().getPressure();
+    float previousPressure = getPreviousEvent().getPressure();
+    return currentPressure / previousPressure > PRESSURE_THRESHOLD;
+  }
+
+  private boolean checkMinSpanBelowThreshold() {
+    for (MultiFingerDistancesObject distancesObject : pointersDistanceMap.values()) {
+      if (distancesObject.getCurrFingersDiffXY() < minSpanThreshold) {
+        return true;
+      }
     }
 
     return false;
@@ -92,7 +111,7 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
    * @param event motion event
    * @return true if we detect sloppy gesture, false otherwise
    */
-  protected boolean isSloppyGesture(MotionEvent event) {
+  private boolean isSloppyGesture(MotionEvent event) {
     // As orientation can change, query the metrics in touch down
     DisplayMetrics metrics = context.getResources().getDisplayMetrics();
     float rightSlopEdge = metrics.widthPixels - edgeSlop;
@@ -113,7 +132,7 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
       }
     }
 
-    return false;
+    return checkMinSpanBelowThreshold();
   }
 
   @Override
@@ -147,8 +166,18 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
         float currFingersDiffX = cx1 - cx0;
         float currFingersDiffY = cy1 - cy0;
 
+        float prevFingersDiffXY =
+          (float) Math.sqrt(prevFingersDiffX * prevFingersDiffX + prevFingersDiffY * prevFingersDiffY);
+
+        float currFingersDiffXY =
+          (float) Math.sqrt(currFingersDiffX * currFingersDiffX + currFingersDiffY * currFingersDiffY);
+
         pointersDistanceMap.put(new PointerDistancePair(primaryPointerId, secondaryPointerId),
-          new MultiFingerDistancesObject(prevFingersDiffX, prevFingersDiffY, currFingersDiffX, currFingersDiffY));
+          new MultiFingerDistancesObject(
+            prevFingersDiffX, prevFingersDiffY,
+            currFingersDiffX, currFingersDiffY,
+            prevFingersDiffXY, currFingersDiffXY)
+        );
       }
     }
   }
@@ -176,9 +205,7 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
     MultiFingerDistancesObject distancesObject = pointersDistanceMap.get(
       new PointerDistancePair(pointerIdList.get(firstPointerIndex), pointerIdList.get(secondPointerIndex)));
 
-    final float cvx = distancesObject.getCurrFingersDiffX();
-    final float cvy = distancesObject.getCurrFingersDiffY();
-    return (float) Math.sqrt(cvx * cvx + cvy * cvy);
+    return distancesObject.getCurrFingersDiffXY();
   }
 
   /**
@@ -204,9 +231,7 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
     MultiFingerDistancesObject distancesObject = pointersDistanceMap.get(
       new PointerDistancePair(pointerIdList.get(firstPointerIndex), pointerIdList.get(secondPointerIndex)));
 
-    final float pvx = distancesObject.getPrevFingersDiffX();
-    final float pvy = distancesObject.getPrevFingersDiffY();
-    return (float) Math.sqrt(pvx * pvx + pvy * pvy);
+    return distancesObject.getPrevFingersDiffXY();
   }
 
   /**
@@ -330,5 +355,33 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
    */
   public PointF getFocalPoint() {
     return focalPoint;
+  }
+
+  /**
+   * Get minimum span between any pair of finger that is required to pass motion events to this detector.
+   *
+   * @return minimum span
+   */
+  public float getMinSpanThreshold() {
+    return minSpanThreshold;
+  }
+
+  /**
+   * Set minimum span between any pair of finger that is required to pass motion events to this detector.
+   *
+   * @param minSpanThreshold minimum span
+   */
+  public void setMinSpanThreshold(float minSpanThreshold) {
+    this.minSpanThreshold = minSpanThreshold;
+  }
+
+  /**
+   * Get default minimum span between any pair of finger that is required to pass motion events to this detector.
+   *
+   * @return default minimum span
+   * @see Constants#DEFAULT_MULTI_FINGER_MIN_SPAN
+   */
+  public float getDefaultMinSpanThreshold() {
+    return Constants.DEFAULT_MULTI_FINGER_MIN_SPAN;
   }
 }

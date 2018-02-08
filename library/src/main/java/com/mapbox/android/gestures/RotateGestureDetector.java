@@ -145,7 +145,7 @@ public class RotateGestureDetector extends ProgressiveGesture<RotateGestureDetec
     deltaSinceStart += deltaSinceLast;
 
     if (isInProgress() && deltaSinceLast != 0) {
-      return !isSloppyGesture(getCurrentEvent()) && listener.onRotate(this, deltaSinceLast, deltaSinceStart);
+      return listener.onRotate(this, deltaSinceLast, deltaSinceStart);
     } else if (canExecute(GESTURE_TYPE_ROTATE)) {
       if (listener.onRotateBegin(this)) {
         gestureStarted();
@@ -222,6 +222,7 @@ public class RotateGestureDetector extends ProgressiveGesture<RotateGestureDetec
    * for this detector to actually qualify it as a rotation gesture.
    *
    * @return Angle threshold for rotation gesture
+   * @see Constants#DEFAULT_ROTATE_ANGLE_THRESHOLD
    */
   public float getDefaultAngleThreshold() {
     return Constants.DEFAULT_ROTATE_ANGLE_THRESHOLD;

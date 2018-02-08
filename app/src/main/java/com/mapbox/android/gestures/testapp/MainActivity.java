@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
     scaleThresholdProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
       @Override
       public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        androidGesturesManager.getStandardScaleGestureDetector().setSpanDeltaThreshold(progress);
+        androidGesturesManager.getStandardScaleGestureDetector().setRelativeSpanDeltaThreshold(progress);
       }
 
       @Override

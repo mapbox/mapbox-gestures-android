@@ -8,13 +8,18 @@ public class MultiFingerDistancesObject {
   private final float prevFingersDiffY;
   private final float currFingersDiffX;
   private final float currFingersDiffY;
+  private final float prevFingersDiffXY;
+  private final float currFingersDiffXY;
 
   public MultiFingerDistancesObject(float prevFingersDiffX, float prevFingersDiffY,
-                                    float currFingersDiffX, float currFingersDiffY) {
+                                    float currFingersDiffX, float currFingersDiffY,
+                                    float prevFingersDiffXY, float currFingersDiffXY) {
     this.prevFingersDiffX = prevFingersDiffX;
     this.prevFingersDiffY = prevFingersDiffY;
     this.currFingersDiffX = currFingersDiffX;
     this.currFingersDiffY = currFingersDiffY;
+    this.prevFingersDiffXY = prevFingersDiffXY;
+    this.currFingersDiffXY = currFingersDiffXY;
   }
 
   public float getPrevFingersDiffX() {
@@ -31,5 +36,13 @@ public class MultiFingerDistancesObject {
 
   public float getCurrFingersDiffY() {
     return currFingersDiffY;
+  }
+
+  public float getPrevFingersDiffXY() {
+    return prevFingersDiffXY;
+  }
+
+  public float getCurrFingersDiffXY() {
+    return currFingersDiffXY;
   }
 }
