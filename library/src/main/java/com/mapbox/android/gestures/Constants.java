@@ -3,7 +3,7 @@ package com.mapbox.android.gestures;
 final class Constants {
   // MultiFinger
   static final float DEFAULT_MULTI_FINGER_SPAN_THRESHOLD = 290f;
-  
+
   // Rotate
   static final float DEFAULT_ROTATE_ANGLE_THRESHOLD = 15.3f;
 
