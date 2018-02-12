@@ -31,7 +31,8 @@ public class AndroidGesturesManager {
     GESTURE_TYPE_DOWN,
     GESTURE_TYPE_DOUBLE_TAP,
     GESTURE_TYPE_DOUBLE_TAP_EVENT,
-    GESTURE_TYPE_SINGLE_TAP_CONFIRMED
+    GESTURE_TYPE_SINGLE_TAP_CONFIRMED,
+    GESTURE_TYPE_MOVE
   })
   public @interface GestureType {
   }
@@ -49,6 +50,7 @@ public class AndroidGesturesManager {
   public static final int GESTURE_TYPE_DOUBLE_TAP = 10;
   public static final int GESTURE_TYPE_DOUBLE_TAP_EVENT = 11;
   public static final int GESTURE_TYPE_SINGLE_TAP_CONFIRMED = 12;
+  public static final int GESTURE_TYPE_MOVE = 13;
 
   private final List<Set<Integer>> mutuallyExclusiveGestures = new ArrayList<>();
   private final List<BaseGesture> detectors = new ArrayList<>();
@@ -58,6 +60,7 @@ public class AndroidGesturesManager {
   private final RotateGestureDetector rotateGestureDetector;
   private final ShoveGestureDetector shoveGestureDetector;
   private final MultiFingerTapGestureDetector multiFingerTapGestureDetector;
+  private final MoveGestureDetector moveGestureDetector;
 
   /**
    * Creates a new instance of the {@link AndroidGesturesManager}.
@@ -105,12 +108,14 @@ public class AndroidGesturesManager {
     rotateGestureDetector = new RotateGestureDetector(context, this);
     shoveGestureDetector = new ShoveGestureDetector(context, this);
     multiFingerTapGestureDetector = new MultiFingerTapGestureDetector(context, this);
+    moveGestureDetector = new MoveGestureDetector(context, this);
 
     detectors.add(standardGestureDetector);
     detectors.add(standardScaleGestureDetector);
     detectors.add(rotateGestureDetector);
     detectors.add(shoveGestureDetector);
     detectors.add(multiFingerTapGestureDetector);
+    detectors.add(moveGestureDetector);
   }
 
   /**
@@ -191,14 +196,12 @@ public class AndroidGesturesManager {
     shoveGestureDetector.setListener(listener);
   }
 
-
   /**
    * Removes a listener for shove gestures.
    */
   public void removeShoveGestureListener() {
     shoveGestureDetector.removeListener();
   }
-
 
   /**
    * Sets a listener for multi finger tap gestures.
@@ -209,12 +212,35 @@ public class AndroidGesturesManager {
     multiFingerTapGestureDetector.setListener(listener);
   }
 
-
   /**
    * Removes a listener for multi finger tap gestures.
    */
   public void removeMultiFingerTapGestureListener() {
     multiFingerTapGestureDetector.removeListener();
+  }
+
+  /**
+   * Sets a listener for move gestures.
+   * <p>
+   * {@link MoveGestureDetector} serves similar purpose to
+   * {@link com.mapbox.android.gestures.StandardGestureDetector.StandardOnGestureListener
+   * #onScroll(MotionEvent, MotionEvent, float, float)}, however, it's a {@link ProgressiveGesture} that
+   * introduces {@link MoveGestureDetector.OnMoveGestureListener#onMoveBegin(MoveGestureDetector)},
+   * {@link MoveGestureDetector.OnMoveGestureListener#onMoveEnd(MoveGestureDetector)},
+   * threshold with {@link MoveGestureDetector#setMoveThreshold(float)} and multi finger support thanks to
+   * {@link MoveDistancesObject}.
+   *
+   * @param listener your gestures listener
+   */
+  public void setMoveGestureListener(MoveGestureDetector.OnMoveGestureListener listener) {
+    moveGestureDetector.setListener(listener);
+  }
+
+  /**
+   * Removes a listener for move gestures.
+   */
+  public void removeMoveGestureListener() {
+    moveGestureDetector.removeListener();
   }
 
   /**
@@ -272,6 +298,15 @@ public class AndroidGesturesManager {
   }
 
   /**
+   * Get move gesture detector.
+   *
+   * @return gesture detector
+   */
+  public MoveGestureDetector getMoveGestureDetector() {
+    return moveGestureDetector;
+  }
+
+  /**
    * Sets a number of sets containing mutually exclusive gestures.
    *
    * @param exclusiveGestures a number of sets of {@link GestureType}s that <b>should not</b> be invoked at the same.
@@ -303,6 +338,12 @@ public class AndroidGesturesManager {
     this.mutuallyExclusiveGestures.addAll(exclusiveGestures);
   }
 
+  /**
+   * Returns a list of sets containing mutually exclusive gestures.
+   *
+   * @return mutually exclusive gestures
+   * @see #setMutuallyExclusiveGestures(List)
+   */
   public List<Set<Integer>> getMutuallyExclusiveGestures() {
     return mutuallyExclusiveGestures;
   }
