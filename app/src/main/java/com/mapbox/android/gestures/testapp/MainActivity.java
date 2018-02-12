@@ -1,7 +1,7 @@
 package com.mapbox.android.gestures.testapp;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +17,7 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 
 import com.mapbox.android.gestures.AndroidGesturesManager;
+import com.mapbox.android.gestures.MoveGestureDetector;
 import com.mapbox.android.gestures.MultiFingerTapGestureDetector;
 import com.mapbox.android.gestures.RotateGestureDetector;
 import com.mapbox.android.gestures.ShoveGestureDetector;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
   private AndroidGesturesManager androidGesturesManager;
   private boolean velocityEnabled;
+
+  private boolean isScrollChosen;
 
   private final ExclusiveSetSpinnerObject emptyExclusiveSetSpinnerObject = new ExclusiveSetSpinnerObject(-1); // (none)
 
@@ -86,6 +89,13 @@ public class MainActivity extends AppCompatActivity {
         new ExclusiveSetSpinnerObject(AndroidGesturesManager.GESTURE_TYPE_SCALE,
           AndroidGesturesManager.GESTURE_TYPE_SCROLL,
           AndroidGesturesManager.GESTURE_TYPE_SHOVE),
+
+        new ExclusiveSetSpinnerObject(AndroidGesturesManager.GESTURE_TYPE_SCALE,
+          AndroidGesturesManager.GESTURE_TYPE_MOVE,
+          AndroidGesturesManager.GESTURE_TYPE_SHOVE),
+
+        new ExclusiveSetSpinnerObject(AndroidGesturesManager.GESTURE_TYPE_ROTATE,
+          AndroidGesturesManager.GESTURE_TYPE_MOVE),
       });
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     mutuallyExclusiveSpinner.setAdapter(adapter);
@@ -98,7 +108,15 @@ public class MainActivity extends AppCompatActivity {
         if (exclusiveSetSpinnerObject.equals(emptyExclusiveSetSpinnerObject)) {
           androidGesturesManager.setMutuallyExclusiveGestures(new ArrayList<Set<Integer>>());
         } else {
+          Set<Integer> exclusiveSet = exclusiveSetSpinnerObject.getExclusiveSet();
           androidGesturesManager.setMutuallyExclusiveGestures(exclusiveSetSpinnerObject.getExclusiveSet());
+          if (exclusiveSet.contains(AndroidGesturesManager.GESTURE_TYPE_SCROLL)) {
+            isScrollChosen = true;
+            androidGesturesManager.removeMoveGestureListener();
+          } else if (exclusiveSet.contains(AndroidGesturesManager.GESTURE_TYPE_MOVE)) {
+            isScrollChosen = false;
+            androidGesturesManager.setMoveGestureListener(onMoveGestureListener);
+          }
         }
       }
 
@@ -199,9 +217,12 @@ public class MainActivity extends AppCompatActivity {
     androidGesturesManager.setStandardGestureListener(new StandardGestureDetector.SimpleStandardOnGestureListener() {
       @Override
       public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        icon.setTranslationX(icon.getTranslationX() - distanceX);
-        icon.setTranslationY(icon.getTranslationY() - distanceY);
-        return true;
+        if (isScrollChosen) {
+          icon.setTranslationX(icon.getTranslationX() - distanceX);
+          icon.setTranslationY(icon.getTranslationY() - distanceY);
+          return true;
+        }
+        return false;
       }
 
       @Override
@@ -230,7 +251,29 @@ public class MainActivity extends AppCompatActivity {
         return true;
       }
     });
+
+    androidGesturesManager.setMoveGestureListener(onMoveGestureListener);
   }
+
+  private final MoveGestureDetector.OnMoveGestureListener onMoveGestureListener =
+    new MoveGestureDetector.OnMoveGestureListener() {
+      @Override
+      public boolean onMoveBegin(MoveGestureDetector detector) {
+        return true;
+      }
+
+      @Override
+      public boolean onMove(MoveGestureDetector detector, float distanceX, float distanceY) {
+        icon.setTranslationX(icon.getTranslationX() - distanceX);
+        icon.setTranslationY(icon.getTranslationY() - distanceY);
+        return true;
+      }
+
+      @Override
+      public void onMoveEnd(MoveGestureDetector detector) {
+
+      }
+    };
 
   @Override
   public boolean onTouchEvent(MotionEvent event) {
@@ -322,6 +365,8 @@ public class MainActivity extends AppCompatActivity {
           return "Scale";
         case AndroidGesturesManager.GESTURE_TYPE_SHOVE:
           return "Shove";
+        case AndroidGesturesManager.GESTURE_TYPE_MOVE:
+          return "Move";
         case -1: // (none)
         default:
           return "none";
