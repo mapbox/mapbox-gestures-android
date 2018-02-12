@@ -87,7 +87,7 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
     deltaPixelsSinceStart += deltaPixelSinceLast;
 
     if (isInProgress() && deltaPixelSinceLast != 0) {
-      return !isSloppyGesture(getCurrentEvent()) && listener.onShove(this, deltaPixelSinceLast, deltaPixelsSinceStart);
+      return listener.onShove(this, deltaPixelSinceLast, deltaPixelsSinceStart);
     } else if (canExecute(GESTURE_TYPE_SHOVE)) {
       if (listener.onShoveBegin(this)) {
         gestureStarted();
@@ -162,6 +162,7 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
    * Get the default delta pixel threshold required to qualify it as a shove gesture.
    *
    * @return delta pixel threshold
+   * @see Constants#DEFAULT_SHOVE_PIXEL_THRESHOLD
    */
   public float getDefaultPixelDeltaThreshold() {
     return Constants.DEFAULT_SHOVE_PIXEL_THRESHOLD;
@@ -189,6 +190,7 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
    * Get the default maximum allowed angle between fingers to qualify it as a shove gesture.
    *
    * @return default maximum allowed angle
+   * @see Constants#DEFAULT_SHOVE_MAX_ANGLE
    */
   public float getDefaultMaxShoveAngle() {
     return Constants.DEFAULT_SHOVE_MAX_ANGLE;

@@ -136,12 +136,12 @@ public class MainActivity extends AppCompatActivity {
 
     scaleThresholdProgress = (SeekBar) findViewById(R.id.progress_threshold_scale);
     scaleThresholdProgress.setProgress(
-      (int) androidGesturesManager.getStandardScaleGestureDetector().getDefaultSpanDeltaThreshold());
+      (int) androidGesturesManager.getStandardScaleGestureDetector().getDefaultSpanSinceStartThreshold());
 
     scaleThresholdProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
       @Override
       public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        androidGesturesManager.getStandardScaleGestureDetector().setSpanDeltaThreshold(progress);
+        androidGesturesManager.getStandardScaleGestureDetector().setSpanSinceStartThreshold(progress);
       }
 
       @Override

@@ -39,7 +39,7 @@ public class StandardScaleGestureDetector extends
 
   private float startSpan;
   private float spanDeltaSinceStart;
-  private float spanDeltaThreshold = Constants.DEFAULT_SCALE_SPAN_THRESHOLD;
+  private float spanSinceStartThreshold = Constants.DEFAULT_SCALE_SPAN_SINCE_START_THRESHOLD;
 
   public StandardScaleGestureDetector(Context context, AndroidGesturesManager androidGesturesManager) {
     super(context, androidGesturesManager);
@@ -75,7 +75,7 @@ public class StandardScaleGestureDetector extends
         spanDeltaSinceStart = Math.abs(startSpan - detector.getCurrentSpan());
 
         // If we can execute but haven't started immediately because there is a threshold as well, check it
-        if (!isInProgress() && spanDeltaSinceStart > spanDeltaThreshold) {
+        if (!isInProgress() && spanDeltaSinceStart > spanSinceStartThreshold) {
           if (listener.onScaleBegin(StandardScaleGestureDetector.this)) {
             gestureStarted();
             return true;
@@ -86,7 +86,7 @@ public class StandardScaleGestureDetector extends
 
         if (isInProgress()) {
           isScalingOut = detector.getScaleFactor() < 1.0f;
-          return !isSloppyGesture(getCurrentEvent()) && listener.onScale(StandardScaleGestureDetector.this);
+          return listener.onScale(StandardScaleGestureDetector.this);
         }
 
         return true;
@@ -101,7 +101,7 @@ public class StandardScaleGestureDetector extends
           velocityTracker = VelocityTracker.obtain();
 
           // If scale can execute and there is no threshold, start gesture
-          if (spanDeltaThreshold == 0) {
+          if (spanSinceStartThreshold == 0) {
             if (listener.onScaleBegin(StandardScaleGestureDetector.this)) {
               gestureStarted();
             }
@@ -285,33 +285,34 @@ public class StandardScaleGestureDetector extends
   }
 
   /**
-   * Get the threshold delta span between initial fingers position and current needed
+   * Get the threshold span between initial fingers position and current needed
    * for this detector to qualify it as a scale gesture.
    *
-   * @return delta span threshold
+   * @return span threshold
    */
-  public float getSpanDeltaThreshold() {
-    return spanDeltaThreshold;
+  public float getSpanSinceStartThreshold() {
+    return spanSinceStartThreshold;
   }
 
   /**
-   * Set the threshold delta span between initial fingers position and current needed
+   * Set the threshold span between initial fingers position and current needed
    * for this detector to qualify it as a scale gesture.
    *
-   * @param spanDeltaThreshold delta span threshold
+   * @param spanSinceStartThreshold delta span threshold
    */
-  public void setSpanDeltaThreshold(float spanDeltaThreshold) {
-    this.spanDeltaThreshold = spanDeltaThreshold;
+  public void setSpanSinceStartThreshold(float spanSinceStartThreshold) {
+    this.spanSinceStartThreshold = spanSinceStartThreshold;
   }
 
   /**
-   * Get the default threshold delta span between initial fingers position and current needed
+   * Get the default threshold span between initial fingers position and current needed
    * for this detector to qualify it as a scale gesture.
    *
-   * @return default delta span threshold
+   * @return default span threshold
+   * @see Constants#DEFAULT_SCALE_SPAN_SINCE_START_THRESHOLD
    */
-  public float getDefaultSpanDeltaThreshold() {
-    return Constants.DEFAULT_SCALE_SPAN_THRESHOLD;
+  public float getDefaultSpanSinceStartThreshold() {
+    return Constants.DEFAULT_SCALE_SPAN_SINCE_START_THRESHOLD;
   }
 
   /**
