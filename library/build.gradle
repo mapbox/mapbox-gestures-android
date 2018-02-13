@@ -25,7 +25,9 @@ android {
     }
 
     testOptions {
-        unitTests.returnDefaultValues = true
+        unitTests {
+            includeAndroidResources = true
+        }
     }
 }
 
@@ -34,6 +36,9 @@ dependencies {
 
     implementation dependenciesList.supportAppcompatV7
     testImplementation dependenciesList.junit
+    testImplementation dependenciesList.mockito
+    testImplementation dependenciesList.robolectric
+    androidTestImplementation dependenciesList.mockitoAndroid
     androidTestImplementation dependenciesList.testRunner
     androidTestImplementation dependenciesList.testEspressoCore
 }
