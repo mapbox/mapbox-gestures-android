@@ -16,12 +16,12 @@ public class MultiFingerTapGestureDetector extends
   /**
    * Maximum time in millis to lift the fingers to register a tap event.
    */
-  private long multiFingerTapTimeThreshold = 150L;
+  private long multiFingerTapTimeThreshold = Constants.DEFAULT_MULTI_TAP_TIME_THRESHOLD;
 
   /**
    * Maximum movement in pixels allowed for any finger before rejecting this gesture.
    */
-  private float multiFingerTapMovementThreshold = 15f;
+  private float multiFingerTapMovementThreshold = Constants.DEFAULT_MULTI_TAP_MOVEMENT_THRESHOLD;
   private boolean movementOccurred;
   private int lastPointersDownCount;
 
@@ -108,6 +108,15 @@ public class MultiFingerTapGestureDetector extends
   }
 
   /**
+   * Get default maximum time in millis that fingers can have a contact with the screen before rejecting this gesture.
+   *
+   * @return default maximum touch time for tap gesture.
+   */
+  public long getDefaultMultiFingerTapTimeThreshold() {
+    return Constants.DEFAULT_MULTI_TAP_TIME_THRESHOLD;
+  }
+
+  /**
    * Get maximum movement allowed for any finger before rejecting this gesture.
    *
    * @return movement threshold in pixels.
@@ -123,5 +132,14 @@ public class MultiFingerTapGestureDetector extends
    */
   public void setMultiFingerTapMovementThreshold(float multiFingerTapMovementThreshold) {
     this.multiFingerTapMovementThreshold = multiFingerTapMovementThreshold;
+  }
+
+  /**
+   * Get default maximum movement allowed for any finger before rejecting this gesture.
+   *
+   * @return default movement threshold in pixels.
+   */
+  public float getDefaultMultiFingerTapMovementThreshold() {
+    return Constants.DEFAULT_MULTI_TAP_MOVEMENT_THRESHOLD;
   }
 }
