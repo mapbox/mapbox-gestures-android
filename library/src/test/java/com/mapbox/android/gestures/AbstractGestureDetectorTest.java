@@ -9,7 +9,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
 @RunWith(RobolectricTestRunner.class)
-abstract class AbstractGestureDetectorTest<K extends BaseGesture> {
+abstract class AbstractGestureDetectorTest {
   AndroidGesturesManager androidGesturesManager;
   Context context;
   MotionEvent emptyMotionEvent;

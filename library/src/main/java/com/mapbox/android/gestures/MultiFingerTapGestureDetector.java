@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.annotation.UiThread;
 import android.view.MotionEvent;
 
+import java.util.HashMap;
+
 import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_MULTI_FINGER_TAP;
 
 /**
@@ -22,7 +24,8 @@ public class MultiFingerTapGestureDetector extends
    * Maximum movement in pixels allowed for any finger before rejecting this gesture.
    */
   private float multiFingerTapMovementThreshold = Constants.DEFAULT_MULTI_TAP_MOVEMENT_THRESHOLD;
-  private boolean movementOccurred;
+  private boolean invalidMovement;
+  private boolean pointerLifted;
   private int lastPointersDownCount;
 
   public MultiFingerTapGestureDetector(Context context, AndroidGesturesManager gesturesManager) {
@@ -40,7 +43,14 @@ public class MultiFingerTapGestureDetector extends
     int action = motionEvent.getActionMasked();
     switch (action) {
       case MotionEvent.ACTION_POINTER_DOWN:
+        if (pointerLifted) {
+          invalidMovement = true;
+        }
         lastPointersDownCount = pointerIdList.size();
+        break;
+
+      case MotionEvent.ACTION_POINTER_UP:
+        pointerLifted = true;
         break;
 
       case MotionEvent.ACTION_UP:
@@ -53,20 +63,10 @@ public class MultiFingerTapGestureDetector extends
         return handled;
 
       case MotionEvent.ACTION_MOVE:
-        if (movementOccurred) {
+        if (invalidMovement) {
           break;
         }
-
-        for (MultiFingerDistancesObject distancesObject : pointersDistanceMap.values()) {
-          float diffX = Math.abs(distancesObject.getCurrFingersDiffX() - distancesObject.getPrevFingersDiffX());
-          float diffY = Math.abs(distancesObject.getCurrFingersDiffY() - distancesObject.getPrevFingersDiffY());
-
-          movementOccurred = diffX > multiFingerTapMovementThreshold || diffY > multiFingerTapMovementThreshold;
-
-          if (movementOccurred) {
-            break;
-          }
-        }
+        invalidMovement = exceededMovementThreshold(pointersDistanceMap);
         break;
 
       default:
@@ -76,9 +76,24 @@ public class MultiFingerTapGestureDetector extends
     return false;
   }
 
+  boolean exceededMovementThreshold(HashMap<PointerDistancePair, MultiFingerDistancesObject> map) {
+    for (MultiFingerDistancesObject distancesObject : map.values()) {
+      float diffX = Math.abs(distancesObject.getCurrFingersDiffX() - distancesObject.getPrevFingersDiffX());
+      float diffY = Math.abs(distancesObject.getCurrFingersDiffY() - distancesObject.getPrevFingersDiffY());
+
+      invalidMovement = diffX > multiFingerTapMovementThreshold || diffY > multiFingerTapMovementThreshold;
+
+      if (invalidMovement) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   @Override
   protected boolean canExecute(int invokedGestureType) {
-    return lastPointersDownCount > 1 && !movementOccurred && getGestureDuration() < multiFingerTapTimeThreshold
+    return lastPointersDownCount > 1 && !invalidMovement && getGestureDuration() < multiFingerTapTimeThreshold
       && super.canExecute(invokedGestureType);
   }
 
@@ -86,7 +101,8 @@ public class MultiFingerTapGestureDetector extends
   protected void reset() {
     super.reset();
     lastPointersDownCount = 0;
-    movementOccurred = false;
+    invalidMovement = false;
+    pointerLifted = false;
   }
 
   /**

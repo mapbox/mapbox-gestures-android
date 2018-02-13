@@ -67,7 +67,7 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
       case MotionEvent.ACTION_MOVE:
         if (pointerIdList.size() > 1 && checkPressure()) {
           calculateDistances();
-          if (!isSloppyGesture(getCurrentEvent())) {
+          if (!isSloppyGesture()) {
             focalPoint = Utils.determineFocalPoint(motionEvent);
             return analyzeMovement();
           }
@@ -82,7 +82,7 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
     return false;
   }
 
-  private boolean checkPressure() {
+  boolean checkPressure() {
     float currentPressure = getCurrentEvent().getPressure();
     float previousPressure = getPreviousEvent().getPressure();
     return currentPressure / previousPressure > PRESSURE_THRESHOLD;
@@ -108,10 +108,9 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
    * <p>
    * Thanks to Almer Thie (code.almeros.com).
    *
-   * @param event motion event
    * @return true if we detect sloppy gesture, false otherwise
    */
-  private boolean isSloppyGesture(MotionEvent event) {
+  protected boolean isSloppyGesture() {
     // As orientation can change, query the metrics in touch down
     DisplayMetrics metrics = context.getResources().getDisplayMetrics();
     float rightSlopEdge = metrics.widthPixels - edgeSlop;
@@ -120,9 +119,9 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
     final float edgeSlop = this.edgeSlop;
 
     for (int pointerId : pointerIdList) {
-      int pointerIndex = event.findPointerIndex(pointerId);
-      float x = Utils.getRawX(event, pointerIndex);
-      float y = Utils.getRawY(event, pointerIndex);
+      int pointerIndex = getCurrentEvent().findPointerIndex(pointerId);
+      float x = Utils.getRawX(getCurrentEvent(), pointerIndex);
+      float y = Utils.getRawY(getCurrentEvent(), pointerIndex);
 
       boolean isSloppy = x < edgeSlop || y < edgeSlop || x > rightSlopEdge
         || y > bottomSlopEdge;
@@ -137,7 +136,7 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
 
   @Override
   protected boolean canExecute(int invokedGestureType) {
-    return super.canExecute(invokedGestureType) && !isSloppyGesture(getCurrentEvent());
+    return super.canExecute(invokedGestureType) && !isSloppyGesture();
   }
 
   protected void reset() {
