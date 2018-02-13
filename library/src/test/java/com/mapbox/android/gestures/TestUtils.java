@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 @RunWith(RobolectricTestRunner.class)
-final class TestUtils {
+public final class TestUtils {
 
   public static MotionEvent getMotionEvent(int action, float x, float y, MotionEvent previousEvent) {
     long currentTime = System.currentTimeMillis();
