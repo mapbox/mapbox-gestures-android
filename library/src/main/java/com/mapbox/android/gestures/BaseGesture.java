@@ -20,7 +20,7 @@ public abstract class BaseGesture<L> {
   private long gestureDuration;
 
   /**
-   * L that will be called with gesture events/updates.
+   * Listener that will be called with gesture events/updates.
    */
   L listener;
 
