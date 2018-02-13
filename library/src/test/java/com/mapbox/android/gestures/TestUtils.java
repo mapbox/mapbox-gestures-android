@@ -2,10 +2,6 @@ package com.mapbox.android.gestures;
 
 import android.view.MotionEvent;
 
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-
-@RunWith(RobolectricTestRunner.class)
 public final class TestUtils {
 
   public static MotionEvent getMotionEvent(int action, float x, float y, MotionEvent previousEvent) {
