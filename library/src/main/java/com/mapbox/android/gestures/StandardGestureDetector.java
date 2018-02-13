@@ -27,60 +27,60 @@ public class StandardGestureDetector extends BaseGesture<StandardGestureDetector
   public StandardGestureDetector(Context context, AndroidGesturesManager androidGesturesManager) {
     super(context, androidGesturesManager);
 
-    GestureDetector.OnGestureListener innerListener = new StandardOnGestureListener() {
-
-      @Override
-      public boolean onSingleTapUp(MotionEvent e) {
-        return canExecute(GESTURE_TYPE_SINGLE_TAP_UP) && listener.onSingleTapUp(e);
-      }
-
-      @Override
-      public void onLongPress(MotionEvent e) {
-        if (canExecute(GESTURE_TYPE_LONG_PRESS)) {
-          listener.onLongPress(e);
-        }
-      }
-
-      @Override
-      public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        return canExecute(GESTURE_TYPE_SCROLL) && listener.onScroll(e1, e2, distanceX, distanceY);
-      }
-
-      @Override
-      public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        return canExecute(GESTURE_TYPE_FLING) && listener.onFling(e1, e2, velocityX, velocityY);
-      }
-
-      @Override
-      public void onShowPress(MotionEvent e) {
-        if (canExecute(GESTURE_TYPE_SHOW_PRESS)) {
-          listener.onShowPress(e);
-        }
-      }
-
-      @Override
-      public boolean onDown(MotionEvent e) {
-        return canExecute(GESTURE_TYPE_DOWN) && listener.onDown(e);
-      }
-
-      @Override
-      public boolean onDoubleTap(MotionEvent e) {
-        return canExecute(GESTURE_TYPE_DOUBLE_TAP) && listener.onDoubleTap(e);
-      }
-
-      @Override
-      public boolean onDoubleTapEvent(MotionEvent e) {
-        return canExecute(GESTURE_TYPE_DOUBLE_TAP_EVENT) && listener.onDoubleTapEvent(e);
-      }
-
-      @Override
-      public boolean onSingleTapConfirmed(MotionEvent e) {
-        return canExecute(GESTURE_TYPE_SINGLE_TAP_CONFIRMED) && listener.onSingleTapConfirmed(e);
-      }
-    };
-
     this.gestureDetector = new GestureDetectorCompat(context, innerListener);
   }
+
+  final StandardOnGestureListener innerListener = new StandardOnGestureListener() {
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+      return canExecute(GESTURE_TYPE_SINGLE_TAP_UP) && listener.onSingleTapUp(e);
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+      if (canExecute(GESTURE_TYPE_LONG_PRESS)) {
+        listener.onLongPress(e);
+      }
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+      return canExecute(GESTURE_TYPE_SCROLL) && listener.onScroll(e1, e2, distanceX, distanceY);
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+      return canExecute(GESTURE_TYPE_FLING) && listener.onFling(e1, e2, velocityX, velocityY);
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+      if (canExecute(GESTURE_TYPE_SHOW_PRESS)) {
+        listener.onShowPress(e);
+      }
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+      return canExecute(GESTURE_TYPE_DOWN) && listener.onDown(e);
+    }
+
+    @Override
+    public boolean onDoubleTap(MotionEvent e) {
+      return canExecute(GESTURE_TYPE_DOUBLE_TAP) && listener.onDoubleTap(e);
+    }
+
+    @Override
+    public boolean onDoubleTapEvent(MotionEvent e) {
+      return canExecute(GESTURE_TYPE_DOUBLE_TAP_EVENT) && listener.onDoubleTapEvent(e);
+    }
+
+    @Override
+    public boolean onSingleTapConfirmed(MotionEvent e) {
+      return canExecute(GESTURE_TYPE_SINGLE_TAP_CONFIRMED) && listener.onSingleTapConfirmed(e);
+    }
+  };
 
   /**
    * Listener that merges {@link android.view.GestureDetector.OnGestureListener}
