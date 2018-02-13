@@ -41,28 +41,22 @@ public class MultiFingerTapGestureDetectorTest extends AbstractGestureDetectorTe
 
   @Test
   public void twoFingerTapTest() {
-    dispatchMultiFingerTap(false);
+    dispatchDown();
+    dispatchPointerDown(10, downMotionEvent);
+    dispatchPointerUp((Constants.DEFAULT_MULTI_TAP_TIME_THRESHOLD / 2), pointerDownMotionEvent);
+    dispatchUp(10, pointerUpMotionEvent);
+    verify(listener, times(1)).onMultiFingerTap(multiFingerTapGestureDetector, 2);
   }
 
   @Test
   public void threeFingerTapTest() {
-    dispatchMultiFingerTap(true);
-  }
-
-  private void dispatchMultiFingerTap(boolean isThreeFinger) {
     dispatchDown();
     dispatchPointerDown(10, downMotionEvent);
-    if (isThreeFinger) {
-      dispatchPointerDown(10, pointerDownMotionEvent);
-    }
+    dispatchPointerDown(10, pointerDownMotionEvent);
     dispatchPointerUp((Constants.DEFAULT_MULTI_TAP_TIME_THRESHOLD / 2), pointerDownMotionEvent);
-    if (isThreeFinger) {
-      dispatchPointerUp(10, pointerUpMotionEvent);
-    }
+    dispatchPointerUp(10, pointerUpMotionEvent);
     dispatchUp(10, pointerUpMotionEvent);
-
-    verify(listener, times(1)).onMultiFingerTap(
-      multiFingerTapGestureDetector, isThreeFinger ? 3 : 2);
+    verify(listener, times(1)).onMultiFingerTap(multiFingerTapGestureDetector, 3);
   }
 
   @Test

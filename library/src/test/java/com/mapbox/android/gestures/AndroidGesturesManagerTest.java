@@ -25,6 +25,10 @@ public class AndroidGesturesManagerTest {
 
   @Before
   public void setUp() throws Exception {
+    set1.clear();
+    set2.clear();
+    set3.clear();
+    mutuallyExclusivesList.clear();
 
     set1.add(AndroidGesturesManager.GESTURE_TYPE_ROTATE);
     set1.add(AndroidGesturesManager.GESTURE_TYPE_SCROLL);
@@ -47,14 +51,14 @@ public class AndroidGesturesManagerTest {
   }
 
   @Test
-  public void initializeGestureDetectorsTest()throws Exception {
+  public void initializeGestureDetectorsTest() throws Exception {
     for (BaseGesture detector : androidGesturesManager.getDetectors()) {
       assertNotNull(detector);
     }
   }
 
   @Test
-  public void setMutuallyExclusivesTest()throws Exception {
+  public void setMutuallyExclusivesTest() throws Exception {
     assertEquals(androidGesturesManager.getMutuallyExclusiveGestures(), mutuallyExclusivesList);
 
     androidGesturesManager.setMutuallyExclusiveGestures(set1, set2, set3);
