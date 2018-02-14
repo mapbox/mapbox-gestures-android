@@ -17,4 +17,7 @@ final class Constants {
   // Tap
   static final long DEFAULT_MULTI_TAP_TIME_THRESHOLD = 150L;
   static final float DEFAULT_MULTI_TAP_MOVEMENT_THRESHOLD = 15L;
+
+  // Move
+  static final float DEFAULT_MOVE_THRESHOLD = 0f;
 }

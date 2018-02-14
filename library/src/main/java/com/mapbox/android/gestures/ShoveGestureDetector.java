@@ -3,6 +3,7 @@ package com.mapbox.android.gestures;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
+import android.view.MotionEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -100,9 +101,13 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
 
   @Override
   protected boolean canExecute(int invokedGestureType) {
-    return verifyAngle()
-      && Math.abs(deltaPixelsSinceStart) > pixelDeltaThreshold
+    return Math.abs(deltaPixelsSinceStart) > pixelDeltaThreshold
       && super.canExecute(invokedGestureType);
+  }
+
+  @Override
+  protected boolean isSloppyGesture(MotionEvent event) {
+    return super.isSloppyGesture(event) || !isAngleAcceptable();
   }
 
   @Override
@@ -117,7 +122,7 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
     deltaPixelsSinceStart = 0;
   }
 
-  private boolean verifyAngle() {
+  private boolean isAngleAcceptable() {
     MultiFingerDistancesObject distancesObject =
       pointersDistanceMap.get(new PointerDistancePair(pointerIdList.get(0), pointerIdList.get(1)));
 
