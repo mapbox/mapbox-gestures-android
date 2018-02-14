@@ -9,7 +9,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class StandardScaleGestureDetectorTest extends
-  AbstractGestureDetectorTest<StandardScaleGestureDetector, StandardScaleGestureDetector.StandardOnScaleGestureListener> {
+  AbstractGestureDetectorTest<StandardScaleGestureDetector,
+    StandardScaleGestureDetector.StandardOnScaleGestureListener> {
 
   @Override
   StandardScaleGestureDetector getDetectorObject() {
