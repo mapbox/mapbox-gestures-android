@@ -106,8 +106,8 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
   }
 
   @Override
-  protected boolean isSloppyGesture(MotionEvent event) {
-    return super.isSloppyGesture(event) || !isAngleAcceptable();
+  protected boolean isSloppyGesture() {
+    return super.isSloppyGesture() || !isAngleAcceptable();
   }
 
   @Override
