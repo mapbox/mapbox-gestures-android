@@ -63,7 +63,6 @@ public class MultiFingerTapGestureDetectorTest
     dispatchPointerDown(25, downMotionEvent);
     dispatchPointerUp(Constants.DEFAULT_MULTI_TAP_TIME_THRESHOLD, pointerDownMotionEvent);
     dispatchUp(25, pointerUpMotionEvent);
-
     verify(listener, times(0)).onMultiFingerTap(gestureDetector, 2);
   }
 
@@ -76,7 +75,6 @@ public class MultiFingerTapGestureDetectorTest
     dispatchPointerDown(10, pointerUpMotionEvent);
     dispatchPointerUp(10, pointerDownMotionEvent);
     dispatchUp(10, pointerUpMotionEvent);
-
     verify(listener, times(0)).onMultiFingerTap(gestureDetector, 2);
   }
 

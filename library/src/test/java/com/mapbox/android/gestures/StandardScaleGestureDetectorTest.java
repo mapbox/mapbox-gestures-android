@@ -26,46 +26,27 @@ public class StandardScaleGestureDetectorTest extends
     // threshold not met
     gestureDetector.spanDeltaSinceStart = gestureDetector.getSpanSinceStartThreshold() / 2;
     gestureDetector.innerOnScaleBegin(gestureDetector.getUnderlyingScaleGestureDetector());
-    verify(listener, times(0)).onScaleBegin(gestureDetector);
-    verify(listener, times(0)).onScale(gestureDetector);
-    verify(listener, times(0)).onScaleEnd(gestureDetector);
 
-    // threshold met
+    // threshold met, starting
     gestureDetector.startSpan = gestureDetector.getSpanSinceStartThreshold() * 2;
     gestureDetector.innerOnScale(gestureDetector.getUnderlyingScaleGestureDetector());
-    verify(listener, times(1)).onScaleBegin(gestureDetector);
-    verify(listener, times(0)).onScale(gestureDetector);
-    verify(listener, times(0)).onScaleEnd(gestureDetector);
 
+    // scale
     gestureDetector.innerOnScale(gestureDetector.getUnderlyingScaleGestureDetector());
-    verify(listener, times(1)).onScaleBegin(gestureDetector);
-    verify(listener, times(1)).onScale(gestureDetector);
-    verify(listener, times(0)).onScaleEnd(gestureDetector);
 
     // stopping
     gestureDetector.innerOnScaleEnd(gestureDetector.getUnderlyingScaleGestureDetector());
-    verify(listener, times(1)).onScaleBegin(gestureDetector);
-    verify(listener, times(1)).onScale(gestureDetector);
-    verify(listener, times(1)).onScaleEnd(gestureDetector);
 
     // no threshold, starting immediately
     gestureDetector.setSpanSinceStartThreshold(0);
     gestureDetector.startSpan = 0;
     gestureDetector.innerOnScaleBegin(gestureDetector.getUnderlyingScaleGestureDetector());
-    verify(listener, times(2)).onScaleBegin(gestureDetector);
-    verify(listener, times(1)).onScale(gestureDetector);
-    verify(listener, times(1)).onScaleEnd(gestureDetector);
 
+    //scale
     gestureDetector.innerOnScale(gestureDetector.getUnderlyingScaleGestureDetector());
-    verify(listener, times(2)).onScaleBegin(gestureDetector);
-    verify(listener, times(2)).onScale(gestureDetector);
-    verify(listener, times(1)).onScaleEnd(gestureDetector);
 
     // stopping
     gestureDetector.innerOnScaleEnd(gestureDetector.getUnderlyingScaleGestureDetector());
-    verify(listener, times(2)).onScaleBegin(gestureDetector);
-    verify(listener, times(2)).onScale(gestureDetector);
-    verify(listener, times(2)).onScaleEnd(gestureDetector);
 
     // threshold not met
     gestureDetector.setSpanSinceStartThreshold(gestureDetector.getDefaultSpanSinceStartThreshold());
@@ -74,6 +55,7 @@ public class StandardScaleGestureDetectorTest extends
     gestureDetector.innerOnScale(gestureDetector.getUnderlyingScaleGestureDetector());
     // stopping without surpassing threshold, no callback invocations
     gestureDetector.innerOnScaleEnd(gestureDetector.getUnderlyingScaleGestureDetector());
+
     verify(listener, times(2)).onScaleBegin(gestureDetector);
     verify(listener, times(2)).onScale(gestureDetector);
     verify(listener, times(2)).onScaleEnd(gestureDetector);

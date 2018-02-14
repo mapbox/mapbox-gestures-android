@@ -30,44 +30,33 @@ public class RotateGestureDetectorTest extends
     doReturn(Constants.DEFAULT_ROTATE_ANGLE_THRESHOLD / 2)
       .when(gestureDetector).getRotationDegreesSinceLast();
     gestureDetector.analyzeMovement();
-    verify(listener, times(0)).onRotateBegin(gestureDetector);
-    verify(listener, times(0)).onRotate(gestureDetector, 0, 0);
-    verify(listener, times(0)).onRotateEnd(gestureDetector);
 
     // threshold met, starting
     doReturn(Constants.DEFAULT_ROTATE_ANGLE_THRESHOLD * 2)
       .when(gestureDetector).getRotationDegreesSinceLast();
     gestureDetector.analyzeMovement();
-    verify(listener, times(1)).onRotateBegin(gestureDetector);
-    verify(listener, times(0)).onRotate(gestureDetector, 0, 0);
-    verify(listener, times(0)).onRotateEnd(gestureDetector);
 
     // new event, executing onRotate()
     gestureDetector.analyzeMovement();
-    verify(listener, times(1)).onRotateBegin(gestureDetector);
     verify(listener, times(1)).onRotate(gestureDetector,
       gestureDetector.deltaSinceLast, gestureDetector.deltaSinceStart);
-    verify(listener, times(0)).onRotateEnd(gestureDetector);
 
     // new event, executing onRotate() even though below threshold because already started
     doReturn(Constants.DEFAULT_ROTATE_ANGLE_THRESHOLD / 2)
       .when(gestureDetector).getRotationDegreesSinceLast();
     gestureDetector.analyzeMovement();
-    verify(listener, times(1)).onRotateBegin(gestureDetector);
     //still 1 invocation because parameters changed, but technically 2
     verify(listener, times(1)).onRotate(gestureDetector,
       gestureDetector.deltaSinceLast, gestureDetector.deltaSinceStart);
-    verify(listener, times(0)).onRotateEnd(gestureDetector);
 
     // stopping
     gestureDetector.deltaSinceLast = 0f; // to stop gesture without animation
     doNothing().when(gestureDetector).startAnimation();
     gestureDetector.gestureStopped();
-    verify(listener, times(1)).onRotateBegin(gestureDetector);
-    verify(listener, times(1)).onRotateEnd(gestureDetector);
 
     // not starting because threshold not met
     gestureDetector.analyzeMovement();
+
     verify(listener, times(1)).onRotateBegin(gestureDetector);
     verify(listener, times(1)).onRotateEnd(gestureDetector);
   }
