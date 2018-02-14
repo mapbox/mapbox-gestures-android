@@ -13,4 +13,7 @@ final class Constants {
   // Shove
   static final float DEFAULT_SHOVE_MAX_ANGLE = 20f;
   static final float DEFAULT_SHOVE_PIXEL_THRESHOLD = 100f;
+
+  // Move
+  static final float DEFAULT_MOVE_THRESHOLD = 0f;
 }

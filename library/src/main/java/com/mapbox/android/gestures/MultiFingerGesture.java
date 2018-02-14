@@ -31,6 +31,8 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
    */
   private static final float PRESSURE_THRESHOLD = 0.67f;
 
+  private static final int DEFAULT_REQUIRED_FINGERS_COUNT = 2;
+
   private final float edgeSlop;
 
   private float spanThreshold = Constants.DEFAULT_MULTI_FINGER_SPAN_THRESHOLD;
@@ -65,7 +67,7 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
         break;
 
       case MotionEvent.ACTION_MOVE:
-        if (pointerIdList.size() > 1 && checkPressure()) {
+        if (pointerIdList.size() >= getRequiredPointersCount() && checkPressure()) {
           calculateDistances();
           if (!isSloppyGesture(getCurrentEvent())) {
             focalPoint = Utils.determineFocalPoint(motionEvent);
@@ -98,6 +100,10 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
     return false;
   }
 
+  protected int getRequiredPointersCount() {
+    return DEFAULT_REQUIRED_FINGERS_COUNT;
+  }
+
   protected boolean analyzeMovement() {
     return false;
   }
@@ -111,7 +117,7 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
    * @param event motion event
    * @return true if we detect sloppy gesture, false otherwise
    */
-  private boolean isSloppyGesture(MotionEvent event) {
+  protected boolean isSloppyGesture(MotionEvent event) {
     // As orientation can change, query the metrics in touch down
     DisplayMetrics metrics = context.getResources().getDisplayMetrics();
     float rightSlopEdge = metrics.widthPixels - edgeSlop;
@@ -335,7 +341,7 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
   }
 
   private boolean verifyPointers(int firstPointerIndex, int secondPointerIndex) {
-    return firstPointerIndex >= 0 && secondPointerIndex >= 0
+    return firstPointerIndex != secondPointerIndex && firstPointerIndex >= 0 && secondPointerIndex >= 0
       && firstPointerIndex < getPointersCount() && secondPointerIndex < getPointersCount();
   }
 
