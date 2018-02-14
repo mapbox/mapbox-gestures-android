@@ -1,81 +1,72 @@
 package com.mapbox.android.gestures;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
-public class StandardGestureDetectorTest extends AbstractGestureDetectorTest {
-  private StandardGestureDetector standardGestureDetector;
+public class StandardGestureDetectorTest extends
+  AbstractGestureDetectorTest<StandardGestureDetector, StandardGestureDetector.StandardOnGestureListener> {
 
-  @Mock
-  private StandardGestureDetector.StandardOnGestureListener listener;
-
-  @Before
-  public void setUp() throws Exception {
-    super.setUp();
-    MockitoAnnotations.initMocks(this);
-    standardGestureDetector = new StandardGestureDetector(context, androidGesturesManager);
-    standardGestureDetector.setListener(listener);
+  @Override
+  StandardGestureDetector getDetectorObject() {
+    return new StandardGestureDetector(context, androidGesturesManager);
   }
 
   @Test
   public void onSingleTapUpTest() {
-    standardGestureDetector.innerListener.onSingleTapUp(emptyMotionEvent);
+    gestureDetector.innerListener.onSingleTapUp(emptyMotionEvent);
     Mockito.verify(listener, Mockito.times(1)).onSingleTapUp(emptyMotionEvent);
   }
 
   @Test
   public void onLongPressTest() {
-    standardGestureDetector.innerListener.onLongPress(emptyMotionEvent);
+    gestureDetector.innerListener.onLongPress(emptyMotionEvent);
     Mockito.verify(listener, Mockito.times(1)).onLongPress(emptyMotionEvent);
   }
 
   @Test
   public void onScrollTest() {
-    standardGestureDetector.innerListener.onScroll(emptyMotionEvent, emptyMotionEvent, 0, 0);
+    gestureDetector.innerListener.onScroll(emptyMotionEvent, emptyMotionEvent, 0, 0);
     Mockito.verify(listener, Mockito.times(1))
       .onScroll(emptyMotionEvent, emptyMotionEvent, 0, 0);
   }
 
   @Test
   public void onFlingTest() {
-    standardGestureDetector.innerListener.onFling(emptyMotionEvent, emptyMotionEvent, 0, 0);
+    gestureDetector.innerListener.onFling(emptyMotionEvent, emptyMotionEvent, 0, 0);
     Mockito.verify(listener, Mockito.times(1))
       .onFling(emptyMotionEvent, emptyMotionEvent, 0, 0);
   }
 
   @Test
   public void onShowPressTest() {
-    standardGestureDetector.innerListener.onShowPress(emptyMotionEvent);
+    gestureDetector.innerListener.onShowPress(emptyMotionEvent);
     Mockito.verify(listener, Mockito.times(1)).onShowPress(emptyMotionEvent);
   }
 
   @Test
   public void onDownTest() {
-    standardGestureDetector.innerListener.onDown(emptyMotionEvent);
+    gestureDetector.innerListener.onDown(emptyMotionEvent);
     Mockito.verify(listener, Mockito.times(1)).onDown(emptyMotionEvent);
   }
 
   @Test
   public void onDoubleTapTest() {
-    standardGestureDetector.innerListener.onDoubleTap(emptyMotionEvent);
+    gestureDetector.innerListener.onDoubleTap(emptyMotionEvent);
     Mockito.verify(listener, Mockito.times(1)).onDoubleTap(emptyMotionEvent);
   }
 
   @Test
   public void onDoubleTapEventTest() {
-    standardGestureDetector.innerListener.onDoubleTapEvent(emptyMotionEvent);
+    gestureDetector.innerListener.onDoubleTapEvent(emptyMotionEvent);
     Mockito.verify(listener, Mockito.times(1)).onDoubleTapEvent(emptyMotionEvent);
   }
 
   @Test
   public void onSingleTapConfirmedTest() {
-    standardGestureDetector.innerListener.onSingleTapConfirmed(emptyMotionEvent);
+    gestureDetector.innerListener.onSingleTapConfirmed(emptyMotionEvent);
     Mockito.verify(listener, Mockito.times(1)).onSingleTapConfirmed(emptyMotionEvent);
   }
 
@@ -85,10 +76,10 @@ public class StandardGestureDetectorTest extends AbstractGestureDetectorTest {
 
   @Test
   public void longpressEnabledTest() throws Exception {
-    assertTrue(standardGestureDetector.isLongpressEnabled());
-    standardGestureDetector.setIsLongpressEnabled(false);
-    assertFalse(standardGestureDetector.isLongpressEnabled());
-    standardGestureDetector.setIsLongpressEnabled(true);
-    assertTrue(standardGestureDetector.isLongpressEnabled());
+    assertTrue(gestureDetector.isLongpressEnabled());
+    gestureDetector.setIsLongpressEnabled(false);
+    assertFalse(gestureDetector.isLongpressEnabled());
+    gestureDetector.setIsLongpressEnabled(true);
+    assertTrue(gestureDetector.isLongpressEnabled());
   }
 }

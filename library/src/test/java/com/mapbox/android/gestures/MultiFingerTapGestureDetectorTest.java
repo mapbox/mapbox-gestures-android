@@ -17,11 +17,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class MultiFingerTapGestureDetectorTest extends AbstractGestureDetectorTest {
-
-  private MultiFingerTapGestureDetector multiFingerTapGestureDetector;
-  @Mock
-  private MultiFingerTapGestureDetector.OnMultiFingerTapGestureListener listener;
+public class MultiFingerTapGestureDetectorTest
+  extends AbstractGestureDetectorTest<MultiFingerTapGestureDetector,
+  MultiFingerTapGestureDetector.OnMultiFingerTapGestureListener> {
 
   private MotionEvent downMotionEvent;
   private MotionEvent pointerDownMotionEvent;
@@ -32,11 +30,13 @@ public class MultiFingerTapGestureDetectorTest extends AbstractGestureDetectorTe
   @Before
   public void setUp() throws Exception {
     super.setUp();
-    MockitoAnnotations.initMocks(this);
-    multiFingerTapGestureDetector = Mockito.spy(new MultiFingerTapGestureDetector(context, androidGesturesManager));
-    multiFingerTapGestureDetector.setListener(listener);
-    doReturn(true).when(multiFingerTapGestureDetector).checkPressure();
-    doReturn(false).when(multiFingerTapGestureDetector).isSloppyGesture();
+    doReturn(true).when(gestureDetector).checkPressure();
+    doReturn(false).when(gestureDetector).isSloppyGesture();
+  }
+
+  @Override
+  MultiFingerTapGestureDetector getDetectorObject() {
+    return Mockito.spy(new MultiFingerTapGestureDetector(context, androidGesturesManager));
   }
 
   @Test
@@ -45,7 +45,7 @@ public class MultiFingerTapGestureDetectorTest extends AbstractGestureDetectorTe
     dispatchPointerDown(10, downMotionEvent);
     dispatchPointerUp((Constants.DEFAULT_MULTI_TAP_TIME_THRESHOLD / 2), pointerDownMotionEvent);
     dispatchUp(10, pointerUpMotionEvent);
-    verify(listener, times(1)).onMultiFingerTap(multiFingerTapGestureDetector, 2);
+    verify(listener, times(1)).onMultiFingerTap(gestureDetector, 2);
   }
 
   @Test
@@ -56,7 +56,7 @@ public class MultiFingerTapGestureDetectorTest extends AbstractGestureDetectorTe
     dispatchPointerUp((Constants.DEFAULT_MULTI_TAP_TIME_THRESHOLD / 2), pointerDownMotionEvent);
     dispatchPointerUp(10, pointerUpMotionEvent);
     dispatchUp(10, pointerUpMotionEvent);
-    verify(listener, times(1)).onMultiFingerTap(multiFingerTapGestureDetector, 3);
+    verify(listener, times(1)).onMultiFingerTap(gestureDetector, 3);
   }
 
   @Test
@@ -66,7 +66,7 @@ public class MultiFingerTapGestureDetectorTest extends AbstractGestureDetectorTe
     dispatchPointerUp(Constants.DEFAULT_MULTI_TAP_TIME_THRESHOLD, pointerDownMotionEvent);
     dispatchUp(25, pointerUpMotionEvent);
 
-    verify(listener, times(0)).onMultiFingerTap(multiFingerTapGestureDetector, 2);
+    verify(listener, times(0)).onMultiFingerTap(gestureDetector, 2);
   }
 
   @Test
@@ -79,22 +79,22 @@ public class MultiFingerTapGestureDetectorTest extends AbstractGestureDetectorTe
     dispatchPointerUp(10, pointerDownMotionEvent);
     dispatchUp(10, pointerUpMotionEvent);
 
-    verify(listener, times(0)).onMultiFingerTap(multiFingerTapGestureDetector, 2);
+    verify(listener, times(0)).onMultiFingerTap(gestureDetector, 2);
   }
 
   @Test
   public void twoFingerTapMovementTest() {
     when(
-      multiFingerTapGestureDetector.exceededMovementThreshold(multiFingerTapGestureDetector.pointersDistanceMap))
+      gestureDetector.exceededMovementThreshold(gestureDetector.pointersDistanceMap))
       .thenReturn(false);
     dispatchMovement();
-    verify(listener, times(1)).onMultiFingerTap(multiFingerTapGestureDetector, 2);
+    verify(listener, times(1)).onMultiFingerTap(gestureDetector, 2);
 
     when(
-      multiFingerTapGestureDetector.exceededMovementThreshold(multiFingerTapGestureDetector.pointersDistanceMap))
+      gestureDetector.exceededMovementThreshold(gestureDetector.pointersDistanceMap))
       .thenReturn(true);
     dispatchMovement();
-    verify(listener, times(1)).onMultiFingerTap(multiFingerTapGestureDetector, 2);
+    verify(listener, times(1)).onMultiFingerTap(gestureDetector, 2);
   }
 
   private void dispatchMovement() {
@@ -118,7 +118,7 @@ public class MultiFingerTapGestureDetectorTest extends AbstractGestureDetectorTe
       (float) Math.sqrt(prevX * prevX + prevY * prevY),
       (float) Math.sqrt(currX * currX + currY * currY)
     ));
-    assertFalse(multiFingerTapGestureDetector.exceededMovementThreshold(map));
+    assertFalse(gestureDetector.exceededMovementThreshold(map));
 
     map.clear();
     map.put(new PointerDistancePair(0, 1), new MultiFingerDistancesObject(
@@ -128,19 +128,19 @@ public class MultiFingerTapGestureDetectorTest extends AbstractGestureDetectorTe
       (float) Math.sqrt((currX + Constants.DEFAULT_MULTI_TAP_MOVEMENT_THRESHOLD + 0.5f)
         * (currX + Constants.DEFAULT_MULTI_TAP_MOVEMENT_THRESHOLD + 0.5f) + currY * currY)
     ));
-    assertTrue(multiFingerTapGestureDetector.exceededMovementThreshold(map));
+    assertTrue(gestureDetector.exceededMovementThreshold(map));
   }
 
   private void dispatchDown() {
     downMotionEvent = TestUtils.getMotionEvent(MotionEvent.ACTION_DOWN, 0, 0);
-    multiFingerTapGestureDetector.onTouchEvent(downMotionEvent);
+    gestureDetector.onTouchEvent(downMotionEvent);
   }
 
   private void dispatchPointerDown(long delay, MotionEvent previous) {
     try {
       Thread.sleep(delay);
       pointerDownMotionEvent = TestUtils.getMotionEvent(MotionEvent.ACTION_POINTER_DOWN, 0, 0, previous);
-      multiFingerTapGestureDetector.onTouchEvent(pointerDownMotionEvent);
+      gestureDetector.onTouchEvent(pointerDownMotionEvent);
     } catch (InterruptedException ex) {
       ex.printStackTrace();
     }
@@ -150,7 +150,7 @@ public class MultiFingerTapGestureDetectorTest extends AbstractGestureDetectorTe
     try {
       Thread.sleep(delay);
       pointerUpMotionEvent = TestUtils.getMotionEvent(MotionEvent.ACTION_POINTER_UP, 0, 0, previous);
-      multiFingerTapGestureDetector.onTouchEvent(pointerUpMotionEvent);
+      gestureDetector.onTouchEvent(pointerUpMotionEvent);
     } catch (InterruptedException ex) {
       ex.printStackTrace();
     }
@@ -160,7 +160,7 @@ public class MultiFingerTapGestureDetectorTest extends AbstractGestureDetectorTe
     try {
       Thread.sleep(delay);
       upMotionEvent = TestUtils.getMotionEvent(MotionEvent.ACTION_UP, 0, 0, previous);
-      multiFingerTapGestureDetector.onTouchEvent(upMotionEvent);
+      gestureDetector.onTouchEvent(upMotionEvent);
     } catch (InterruptedException ex) {
       ex.printStackTrace();
     }
@@ -170,7 +170,7 @@ public class MultiFingerTapGestureDetectorTest extends AbstractGestureDetectorTe
     try {
       Thread.sleep(delay);
       moveMotionEvent = TestUtils.getMotionEvent(MotionEvent.ACTION_MOVE, 0, 0, previous);
-      multiFingerTapGestureDetector.onTouchEvent(moveMotionEvent);
+      gestureDetector.onTouchEvent(moveMotionEvent);
     } catch (InterruptedException ex) {
       ex.printStackTrace();
     }
