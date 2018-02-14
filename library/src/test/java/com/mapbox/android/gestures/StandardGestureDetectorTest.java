@@ -71,10 +71,6 @@ public class StandardGestureDetectorTest extends
   }
 
   @Test
-  public void analyzeEventTest() throws Exception {
-  }
-
-  @Test
   public void longpressEnabledTest() throws Exception {
     assertTrue(gestureDetector.isLongpressEnabled());
     gestureDetector.setIsLongpressEnabled(false);

@@ -3,6 +3,7 @@ package com.mapbox.android.gestures;
 import android.content.Context;
 import android.graphics.PointF;
 import android.support.annotation.NonNull;
+import android.support.annotation.UiThread;
 import android.view.MotionEvent;
 
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_MO
  * threshold with {@link MoveGestureDetector#setMoveThreshold(float)} and multi finger support thanks to
  * {@link MoveDistancesObject}.
  */
+@UiThread
 public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.OnMoveGestureListener> {
   private static final int MOVE_REQUIRED_POINTERS_COUNT = 1;
   private static final Set<Integer> handledTypes = new HashSet<>();

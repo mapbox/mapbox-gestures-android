@@ -19,7 +19,7 @@ public class ShoveGestureDetectorTest extends
   }
 
   @Test
-  public void analyzeMovement() throws Exception {
+  public void analyzeMovementTest() throws Exception {
     when(listener.onShoveBegin(gestureDetector)).thenReturn(true);
     when(listener.onShove(gestureDetector, gestureDetector.deltaPixelSinceLast, gestureDetector.deltaPixelsSinceStart))
       .thenReturn(true);
