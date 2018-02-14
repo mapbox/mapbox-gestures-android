@@ -165,17 +165,10 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
         float currFingersDiffX = cx1 - cx0;
         float currFingersDiffY = cy1 - cy0;
 
-        float prevFingersDiffXY =
-          (float) Math.sqrt(prevFingersDiffX * prevFingersDiffX + prevFingersDiffY * prevFingersDiffY);
-
-        float currFingersDiffXY =
-          (float) Math.sqrt(currFingersDiffX * currFingersDiffX + currFingersDiffY * currFingersDiffY);
-
         pointersDistanceMap.put(new PointerDistancePair(primaryPointerId, secondaryPointerId),
           new MultiFingerDistancesObject(
             prevFingersDiffX, prevFingersDiffY,
-            currFingersDiffX, currFingersDiffY,
-            prevFingersDiffXY, currFingersDiffXY)
+            currFingersDiffX, currFingersDiffY)
         );
       }
     }

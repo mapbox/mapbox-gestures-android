@@ -4,9 +4,7 @@ import android.view.MotionEvent;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 
 import java.util.HashMap;
 
@@ -114,19 +112,14 @@ public class MultiFingerTapGestureDetectorTest
     final HashMap<PointerDistancePair, MultiFingerDistancesObject> map = new HashMap<>();
     map.put(new PointerDistancePair(0, 1), new MultiFingerDistancesObject(
       prevX, prevY,
-      currX, currY,
-      (float) Math.sqrt(prevX * prevX + prevY * prevY),
-      (float) Math.sqrt(currX * currX + currY * currY)
+      currX, currY
     ));
     assertFalse(gestureDetector.exceededMovementThreshold(map));
 
     map.clear();
     map.put(new PointerDistancePair(0, 1), new MultiFingerDistancesObject(
       prevX, prevY,
-      currX + Constants.DEFAULT_MULTI_TAP_MOVEMENT_THRESHOLD + 0.5f, currY,
-      (float) Math.sqrt(prevX * prevX + prevY * prevY),
-      (float) Math.sqrt((currX + Constants.DEFAULT_MULTI_TAP_MOVEMENT_THRESHOLD + 0.5f)
-        * (currX + Constants.DEFAULT_MULTI_TAP_MOVEMENT_THRESHOLD + 0.5f) + currY * currY)
+      currX + Constants.DEFAULT_MULTI_TAP_MOVEMENT_THRESHOLD + 0.5f, currY
     ));
     assertTrue(gestureDetector.exceededMovementThreshold(map));
   }
