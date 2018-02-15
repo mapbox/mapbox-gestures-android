@@ -33,6 +33,10 @@ public abstract class ProgressiveGesture<L> extends MultiFingerGesture<L> {
 
   @Override
   protected boolean analyzeEvent(MotionEvent motionEvent) {
+    if (!isEnabled()) {
+      gestureStopped();
+    }
+
     if (velocityTracker != null) {
       velocityTracker.addMovement(getCurrentEvent());
     }

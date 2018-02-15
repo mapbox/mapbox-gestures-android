@@ -110,6 +110,7 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
         break;
 
       case MotionEvent.ACTION_UP:
+        moveDistancesObjectMap.clear();
       case MotionEvent.ACTION_POINTER_UP:
         resetFocal = true; //recalculating focal point
 
@@ -176,7 +177,6 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
   @Override
   protected void reset() {
     super.reset();
-    moveDistancesObjectMap.clear();
   }
 
   @Override
