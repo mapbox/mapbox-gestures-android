@@ -183,16 +183,6 @@ public class MainActivity extends AppCompatActivity {
           rescaleIcon(detector.getScaleFactor());
           return true;
         }
-
-        @Override
-        public boolean scaleVelocityAnimator(StandardScaleGestureDetector detector, float velocityX, float velocityY,
-                                             float scaleVelocityAnimatorValue) {
-          if (!velocityEnabled) {
-            return false;
-          }
-          rescaleIcon(scaleVelocityAnimatorValue);
-          return true;
-        }
       });
 
     androidGesturesManager.setRotateGestureListener(new RotateGestureDetector.SimpleOnRotateGestureListener() {
@@ -200,16 +190,6 @@ public class MainActivity extends AppCompatActivity {
       public boolean onRotate(RotateGestureDetector detector, float rotationDegreesSinceLast,
                               float rotationDegreesSinceFirst) {
         icon.setRotation(icon.getRotation() - rotationDegreesSinceLast);
-        return true;
-      }
-
-      @Override
-      public boolean rotationVelocityAnimator(RotateGestureDetector detector, float velocityX, float velocityY,
-                                              float rotationVelocityAnimatorValue) {
-        if (!velocityEnabled) {
-          return false;
-        }
-        icon.setRotation(icon.getRotation() - rotationVelocityAnimatorValue * 5);
         return true;
       }
     });

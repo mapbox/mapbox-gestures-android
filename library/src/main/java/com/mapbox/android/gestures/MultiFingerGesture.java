@@ -146,7 +146,6 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
   }
 
   protected void reset() {
-    pointersDistanceMap.clear();
   }
 
   private void calculateDistances() {

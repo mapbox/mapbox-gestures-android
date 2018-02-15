@@ -155,18 +155,6 @@ public class RotateGestureDetector extends ProgressiveGesture<RotateGestureDetec
     return angularVelocity;
   }
 
-  void startAnimation() {
-    float angularVelocity = Math.abs(calculateAngularVelocityVector(velocityX, velocityY));
-    if (deltaSinceLast < 0) {
-      angularVelocity = -angularVelocity;
-    }
-
-    valueAnimator.setFloatValues(angularVelocity, 0f);
-    valueAnimator.setDuration((long) (Math.abs(angularVelocity) * 100));
-    valueAnimator.setInterpolator(getInterpolator());
-    valueAnimator.start();
-  }
-
   /**
    * Get the threshold angle between first and current fingers position
    * for this detector to actually qualify it as a rotation gesture.

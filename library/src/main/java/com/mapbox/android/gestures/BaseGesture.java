@@ -69,7 +69,7 @@ public abstract class BaseGesture<L> {
             if (detector instanceof ProgressiveGesture) {
               ProgressiveGesture progressiveDetector = (ProgressiveGesture) detector;
               if (progressiveDetector.getHandledTypes().contains(gestureType)
-                && (progressiveDetector.isInProgress() || progressiveDetector.isVelocityAnimating())) {
+                && progressiveDetector.isInProgress()) {
                 return false;
               }
             }
