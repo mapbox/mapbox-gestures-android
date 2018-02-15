@@ -1,12 +1,8 @@
 package com.mapbox.android.gestures;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.VelocityTracker;
@@ -35,8 +31,6 @@ public class StandardScaleGestureDetector extends
   ScaleGestureDetector.OnScaleGestureListener innerListener;
   private boolean stopConfirmed;
   private boolean isScalingOut;
-  private float scaleVelocityThreshold = 1500f;
-  private long maxScaleVelocityAnimationDuration = 1000L;
 
   float startSpan;
   float spanDeltaSinceStart;
@@ -44,31 +38,6 @@ public class StandardScaleGestureDetector extends
 
   public StandardScaleGestureDetector(Context context, AndroidGesturesManager androidGesturesManager) {
     super(context, androidGesturesManager);
-
-    setInterpolator(new FastOutSlowInInterpolator());
-
-    valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-      @Override
-      public void onAnimationUpdate(ValueAnimator animation) {
-        boolean canContinue = listener.scaleVelocityAnimator(
-          StandardScaleGestureDetector.this,
-          velocityX,
-          velocityY,
-          (Float) animation.getAnimatedValue()
-        );
-
-        if (!canContinue) {
-          animation.cancel();
-        }
-      }
-    });
-
-    valueAnimator.addListener(new AnimatorListenerAdapter() {
-      @Override
-      public void onAnimationEnd(Animator animation) {
-        listener.onScaleEnd(StandardScaleGestureDetector.this);
-      }
-    });
 
     innerListener = new ScaleGestureDetector.OnScaleGestureListener() {
       @Override
@@ -112,7 +81,6 @@ public class StandardScaleGestureDetector extends
   }
 
   boolean innerOnScaleBegin(ScaleGestureDetector detector) {
-    stopConfirmed = false;
     startSpan = detector.getCurrentSpan();
     if (canExecute(GESTURE_TYPE_SCALE)) {
       // Obtaining velocity animator to start gathering gestures for short, quick movements
@@ -132,29 +100,7 @@ public class StandardScaleGestureDetector extends
 
   void innerOnScaleEnd(ScaleGestureDetector detector) {
     stopConfirmed = true;
-
-    if (!isInProgress()) {
-      // Invoking gestureStopped() to cleanup trackers
-      gestureStopped();
-      return;
-    }
-
     gestureStopped();
-    float velocityXY = Math.abs(velocityX) + Math.abs(velocityY);
-    if (velocityXY < scaleVelocityThreshold) {
-      listener.onScaleEnd(StandardScaleGestureDetector.this);
-      return;
-    }
-    startAnimation(velocityXY);
-  }
-
-  void startAnimation(float velocityXY) {
-    float logVelocityXY = (float) Math.log10(velocityXY);
-    logVelocityXY = isScalingOut ? -logVelocityXY : logVelocityXY;
-    valueAnimator.setFloatValues(1f + logVelocityXY / 100, 1.0f);
-    valueAnimator.setDuration(Math.abs((long) Math.min(velocityXY / 7, maxScaleVelocityAnimationDuration)));
-    valueAnimator.setInterpolator(getInterpolator());
-    valueAnimator.start();
   }
 
   @Override
@@ -165,8 +111,16 @@ public class StandardScaleGestureDetector extends
 
   @Override
   protected void gestureStopped() {
+    if (!isInProgress()) {
+      // Cleaning up resources after a gesture that did not exceed the threshold
+      super.gestureStopped();
+      return;
+    }
+
     if (stopConfirmed) {
       super.gestureStopped();
+      listener.onScaleEnd(StandardScaleGestureDetector.this, velocityX, velocityY);
+      stopConfirmed = false;
     }
   }
 
@@ -177,33 +131,6 @@ public class StandardScaleGestureDetector extends
   }
 
   public interface StandardOnScaleGestureListener {
-
-    /**
-     * Continuous callback after user has ended scale gesture by lifting the fingers.
-     * Value animation is based on the velocity of the gesture when it ended and this callback will be invoked for each
-     * animation value change until the value animation finishes.
-     * <p>
-     * {@link #onScaleEnd(StandardScaleGestureDetector)} will not be called until the value animation finishes.
-     * You can return false here to end the gesture immediately.
-     *
-     * @param detector                   this detector
-     * @param velocityX                  velocityX of the gesture in the moment of lifting the fingers
-     * @param velocityY                  velocityY of the gesture in the moment of lifting the fingers
-     * @param scaleVelocityAnimatorValue current animation value of the gesture
-     * @return true if you want to receive the rest of the animation callbacks
-     * or false to end the rotation gesture immediately.
-     */
-    boolean scaleVelocityAnimator(StandardScaleGestureDetector detector, float velocityX, float velocityY,
-                                  float scaleVelocityAnimatorValue);
-
-    /**
-     * You can retrieve the base {@link ScaleGestureDetector} via {@link #getUnderlyingScaleGestureDetector()}.
-     *
-     * @param detector this detector
-     * @see android.view.ScaleGestureDetector.OnScaleGestureListener#onScale(ScaleGestureDetector)
-     */
-    boolean onScale(StandardScaleGestureDetector detector);
-
     /**
      * You can retrieve the base {@link ScaleGestureDetector} via {@link #getUnderlyingScaleGestureDetector()}.
      *
@@ -216,17 +143,22 @@ public class StandardScaleGestureDetector extends
      * You can retrieve the base {@link ScaleGestureDetector} via {@link #getUnderlyingScaleGestureDetector()}.
      *
      * @param detector this detector
+     * @see android.view.ScaleGestureDetector.OnScaleGestureListener#onScale(ScaleGestureDetector)
+     */
+    boolean onScale(StandardScaleGestureDetector detector);
+
+    /**
+     * You can retrieve the base {@link ScaleGestureDetector} via {@link #getUnderlyingScaleGestureDetector()}.
+     *
+     * @param detector  this detector
+     * @param velocityX velocityX of the gesture in the moment of lifting the fingers
+     * @param velocityY velocityY of the gesture in the moment of lifting the fingers
      * @see android.view.ScaleGestureDetector.OnScaleGestureListener#onScaleEnd(ScaleGestureDetector)
      */
-    void onScaleEnd(StandardScaleGestureDetector detector);
+    void onScaleEnd(StandardScaleGestureDetector detector, float velocityX, float velocityY);
   }
 
   public static class SimpleStandardOnScaleGestureListener implements StandardOnScaleGestureListener {
-
-    @Override
-    public boolean onScale(StandardScaleGestureDetector detector) {
-      return false;
-    }
 
     @Override
     public boolean onScaleBegin(StandardScaleGestureDetector detector) {
@@ -234,51 +166,14 @@ public class StandardScaleGestureDetector extends
     }
 
     @Override
-    public void onScaleEnd(StandardScaleGestureDetector detector) {
-      // No implementation
+    public boolean onScale(StandardScaleGestureDetector detector) {
+      return false;
     }
 
     @Override
-    public boolean scaleVelocityAnimator(StandardScaleGestureDetector detector, float velocityX, float velocityY,
-                                         float scaleVelocityAnimatorValue) {
-      return false;
+    public void onScaleEnd(StandardScaleGestureDetector detector, float velocityX, float velocityY) {
+      // No implementation
     }
-  }
-
-  /**
-   * Get minimum XY velocity of the gesture required to start value animation.
-   *
-   * @return minimum XY velocity to start value animation
-   */
-  public float getScaleVelocityThreshold() {
-    return scaleVelocityThreshold;
-  }
-
-  /**
-   * Set minimum XY velocity of the gesture required to start value animation.
-   *
-   * @param scaleVelocityThreshold minimum XY velocity to start value animation
-   */
-  public void setScaleVelocityThreshold(float scaleVelocityThreshold) {
-    this.scaleVelocityThreshold = scaleVelocityThreshold;
-  }
-
-  /**
-   * Get maximum scale velocity animation duration.
-   *
-   * @return maximum scale velocity animation duration
-   */
-  public long getMaxScaleVelocityAnimationDuration() {
-    return maxScaleVelocityAnimationDuration;
-  }
-
-  /**
-   * Set maximum scale velocity animation duration.
-   *
-   * @param maxScaleVelocityAnimationDuration maximum scale velocity animation duration
-   */
-  public void setMaxScaleVelocityAnimationDuration(long maxScaleVelocityAnimationDuration) {
-    this.maxScaleVelocityAnimationDuration = maxScaleVelocityAnimationDuration;
   }
 
   /**

@@ -21,7 +21,6 @@ public class StandardScaleGestureDetectorTest extends
   public void analyzeMovementTest() throws Exception {
     when(listener.onScaleBegin(gestureDetector)).thenReturn(true);
     when(listener.onScale(gestureDetector)).thenReturn(true);
-    doNothing().when(gestureDetector).startAnimation(0);
 
     // threshold not met
     gestureDetector.spanDeltaSinceStart = gestureDetector.getSpanSinceStartThreshold() / 2;
@@ -50,7 +49,7 @@ public class StandardScaleGestureDetectorTest extends
 
     // threshold not met
     gestureDetector.setSpanSinceStartThreshold(gestureDetector.getDefaultSpanSinceStartThreshold());
-    gestureDetector.startSpan = gestureDetector.getSpanThreshold() / 2;
+    gestureDetector.startSpan = gestureDetector.getSpanSinceStartThreshold() / 2;
     gestureDetector.innerOnScaleBegin(gestureDetector.getUnderlyingScaleGestureDetector());
     gestureDetector.innerOnScale(gestureDetector.getUnderlyingScaleGestureDetector());
     // stopping without surpassing threshold, no callback invocations
@@ -58,6 +57,7 @@ public class StandardScaleGestureDetectorTest extends
 
     verify(listener, times(2)).onScaleBegin(gestureDetector);
     verify(listener, times(2)).onScale(gestureDetector);
-    verify(listener, times(2)).onScaleEnd(gestureDetector);
+    verify(listener, times(2)).onScaleEnd(
+      gestureDetector, gestureDetector.velocityX, gestureDetector.velocityY);
   }
 }
