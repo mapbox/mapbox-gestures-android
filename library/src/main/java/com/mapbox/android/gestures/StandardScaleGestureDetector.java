@@ -32,13 +32,14 @@ public class StandardScaleGestureDetector extends
   }
 
   private ScaleGestureDetector scaleGestureDetector;
+  ScaleGestureDetector.OnScaleGestureListener innerListener;
   private boolean stopConfirmed;
   private boolean isScalingOut;
   private float scaleVelocityThreshold = 1500f;
   private long maxScaleVelocityAnimationDuration = 1000L;
 
-  private float startSpan;
-  private float spanDeltaSinceStart;
+  float startSpan;
+  float spanDeltaSinceStart;
   private float spanSinceStartThreshold = Constants.DEFAULT_SCALE_SPAN_SINCE_START_THRESHOLD;
 
   public StandardScaleGestureDetector(Context context, AndroidGesturesManager androidGesturesManager) {
@@ -69,77 +70,91 @@ public class StandardScaleGestureDetector extends
       }
     });
 
-    ScaleGestureDetector.OnScaleGestureListener innerListener = new ScaleGestureDetector.OnScaleGestureListener() {
+    innerListener = new ScaleGestureDetector.OnScaleGestureListener() {
       @Override
       public boolean onScale(ScaleGestureDetector detector) {
-        spanDeltaSinceStart = Math.abs(startSpan - detector.getCurrentSpan());
-
-        // If we can execute but haven't started immediately because there is a threshold as well, check it
-        if (!isInProgress() && spanDeltaSinceStart > spanSinceStartThreshold) {
-          if (listener.onScaleBegin(StandardScaleGestureDetector.this)) {
-            gestureStarted();
-            return true;
-          } else {
-            return false;
-          }
-        }
-
-        if (isInProgress()) {
-          isScalingOut = detector.getScaleFactor() < 1.0f;
-          return listener.onScale(StandardScaleGestureDetector.this);
-        }
-
-        return true;
+        return innerOnScale(detector);
       }
 
       @Override
       public boolean onScaleBegin(ScaleGestureDetector detector) {
-        stopConfirmed = false;
-        startSpan = detector.getCurrentSpan();
-        if (canExecute(GESTURE_TYPE_SCALE)) {
-          // Obtaining velocity animator to start gathering gestures for short, quick movements
-          velocityTracker = VelocityTracker.obtain();
-
-          // If scale can execute and there is no threshold, start gesture
-          if (spanSinceStartThreshold == 0) {
-            if (listener.onScaleBegin(StandardScaleGestureDetector.this)) {
-              gestureStarted();
-            }
-          }
-
-          return true;
-        }
-        return false;
+        return innerOnScaleBegin(detector);
       }
 
       @Override
       public void onScaleEnd(final ScaleGestureDetector detector) {
-        stopConfirmed = true;
-
-        if (!isInProgress()) {
-          // Invoked when gesture finished but never reached the threshold. Cleaning up the VelocityAnimator
-          gestureStopped();
-          return;
-        }
-
-        gestureStopped();
-
-        float velocityXY = Math.abs(velocityX) + Math.abs(velocityY);
-        if (velocityXY < scaleVelocityThreshold) {
-          listener.onScaleEnd(StandardScaleGestureDetector.this);
-          return;
-        }
-
-        float logVelocityXY = (float) Math.log10(velocityXY);
-        logVelocityXY = isScalingOut ? -logVelocityXY : logVelocityXY;
-        valueAnimator.setFloatValues(1f + logVelocityXY / 100, 1.0f);
-        valueAnimator.setDuration(Math.abs((long) Math.min(velocityXY / 7, maxScaleVelocityAnimationDuration)));
-        valueAnimator.setInterpolator(getInterpolator());
-        valueAnimator.start();
+        innerOnScaleEnd(detector);
       }
     };
 
     scaleGestureDetector = new ScaleGestureDetector(context, innerListener);
+  }
+
+  boolean innerOnScale(ScaleGestureDetector detector) {
+    spanDeltaSinceStart = Math.abs(startSpan - detector.getCurrentSpan());
+
+    // If we can execute but haven't started immediately because there is a threshold as well, check it
+    if (!isInProgress() && spanDeltaSinceStart > spanSinceStartThreshold) {
+      if (listener.onScaleBegin(StandardScaleGestureDetector.this)) {
+        gestureStarted();
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    if (isInProgress()) {
+      isScalingOut = detector.getScaleFactor() < 1.0f;
+      return listener.onScale(StandardScaleGestureDetector.this);
+    }
+
+    return true;
+  }
+
+  boolean innerOnScaleBegin(ScaleGestureDetector detector) {
+    stopConfirmed = false;
+    startSpan = detector.getCurrentSpan();
+    if (canExecute(GESTURE_TYPE_SCALE)) {
+      // Obtaining velocity animator to start gathering gestures for short, quick movements
+      velocityTracker = VelocityTracker.obtain();
+
+      // If scale can execute and there is no threshold, start gesture
+      if (spanSinceStartThreshold == 0) {
+        if (listener.onScaleBegin(StandardScaleGestureDetector.this)) {
+          gestureStarted();
+        }
+      }
+
+      return true;
+    }
+    return false;
+  }
+
+  void innerOnScaleEnd(ScaleGestureDetector detector) {
+    stopConfirmed = true;
+
+    if (!isInProgress()) {
+      // Invoking gestureStopped() to cleanup trackers
+      gestureStopped();
+      return;
+    }
+
+    gestureStopped();
+    float velocityXY = Math.abs(velocityX) + Math.abs(velocityY);
+    if (velocityXY < scaleVelocityThreshold) {
+      listener.onScaleEnd(StandardScaleGestureDetector.this);
+      return;
+    }
+    startAnimation(velocityXY);
+  }
+
+  void startAnimation(float velocityXY) {
+    float logVelocityXY = (float) Math.log10(velocityXY);
+    logVelocityXY = isScalingOut ? -logVelocityXY : logVelocityXY;
+    valueAnimator.setFloatValues(1f + logVelocityXY / 100, 1.0f);
+    valueAnimator.setDuration(Math.abs((long) Math.min(velocityXY / 7, maxScaleVelocityAnimationDuration)));
+    valueAnimator.setInterpolator(getInterpolator());
+    valueAnimator.start();
   }
 
   @Override

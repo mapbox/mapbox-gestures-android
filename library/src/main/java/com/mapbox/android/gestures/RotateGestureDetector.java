@@ -25,8 +25,8 @@ public class RotateGestureDetector extends ProgressiveGesture<RotateGestureDetec
   }
 
   private float angleThreshold = Constants.DEFAULT_ROTATE_ANGLE_THRESHOLD;
-  private float deltaSinceStart;
-  private float deltaSinceLast;
+  float deltaSinceStart;
+  float deltaSinceLast;
 
   public RotateGestureDetector(Context context, AndroidGesturesManager gesturesManager) {
     super(context, gesturesManager);
@@ -167,21 +167,14 @@ public class RotateGestureDetector extends ProgressiveGesture<RotateGestureDetec
 
     if (deltaSinceLast == 0) {
       listener.onRotateEnd(this);
+      deltaSinceStart = 0;
       return;
     }
 
-    float angularVelocity = Math.abs(calculateAngularVelocityVector(velocityX, velocityY));
-    if (deltaSinceLast < 0) {
-      angularVelocity = -angularVelocity;
-    }
-
-    valueAnimator.setFloatValues(angularVelocity, 0f);
-    valueAnimator.setDuration((long) (Math.abs(angularVelocity) * 100));
-    valueAnimator.setInterpolator(getInterpolator());
-    valueAnimator.start();
+    startAnimation();
   }
 
-  private float getRotationDegreesSinceLast() {
+  float getRotationDegreesSinceLast() {
     MultiFingerDistancesObject distancesObject =
       pointersDistanceMap.get(new PointerDistancePair(pointerIdList.get(0), pointerIdList.get(1)));
 
@@ -192,9 +185,21 @@ public class RotateGestureDetector extends ProgressiveGesture<RotateGestureDetec
     return (float) Math.toDegrees(diffRadians);
   }
 
-  private float calculateAngularVelocityVector(float velocityX, float velocityY) {
+  float calculateAngularVelocityVector(float velocityX, float velocityY) {
     return (float) ((getFocalPoint().x * velocityY + getFocalPoint().y * velocityX)
       / (Math.pow(getFocalPoint().x, 2.0) + Math.pow(getFocalPoint().y, 2.0)));
+  }
+
+  void startAnimation() {
+    float angularVelocity = Math.abs(calculateAngularVelocityVector(velocityX, velocityY));
+    if (deltaSinceLast < 0) {
+      angularVelocity = -angularVelocity;
+    }
+
+    valueAnimator.setFloatValues(angularVelocity, 0f);
+    valueAnimator.setDuration((long) (Math.abs(angularVelocity) * 100));
+    valueAnimator.setInterpolator(getInterpolator());
+    valueAnimator.start();
   }
 
   /**

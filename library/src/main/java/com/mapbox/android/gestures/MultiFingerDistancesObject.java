@@ -12,14 +12,17 @@ public class MultiFingerDistancesObject {
   private final float currFingersDiffXY;
 
   public MultiFingerDistancesObject(float prevFingersDiffX, float prevFingersDiffY,
-                                    float currFingersDiffX, float currFingersDiffY,
-                                    float prevFingersDiffXY, float currFingersDiffXY) {
+                                    float currFingersDiffX, float currFingersDiffY) {
     this.prevFingersDiffX = prevFingersDiffX;
     this.prevFingersDiffY = prevFingersDiffY;
     this.currFingersDiffX = currFingersDiffX;
     this.currFingersDiffY = currFingersDiffY;
-    this.prevFingersDiffXY = prevFingersDiffXY;
-    this.currFingersDiffXY = currFingersDiffXY;
+
+    prevFingersDiffXY =
+      (float) Math.sqrt(prevFingersDiffX * prevFingersDiffX + prevFingersDiffY * prevFingersDiffY);
+
+    currFingersDiffXY =
+      (float) Math.sqrt(currFingersDiffX * currFingersDiffX + currFingersDiffY * currFingersDiffY);
   }
 
   public float getPrevFingersDiffX() {

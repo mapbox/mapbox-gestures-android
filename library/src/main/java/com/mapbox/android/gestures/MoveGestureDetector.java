@@ -3,6 +3,7 @@ package com.mapbox.android.gestures;
 import android.content.Context;
 import android.graphics.PointF;
 import android.support.annotation.NonNull;
+import android.support.annotation.UiThread;
 import android.view.MotionEvent;
 
 import java.util.HashMap;
@@ -23,11 +24,14 @@ import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_MO
  * threshold with {@link MoveGestureDetector#setMoveThreshold(float)} and multi finger support thanks to
  * {@link MoveDistancesObject}.
  */
+@UiThread
 public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.OnMoveGestureListener> {
   private static final int MOVE_REQUIRED_POINTERS_COUNT = 1;
   private static final Set<Integer> handledTypes = new HashSet<>();
   private PointF previousFocalPoint;
   private boolean resetFocal;
+  float focalDistanceX;
+  float focalDistanceY;
 
   static {
     handledTypes.add(GESTURE_TYPE_MOVE);
@@ -126,14 +130,14 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
 
     if (isInProgress()) {
       PointF currentFocalPoint = getFocalPoint();
-      float distanceX = previousFocalPoint.x - currentFocalPoint.x;
-      float distanceY = previousFocalPoint.y - currentFocalPoint.y;
+      focalDistanceX = previousFocalPoint.x - currentFocalPoint.x;
+      focalDistanceY = previousFocalPoint.y - currentFocalPoint.y;
       previousFocalPoint = currentFocalPoint;
       if (resetFocal) {
         resetFocal = false;
         return listener.onMove(this, 0, 0);
       }
-      return listener.onMove(this, distanceX, distanceY);
+      return listener.onMove(this, focalDistanceX, focalDistanceY);
     } else if (canExecute(GESTURE_TYPE_MOVE)) {
       if (listener.onMoveBegin(this)) {
         gestureStarted();
@@ -154,7 +158,7 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
     }
   }
 
-  private boolean checkAnyMoveAboveThreshold() {
+  boolean checkAnyMoveAboveThreshold() {
     for (MoveDistancesObject moveDistancesObject : moveDistancesObjectMap.values()) {
       if (Math.abs(moveDistancesObject.getDistanceXSinceStart()) > moveThreshold
         || Math.abs(moveDistancesObject.getDistanceYSinceStart()) > moveThreshold) {
@@ -173,6 +177,12 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
   protected void reset() {
     super.reset();
     moveDistancesObjectMap.clear();
+  }
+
+  @Override
+  protected void gestureStopped() {
+    super.gestureStopped();
+    listener.onMoveEnd(this);
   }
 
   @Override

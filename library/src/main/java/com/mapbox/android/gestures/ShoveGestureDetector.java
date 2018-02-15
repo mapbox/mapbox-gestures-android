@@ -3,7 +3,6 @@ package com.mapbox.android.gestures;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
-import android.view.MotionEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,7 +22,8 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
 
   private float maxShoveAngle = Constants.DEFAULT_SHOVE_MAX_ANGLE;
   private float pixelDeltaThreshold = Constants.DEFAULT_SHOVE_PIXEL_THRESHOLD;
-  private float deltaPixelsSinceStart;
+  float deltaPixelsSinceStart;
+  float deltaPixelSinceLast;
 
   public ShoveGestureDetector(Context context, AndroidGesturesManager gesturesManager) {
     super(context, gesturesManager);
@@ -84,7 +84,7 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
   protected boolean analyzeMovement() {
     super.analyzeMovement();
 
-    float deltaPixelSinceLast = getDeltaPixelsSinceLast();
+    deltaPixelSinceLast = getDeltaPixelsSinceLast();
     deltaPixelsSinceStart += deltaPixelSinceLast;
 
     if (isInProgress() && deltaPixelSinceLast != 0) {
@@ -106,8 +106,8 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
   }
 
   @Override
-  protected boolean isSloppyGesture(MotionEvent event) {
-    return super.isSloppyGesture(event) || !isAngleAcceptable();
+  protected boolean isSloppyGesture() {
+    return super.isSloppyGesture() || !isAngleAcceptable();
   }
 
   @Override
@@ -122,7 +122,7 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
     deltaPixelsSinceStart = 0;
   }
 
-  private boolean isAngleAcceptable() {
+  boolean isAngleAcceptable() {
     MultiFingerDistancesObject distancesObject =
       pointersDistanceMap.get(new PointerDistancePair(pointerIdList.get(0), pointerIdList.get(1)));
 
@@ -133,7 +133,7 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
     return angle <= maxShoveAngle || 180f - angle <= maxShoveAngle;
   }
 
-  private float getDeltaPixelsSinceLast() {
+  float getDeltaPixelsSinceLast() {
     float py0 = getPreviousEvent().getY(getPreviousEvent().findPointerIndex(pointerIdList.get(0)));
     float py1 = getPreviousEvent().getY(getPreviousEvent().findPointerIndex(pointerIdList.get(1)));
     float prevAverageY = (py0 + py1) / 2.0f;
