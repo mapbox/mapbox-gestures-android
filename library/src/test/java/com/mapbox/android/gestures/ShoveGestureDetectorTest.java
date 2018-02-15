@@ -73,7 +73,8 @@ public class ShoveGestureDetectorTest extends
     gestureDetector.analyzeMovement();
 
     verify(listener, times(2)).onShoveBegin(gestureDetector);
-    verify(listener, times(1)).onShoveEnd(gestureDetector);
+    verify(listener, times(1)).onShoveEnd(
+      gestureDetector, gestureDetector.velocityX, gestureDetector.velocityY);
   }
 
   @Test
