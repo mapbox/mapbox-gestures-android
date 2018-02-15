@@ -28,34 +28,8 @@ public class RotateGestureDetector extends ProgressiveGesture<RotateGestureDetec
   float deltaSinceStart;
   float deltaSinceLast;
 
-  public RotateGestureDetector(Context context, AndroidGesturesManager gesturesManager) {
+  protected RotateGestureDetector(Context context, AndroidGesturesManager gesturesManager) {
     super(context, gesturesManager);
-
-    setInterpolator(new DecelerateInterpolator());
-
-    valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-      @Override
-      public void onAnimationUpdate(ValueAnimator animation) {
-        boolean canContinue = listener.rotationVelocityAnimator(
-          RotateGestureDetector.this,
-          velocityX,
-          velocityY,
-          (Float) animation.getAnimatedValue()
-        );
-
-        if (!canContinue) {
-          animation.cancel();
-        }
-      }
-    });
-
-    valueAnimator.addListener(new AnimatorListenerAdapter() {
-      @Override
-      public void onAnimationEnd(Animator animation) {
-        listener.onRotateEnd(RotateGestureDetector.this);
-        deltaSinceStart = 0;
-      }
-    });
   }
 
   @NonNull
@@ -87,29 +61,14 @@ public class RotateGestureDetector extends ProgressiveGesture<RotateGestureDetec
     boolean onRotate(RotateGestureDetector detector, float rotationDegreesSinceLast, float rotationDegreesSinceFirst);
 
     /**
-     * Continuous callback after user has ended rotation gesture by lifting the fingers.
-     * Value animation is based on the velocity of the gesture when it ended and this callback will be invoked for each
-     * animation value change until the value animation finishes.
-     * <p>
-     * {@link #onRotateEnd(RotateGestureDetector)} will not be called until the value animation finishes.
-     * You can return false here to end the gesture immediately.
-     *
-     * @param detector                      this detector
-     * @param velocityX                     velocityX of the gesture in the moment of lifting the fingers
-     * @param velocityY                     velocityY of the gesture in the moment of lifting the fingers
-     * @param rotationVelocityAnimatorValue current animation value of the gesture
-     * @return true if you want to receive the rest of the animation callbacks
-     * or false to end the rotation gesture immediately.
-     */
-    boolean rotationVelocityAnimator(RotateGestureDetector detector, float velocityX, float velocityY,
-                                     float rotationVelocityAnimatorValue);
-
-    /**
      * Indicates that the rotation gesture ended.
      *
-     * @param detector this detector
+     * @param velocityX       velocityX of the gesture in the moment of lifting the fingers
+     * @param velocityY       velocityY of the gesture in the moment of lifting the fingers
+     * @param angularVelocity angularVelocity of the gesture in the moment of lifting the fingers
+     * @param detector        this detector
      */
-    void onRotateEnd(RotateGestureDetector detector);
+    void onRotateEnd(RotateGestureDetector detector, float velocityX, float velocityY, float angularVelocity);
   }
 
   public static class SimpleOnRotateGestureListener implements OnRotateGestureListener {
@@ -126,13 +85,7 @@ public class RotateGestureDetector extends ProgressiveGesture<RotateGestureDetec
     }
 
     @Override
-    public boolean rotationVelocityAnimator(RotateGestureDetector detector, float velocityX, float velocityY,
-                                            float rotationVelocityAnimatorValue) {
-      return false;
-    }
-
-    @Override
-    public void onRotateEnd(RotateGestureDetector detector) {
+    public void onRotateEnd(RotateGestureDetector detector, float velocityX, float velocityY, float angularVelocity) {
       // No implementation
     }
   }
@@ -166,12 +119,18 @@ public class RotateGestureDetector extends ProgressiveGesture<RotateGestureDetec
     super.gestureStopped();
 
     if (deltaSinceLast == 0) {
-      listener.onRotateEnd(this);
-      deltaSinceStart = 0;
-      return;
+      velocityX = 0;
+      velocityY = 0;
     }
 
-    startAnimation();
+    float angularVelocity = Math.abs(calculateAngularVelocityVector(velocityX, velocityY));
+    listener.onRotateEnd(this, velocityX, velocityY, angularVelocity);
+  }
+
+  @Override
+  protected void reset() {
+    super.reset();
+    deltaSinceStart = 0f;
   }
 
   float getRotationDegreesSinceLast() {
@@ -186,8 +145,14 @@ public class RotateGestureDetector extends ProgressiveGesture<RotateGestureDetec
   }
 
   float calculateAngularVelocityVector(float velocityX, float velocityY) {
-    return (float) ((getFocalPoint().x * velocityY + getFocalPoint().y * velocityX)
-      / (Math.pow(getFocalPoint().x, 2.0) + Math.pow(getFocalPoint().y, 2.0)));
+    float angularVelocity = Math.abs((float) ((getFocalPoint().x * velocityY + getFocalPoint().y * velocityX)
+      / (Math.pow(getFocalPoint().x, 2.0) + Math.pow(getFocalPoint().y, 2.0))));
+
+    if (deltaSinceLast < 0) {
+      angularVelocity = -angularVelocity;
+    }
+
+    return angularVelocity;
   }
 
   void startAnimation() {

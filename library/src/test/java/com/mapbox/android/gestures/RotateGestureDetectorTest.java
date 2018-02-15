@@ -50,15 +50,15 @@ public class RotateGestureDetectorTest extends
       gestureDetector.deltaSinceLast, gestureDetector.deltaSinceStart);
 
     // stopping
-    gestureDetector.deltaSinceLast = 0f; // to stop gesture without animation
-    doNothing().when(gestureDetector).startAnimation();
     gestureDetector.gestureStopped();
 
     // not starting because threshold not met
     gestureDetector.analyzeMovement();
 
     verify(listener, times(1)).onRotateBegin(gestureDetector);
-    verify(listener, times(1)).onRotateEnd(gestureDetector);
+    verify(listener, times(1)).onRotateEnd(
+      gestureDetector, gestureDetector.velocityX, gestureDetector.velocityY,
+      gestureDetector.calculateAngularVelocityVector(gestureDetector.velocityX, gestureDetector.velocityY));
   }
 
   @Test
