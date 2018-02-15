@@ -98,6 +98,7 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
   protected boolean analyzeEvent(MotionEvent motionEvent) {
     switch (motionEvent.getActionMasked()) {
       case MotionEvent.ACTION_DOWN:
+        moveDistancesObjectMap.clear();
       case MotionEvent.ACTION_POINTER_DOWN:
         resetFocal = true; //recalculating focal point
 
@@ -111,6 +112,8 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
 
       case MotionEvent.ACTION_UP:
         moveDistancesObjectMap.clear();
+        break;
+
       case MotionEvent.ACTION_POINTER_UP:
         resetFocal = true; //recalculating focal point
 

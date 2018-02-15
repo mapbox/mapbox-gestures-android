@@ -33,7 +33,7 @@ public abstract class ProgressiveGesture<L> extends MultiFingerGesture<L> {
 
   @Override
   protected boolean analyzeEvent(MotionEvent motionEvent) {
-    if (!isEnabled()) {
+    if (!isEnabled() && isInProgress) {
       gestureStopped();
     }
 
