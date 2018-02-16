@@ -19,6 +19,7 @@ public abstract class ProgressiveGesture<L> extends MultiFingerGesture<L> {
   private final Set<Integer> handledTypes = provideHandledTypes();
 
   private boolean isInProgress;
+  private boolean interrupted;
 
   VelocityTracker velocityTracker;
   float velocityX;
@@ -33,7 +34,8 @@ public abstract class ProgressiveGesture<L> extends MultiFingerGesture<L> {
 
   @Override
   protected boolean analyzeEvent(MotionEvent motionEvent) {
-    if (!isEnabled() && isInProgress) {
+    if ((!isEnabled() || interrupted) && isInProgress) {
+      interrupted = false;
       gestureStopped();
     }
 
@@ -110,5 +112,9 @@ public abstract class ProgressiveGesture<L> extends MultiFingerGesture<L> {
    */
   public boolean isInProgress() {
     return isInProgress;
+  }
+
+  public void interrupt() {
+    this.interrupted = true;
   }
 }
