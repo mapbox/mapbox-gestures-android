@@ -123,7 +123,7 @@ public class RotateGestureDetector extends ProgressiveGesture<RotateGestureDetec
       velocityY = 0;
     }
 
-    float angularVelocity = Math.abs(calculateAngularVelocityVector(velocityX, velocityY));
+    float angularVelocity = calculateAngularVelocityVector(velocityX, velocityY);
     listener.onRotateEnd(this, velocityX, velocityY, angularVelocity);
   }
 
