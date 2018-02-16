@@ -103,7 +103,7 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
 
   @Override
   protected boolean canExecute(int invokedGestureType) {
-    return Math.abs(deltaPixelsSinceStart) > pixelDeltaThreshold
+    return Math.abs(deltaPixelsSinceStart) >= pixelDeltaThreshold
       && super.canExecute(invokedGestureType);
   }
 

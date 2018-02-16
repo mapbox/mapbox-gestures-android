@@ -60,10 +60,14 @@ public class StandardScaleGestureDetector extends
   }
 
   boolean innerOnScale(ScaleGestureDetector detector) {
+    if (startSpan == 0) {
+      startSpan = detector.getCurrentSpan();
+    }
+
     spanDeltaSinceStart = Math.abs(startSpan - detector.getCurrentSpan());
 
     // If we can execute but haven't started immediately because there is a threshold as well, check it
-    if (!isInProgress() && spanDeltaSinceStart > spanSinceStartThreshold) {
+    if (!isInProgress() && canExecute(GESTURE_TYPE_SCALE) && spanDeltaSinceStart >= spanSinceStartThreshold) {
       if (listener.onScaleBegin(StandardScaleGestureDetector.this)) {
         gestureStarted();
         return true;
@@ -122,6 +126,12 @@ public class StandardScaleGestureDetector extends
       listener.onScaleEnd(StandardScaleGestureDetector.this, velocityX, velocityY);
       stopConfirmed = false;
     }
+  }
+
+  @Override
+  public void interrupt() {
+    super.interrupt();
+    stopConfirmed = true;
   }
 
   @NonNull

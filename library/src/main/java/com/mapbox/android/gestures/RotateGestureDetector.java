@@ -111,7 +111,7 @@ public class RotateGestureDetector extends ProgressiveGesture<RotateGestureDetec
 
   @Override
   protected boolean canExecute(int invokedGestureType) {
-    return Math.abs(deltaSinceStart) > angleThreshold && super.canExecute(invokedGestureType);
+    return Math.abs(deltaSinceStart) >= angleThreshold && super.canExecute(invokedGestureType);
   }
 
   @Override

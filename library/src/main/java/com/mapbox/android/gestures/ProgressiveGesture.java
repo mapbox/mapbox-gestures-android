@@ -114,6 +114,9 @@ public abstract class ProgressiveGesture<L> extends MultiFingerGesture<L> {
     return isInProgress;
   }
 
+  /**
+   *
+   */
   public void interrupt() {
     this.interrupted = true;
   }

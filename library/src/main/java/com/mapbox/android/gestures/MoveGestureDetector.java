@@ -164,8 +164,8 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
 
   boolean checkAnyMoveAboveThreshold() {
     for (MoveDistancesObject moveDistancesObject : moveDistancesObjectMap.values()) {
-      if (Math.abs(moveDistancesObject.getDistanceXSinceStart()) > moveThreshold
-        || Math.abs(moveDistancesObject.getDistanceYSinceStart()) > moveThreshold) {
+      if (Math.abs(moveDistancesObject.getDistanceXSinceStart()) >= moveThreshold
+        || Math.abs(moveDistancesObject.getDistanceYSinceStart()) >= moveThreshold) {
         return true;
       }
     }
