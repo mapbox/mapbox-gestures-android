@@ -2,6 +2,7 @@ package com.mapbox.android.gestures;
 
 import org.junit.Test;
 
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -20,6 +21,7 @@ public class StandardScaleGestureDetectorTest extends
   public void analyzeMovementTest() throws Exception {
     when(listener.onScaleBegin(gestureDetector)).thenReturn(true);
     when(listener.onScale(gestureDetector)).thenReturn(true);
+    doReturn(false).when(gestureDetector).isSloppyGesture();
 
     // threshold not met
     gestureDetector.spanDeltaSinceStart = gestureDetector.getSpanSinceStartThreshold() / 2;
@@ -43,6 +45,16 @@ public class StandardScaleGestureDetectorTest extends
     //scale
     gestureDetector.innerOnScale(gestureDetector.getUnderlyingScaleGestureDetector());
 
+    //interrupt
+    gestureDetector.interrupt();
+    gestureDetector.analyzeEvent(emptyMotionEvent);
+
+    //stopping, then starting because was interrupted
+    gestureDetector.innerOnScale(gestureDetector.getUnderlyingScaleGestureDetector());
+
+    //scale
+    gestureDetector.innerOnScale(gestureDetector.getUnderlyingScaleGestureDetector());
+
     // stopping
     gestureDetector.innerOnScaleEnd(gestureDetector.getUnderlyingScaleGestureDetector());
 
@@ -54,9 +66,9 @@ public class StandardScaleGestureDetectorTest extends
     // stopping without surpassing threshold, no callback invocations
     gestureDetector.innerOnScaleEnd(gestureDetector.getUnderlyingScaleGestureDetector());
 
-    verify(listener, times(2)).onScaleBegin(gestureDetector);
-    verify(listener, times(2)).onScale(gestureDetector);
-    verify(listener, times(2)).onScaleEnd(
+    verify(listener, times(3)).onScaleBegin(gestureDetector);
+    verify(listener, times(3)).onScale(gestureDetector);
+    verify(listener, times(3)).onScaleEnd(
       gestureDetector, gestureDetector.velocityX, gestureDetector.velocityY);
   }
 }
