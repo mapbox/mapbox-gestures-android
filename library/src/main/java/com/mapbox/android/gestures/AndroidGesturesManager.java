@@ -226,7 +226,7 @@ public class AndroidGesturesManager {
    * {@link com.mapbox.android.gestures.StandardGestureDetector.StandardOnGestureListener
    * #onScroll(MotionEvent, MotionEvent, float, float)}, however, it's a {@link ProgressiveGesture} that
    * introduces {@link MoveGestureDetector.OnMoveGestureListener#onMoveBegin(MoveGestureDetector)},
-   * {@link MoveGestureDetector.OnMoveGestureListener#onMoveEnd(MoveGestureDetector)},
+   * {@link MoveGestureDetector.OnMoveGestureListener#onMoveEnd(MoveGestureDetector, float, float)},
    * threshold with {@link MoveGestureDetector#setMoveThreshold(float)} and multi finger support thanks to
    * {@link MoveDistancesObject}.
    *
