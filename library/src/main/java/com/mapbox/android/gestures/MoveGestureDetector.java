@@ -71,9 +71,11 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
     /**
      * Indicates that the move gesture ended.
      *
-     * @param detector this detector
+     * @param velocityX velocityX of the gesture in the moment of lifting the fingers
+     * @param velocityY velocityY of the gesture in the moment of lifting the fingers
+     * @param detector  this detector
      */
-    void onMoveEnd(MoveGestureDetector detector);
+    void onMoveEnd(MoveGestureDetector detector, float velocityX, float velocityY);
   }
 
   public static class SimpleOnMoveGestureListener implements OnMoveGestureListener {
@@ -89,7 +91,7 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
     }
 
     @Override
-    public void onMoveEnd(MoveGestureDetector detector) {
+    public void onMoveEnd(MoveGestureDetector detector, float velocityX, float velocityY) {
       // No implementation
     }
   }
@@ -188,7 +190,7 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
   @Override
   protected void gestureStopped() {
     super.gestureStopped();
-    listener.onMoveEnd(this);
+    listener.onMoveEnd(this, velocityX, velocityY);
   }
 
   @Override

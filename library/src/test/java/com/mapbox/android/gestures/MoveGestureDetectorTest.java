@@ -28,7 +28,8 @@ public class MoveGestureDetectorTest extends
 
     verify(listener, times(1)).onMoveBegin(gestureDetector);
     verify(listener, times(1)).onMove(gestureDetector, 0, 0);
-    verify(listener, times(1)).onMoveEnd(gestureDetector);
+    verify(listener, times(1)).onMoveEnd(
+      gestureDetector, gestureDetector.velocityX, gestureDetector.velocityY);
   }
 
   @Test
@@ -60,6 +61,8 @@ public class MoveGestureDetectorTest extends
     gestureDetector.onTouchEvent(pointerUpEvent);
     MotionEvent upEvent = TestUtils.getMotionEvent(MotionEvent.ACTION_POINTER_UP, 200, 100, pointerUpEvent);
     gestureDetector.onTouchEvent(upEvent);
-    verify(listener, times(1)).onMoveEnd(gestureDetector);
+    verify(listener, times(1)).onMoveEnd(
+      gestureDetector, gestureDetector.velocityX, gestureDetector.velocityY
+    );
   }
 }
