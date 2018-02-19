@@ -2,7 +2,6 @@ package com.mapbox.android.gestures;
 
 import org.junit.Test;
 
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

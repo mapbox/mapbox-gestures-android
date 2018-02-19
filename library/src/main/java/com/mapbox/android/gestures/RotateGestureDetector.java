@@ -1,12 +1,8 @@
 package com.mapbox.android.gestures;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
-import android.view.animation.DecelerateInterpolator;
 
 import java.util.HashSet;
 import java.util.Set;
