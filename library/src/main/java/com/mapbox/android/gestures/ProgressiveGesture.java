@@ -34,9 +34,10 @@ public abstract class ProgressiveGesture<L> extends MultiFingerGesture<L> {
 
   @Override
   protected boolean analyzeEvent(MotionEvent motionEvent) {
-    if ((!isEnabled() || interrupted) && isInProgress) {
+    if (interrupted) {
       interrupted = false;
       gestureStopped();
+      return false;
     }
 
     if (velocityTracker != null) {
@@ -114,10 +115,21 @@ public abstract class ProgressiveGesture<L> extends MultiFingerGesture<L> {
     return isInProgress;
   }
 
+  @Override
+  public void setEnabled(boolean enabled) {
+    super.setEnabled(enabled);
+    if (!enabled) {
+      interrupt();
+    }
+  }
+
   /**
-   *
+   * Interrupt a gesture by stopping it's execution immediately.
+   * Forces gesture detector to meet start conditions again in order to resume.
    */
   public void interrupt() {
-    this.interrupted = true;
+    if (isInProgress()) {
+      this.interrupted = true;
+    }
   }
 }

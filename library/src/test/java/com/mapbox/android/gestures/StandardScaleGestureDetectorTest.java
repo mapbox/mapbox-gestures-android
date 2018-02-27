@@ -37,19 +37,27 @@ public class StandardScaleGestureDetectorTest extends
     // stopping
     gestureDetector.innerOnScaleEnd(gestureDetector.getUnderlyingScaleGestureDetector());
 
+    //interrupt
+    gestureDetector.interrupt();
+
     // no threshold, starting immediately
     gestureDetector.setSpanSinceStartThreshold(0);
     gestureDetector.startSpan = 0;
     gestureDetector.innerOnScaleBegin(gestureDetector.getUnderlyingScaleGestureDetector());
+
+    doReturn(emptyMotionEvent).when(gestureDetector).getCurrentEvent();
+    //doesn't call stop because wasn't in progress when interrupted
+    gestureDetector.analyzeEvent(emptyMotionEvent);
 
     //scale
     gestureDetector.innerOnScale(gestureDetector.getUnderlyingScaleGestureDetector());
 
     //interrupt
     gestureDetector.interrupt();
+    //stopping because was interrupted
     gestureDetector.analyzeEvent(emptyMotionEvent);
 
-    //stopping, then starting because was interrupted
+    //starting again because was interrupted
     gestureDetector.innerOnScale(gestureDetector.getUnderlyingScaleGestureDetector());
 
     //scale
