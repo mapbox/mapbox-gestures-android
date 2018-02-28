@@ -37,7 +37,6 @@ public abstract class ProgressiveGesture<L> extends MultiFingerGesture<L> {
     if (interrupted) {
       interrupted = false;
       gestureStopped();
-      return false;
     }
 
     if (velocityTracker != null) {
