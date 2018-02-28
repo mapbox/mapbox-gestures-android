@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
       }
 
       @Override
-      public void onMoveEnd(MoveGestureDetector detector) {
+      public void onMoveEnd(MoveGestureDetector detector, float velocityX, float velocityY) {
 
       }
     };
