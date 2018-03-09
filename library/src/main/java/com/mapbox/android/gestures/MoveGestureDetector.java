@@ -40,7 +40,7 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
   private float moveThreshold = Constants.DEFAULT_MOVE_THRESHOLD;
   private final Map<Integer, MoveDistancesObject> moveDistancesObjectMap = new HashMap<>();
 
-  protected MoveGestureDetector(Context context, AndroidGesturesManager gesturesManager) {
+  public MoveGestureDetector(Context context, AndroidGesturesManager gesturesManager) {
     super(context, gesturesManager);
   }
 

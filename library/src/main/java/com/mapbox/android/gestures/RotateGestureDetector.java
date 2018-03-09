@@ -24,7 +24,7 @@ public class RotateGestureDetector extends ProgressiveGesture<RotateGestureDetec
   float deltaSinceStart;
   float deltaSinceLast;
 
-  protected RotateGestureDetector(Context context, AndroidGesturesManager gesturesManager) {
+  public RotateGestureDetector(Context context, AndroidGesturesManager gesturesManager) {
     super(context, gesturesManager);
   }
 

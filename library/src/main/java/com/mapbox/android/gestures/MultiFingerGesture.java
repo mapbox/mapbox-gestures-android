@@ -45,7 +45,7 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
   final HashMap<PointerDistancePair, MultiFingerDistancesObject> pointersDistanceMap = new HashMap<>();
   private PointF focalPoint = new PointF();
 
-  protected MultiFingerGesture(Context context, AndroidGesturesManager gesturesManager) {
+  public MultiFingerGesture(Context context, AndroidGesturesManager gesturesManager) {
     super(context, gesturesManager);
 
     ViewConfiguration config = ViewConfiguration.get(context);

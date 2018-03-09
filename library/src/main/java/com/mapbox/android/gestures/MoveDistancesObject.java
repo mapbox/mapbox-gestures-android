@@ -17,12 +17,17 @@ public final class MoveDistancesObject {
   private float distanceXSinceStart;
   private float distanceYSinceStart;
 
-  MoveDistancesObject(float initialX, float initialY) {
+  public MoveDistancesObject(float initialX, float initialY) {
     this.initialX = initialX;
     this.initialY = initialY;
   }
 
-  void addNewPosition(float x, float y) {
+  /**
+   * Add a new position of this pointer and recalculate distances.
+   * @param x new X coordinate
+   * @param y new Y coordinate
+   */
+  public void addNewPosition(float x, float y) {
     prevX = currX;
     prevY = currY;
 

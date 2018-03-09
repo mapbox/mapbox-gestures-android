@@ -25,7 +25,7 @@ public abstract class ProgressiveGesture<L> extends MultiFingerGesture<L> {
   float velocityX;
   float velocityY;
 
-  protected ProgressiveGesture(Context context, AndroidGesturesManager gesturesManager) {
+  public ProgressiveGesture(Context context, AndroidGesturesManager gesturesManager) {
     super(context, gesturesManager);
   }
 
