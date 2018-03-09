@@ -149,7 +149,7 @@ public class MultiFingerTapGestureDetector extends
    *
    * @param multiFingerTapMovementThresholdDimen movement threshold.
    */
-  public void setMultiFingerTapMovementThreshold(@DimenRes int multiFingerTapMovementThresholdDimen) {
+  public void setMultiFingerTapMovementThresholdResource(@DimenRes int multiFingerTapMovementThresholdDimen) {
     setMultiFingerTapMovementThreshold(context.getResources().getDimension(multiFingerTapMovementThresholdDimen));
   }
 }

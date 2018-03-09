@@ -224,7 +224,7 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
    *
    * @param moveThresholdDimen delta threshold
    */
-  public void setMoveThreshold(@DimenRes int moveThresholdDimen) {
+  public void setMoveThresholdResource(@DimenRes int moveThresholdDimen) {
     setMoveThreshold(context.getResources().getDimension(moveThresholdDimen));
   }
 

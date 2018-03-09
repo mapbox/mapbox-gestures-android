@@ -233,7 +233,7 @@ public class StandardScaleGestureDetector extends
    *
    * @param spanSinceStartThresholdDimen delta span threshold
    */
-  public void setSpanSinceStartThreshold(@DimenRes int spanSinceStartThresholdDimen) {
+  public void setSpanSinceStartThresholdResource(@DimenRes int spanSinceStartThresholdDimen) {
     setSpanSinceStartThreshold(context.getResources().getDimension(spanSinceStartThresholdDimen));
   }
 

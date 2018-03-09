@@ -173,7 +173,7 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
    *
    * @param pixelDeltaThresholdDimen delta threshold
    */
-  public void setPixelDeltaThreshold(@DimenRes int pixelDeltaThresholdDimen) {
+  public void setPixelDeltaThresholdResource(@DimenRes int pixelDeltaThresholdDimen) {
     setPixelDeltaThreshold(context.getResources().getDimension(pixelDeltaThresholdDimen));
   }
 

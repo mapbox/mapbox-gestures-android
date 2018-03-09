@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
     rotateThresholdProgress = (SeekBar) findViewById(R.id.progress_threshold_rotate);
     rotateThresholdProgress.setProgress(
-      (int) androidGesturesManager.getRotateGestureDetector().getDefaultAngleThreshold());
+      (int) androidGesturesManager.getRotateGestureDetector().getAngleThreshold());
 
     rotateThresholdProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
       @Override
@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
     scaleThresholdProgress = (SeekBar) findViewById(R.id.progress_threshold_scale);
     scaleThresholdProgress.setProgress(
-      (int) androidGesturesManager.getStandardScaleGestureDetector().getDefaultSpanSinceStartThreshold());
+      (int) androidGesturesManager.getStandardScaleGestureDetector().getSpanSinceStartThreshold());
 
     scaleThresholdProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
       @Override

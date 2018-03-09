@@ -136,21 +136,21 @@ public class AndroidGesturesManager {
   private void initDefaultThresholds() {
     for (BaseGesture detector : detectors) {
       if (detector instanceof MultiFingerTapGestureDetector) {
-        ((MultiFingerGesture) detector).setSpanThreshold(R.dimen.mapbox_defaultMutliFingerSpanThreshold);
+        ((MultiFingerGesture) detector).setSpanThresholdResource(R.dimen.mapbox_defaultMutliFingerSpanThreshold);
       }
 
       if (detector instanceof StandardScaleGestureDetector) {
-        ((StandardScaleGestureDetector) detector).setSpanSinceStartThreshold(
+        ((StandardScaleGestureDetector) detector).setSpanSinceStartThresholdResource(
           R.dimen.mapbox_defaultScaleSpanSinceStartThreshold);
       }
 
       if (detector instanceof ShoveGestureDetector) {
-        ((ShoveGestureDetector) detector).setPixelDeltaThreshold(R.dimen.mapbox_defaultShovePixelThreshold);
+        ((ShoveGestureDetector) detector).setPixelDeltaThresholdResource(R.dimen.mapbox_defaultShovePixelThreshold);
         ((ShoveGestureDetector) detector).setMaxShoveAngle(Constants.DEFAULT_SHOVE_MAX_ANGLE);
       }
 
       if (detector instanceof MultiFingerTapGestureDetector) {
-        ((MultiFingerTapGestureDetector) detector).setMultiFingerTapMovementThreshold(
+        ((MultiFingerTapGestureDetector) detector).setMultiFingerTapMovementThresholdResource(
           R.dimen.mapbox_defaultMultiTapMovementThreshold);
 
         ((MultiFingerTapGestureDetector) detector).setMultiFingerTapTimeThreshold(

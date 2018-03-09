@@ -380,7 +380,7 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
    *
    * @param spanThresholdDimen minimum span
    */
-  public void setSpanThreshold(@DimenRes int spanThresholdDimen) {
+  public void setSpanThresholdResource(@DimenRes int spanThresholdDimen) {
     setSpanThreshold(context.getResources().getDimension(spanThresholdDimen));
   }
 }
