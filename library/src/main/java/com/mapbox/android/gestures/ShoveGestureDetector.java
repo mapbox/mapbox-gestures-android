@@ -1,6 +1,7 @@
 package com.mapbox.android.gestures;
 
 import android.content.Context;
+import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 
@@ -20,8 +21,8 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
     handledTypes.add(GESTURE_TYPE_SHOVE);
   }
 
-  private float maxShoveAngle = Constants.DEFAULT_SHOVE_MAX_ANGLE;
-  private float pixelDeltaThreshold = Constants.DEFAULT_SHOVE_PIXEL_THRESHOLD;
+  private float maxShoveAngle;
+  private float pixelDeltaThreshold;
   float deltaPixelsSinceStart;
   float deltaPixelSinceLast;
 
@@ -60,7 +61,7 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
      *
      * @param velocityX velocityX of the gesture in the moment of lifting the fingers
      * @param velocityY velocityY of the gesture in the moment of lifting the fingers
-     * @param detector this detector
+     * @param detector  this detector
      */
     void onShoveEnd(ShoveGestureDetector detector, float velocityX, float velocityY);
   }
@@ -158,25 +159,26 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
 
   /**
    * Set the delta pixel threshold required to qualify it as a shove gesture.
+   * <p>
+   * We encourage to set those values from dimens to accommodate for various screen sizes.
    *
-   * @param pixelDeltaThreshold delta pixel threshold
+   * @param pixelDeltaThreshold delta threshold
    */
   public void setPixelDeltaThreshold(float pixelDeltaThreshold) {
     this.pixelDeltaThreshold = pixelDeltaThreshold;
   }
 
   /**
-   * Get the default delta pixel threshold required to qualify it as a shove gesture.
+   * Set the delta dp threshold required to qualify it as a shove gesture.
    *
-   * @return delta pixel threshold
-   * @see Constants#DEFAULT_SHOVE_PIXEL_THRESHOLD
+   * @param pixelDeltaThresholdDimen delta threshold
    */
-  public float getDefaultPixelDeltaThreshold() {
-    return Constants.DEFAULT_SHOVE_PIXEL_THRESHOLD;
+  public void setPixelDeltaThreshold(@DimenRes int pixelDeltaThresholdDimen) {
+    setPixelDeltaThreshold(context.getResources().getDimension(pixelDeltaThresholdDimen));
   }
 
   /**
-   * Get the maximum allowed angle between fingers to qualify it as a shove gesture.
+   * Get the maximum allowed angle between fingers, measured from the horizontal line, to qualify it as a shove gesture.
    *
    * @return maximum allowed angle
    */
@@ -185,21 +187,11 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
   }
 
   /**
-   * Set the maximum allowed angle between fingers to qualify it as a shove gesture.
+   * Set the maximum allowed angle between fingers, measured from the horizontal line, to qualify it as a shove gesture.
    *
    * @param maxShoveAngle maximum allowed angle
    */
   public void setMaxShoveAngle(float maxShoveAngle) {
     this.maxShoveAngle = maxShoveAngle;
-  }
-
-  /**
-   * Get the default maximum allowed angle between fingers to qualify it as a shove gesture.
-   *
-   * @return default maximum allowed angle
-   * @see Constants#DEFAULT_SHOVE_MAX_ANGLE
-   */
-  public float getDefaultMaxShoveAngle() {
-    return Constants.DEFAULT_SHOVE_MAX_ANGLE;
   }
 }
