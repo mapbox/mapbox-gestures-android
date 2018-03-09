@@ -18,6 +18,7 @@ public abstract class BaseGesture<L> {
   private MotionEvent currentEvent;
   private MotionEvent previousEvent;
   private long gestureDuration;
+  private boolean isEnabled = true;
 
   /**
    * Listener that will be called with gesture events/updates.
@@ -58,7 +59,7 @@ public abstract class BaseGesture<L> {
   protected abstract boolean analyzeEvent(MotionEvent motionEvent);
 
   protected boolean canExecute(@AndroidGesturesManager.GestureType int invokedGestureType) {
-    if (listener == null) {
+    if (listener == null || !isEnabled) {
       return false;
     }
 
@@ -69,7 +70,7 @@ public abstract class BaseGesture<L> {
             if (detector instanceof ProgressiveGesture) {
               ProgressiveGesture progressiveDetector = (ProgressiveGesture) detector;
               if (progressiveDetector.getHandledTypes().contains(gestureType)
-                && (progressiveDetector.isInProgress() || progressiveDetector.isVelocityAnimating())) {
+                && progressiveDetector.isInProgress()) {
                 return false;
               }
             }
@@ -118,5 +119,21 @@ public abstract class BaseGesture<L> {
    */
   public MotionEvent getPreviousEvent() {
     return previousEvent;
+  }
+
+  /**
+   * Check whether this detector accepts and analyzes motion events. Default is true.
+   * @return true if it analyzes, false otherwise
+   */
+  public boolean isEnabled() {
+    return isEnabled;
+  }
+
+  /**
+   * Set whether this detector should accept and analyze motion events. Default is true.
+   * @param enabled true if it should analyze, false otherwise
+   */
+  public void setEnabled(boolean enabled) {
+    isEnabled = enabled;
   }
 }

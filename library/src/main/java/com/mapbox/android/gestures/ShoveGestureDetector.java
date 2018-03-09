@@ -58,9 +58,11 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
     /**
      * Indicates that the shove gesture ended.
      *
+     * @param velocityX velocityX of the gesture in the moment of lifting the fingers
+     * @param velocityY velocityY of the gesture in the moment of lifting the fingers
      * @param detector this detector
      */
-    void onShoveEnd(ShoveGestureDetector detector);
+    void onShoveEnd(ShoveGestureDetector detector, float velocityX, float velocityY);
   }
 
   public static class SimpleOnShoveGestureListener implements OnShoveGestureListener {
@@ -75,7 +77,7 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
     }
 
     @Override
-    public void onShoveEnd(ShoveGestureDetector detector) {
+    public void onShoveEnd(ShoveGestureDetector detector, float velocityX, float velocityY) {
       // No Implementation
     }
   }
@@ -101,7 +103,7 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
 
   @Override
   protected boolean canExecute(int invokedGestureType) {
-    return Math.abs(deltaPixelsSinceStart) > pixelDeltaThreshold
+    return Math.abs(deltaPixelsSinceStart) >= pixelDeltaThreshold
       && super.canExecute(invokedGestureType);
   }
 
@@ -113,7 +115,7 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
   @Override
   protected void gestureStopped() {
     super.gestureStopped();
-    listener.onShoveEnd(this);
+    listener.onShoveEnd(this, velocityX, velocityY);
   }
 
   @Override

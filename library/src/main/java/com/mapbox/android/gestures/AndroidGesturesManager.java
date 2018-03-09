@@ -103,19 +103,19 @@ public class AndroidGesturesManager {
   public AndroidGesturesManager(Context context, List<Set<Integer>> exclusiveGestures) {
     this.mutuallyExclusiveGestures.addAll(exclusiveGestures);
 
-    standardGestureDetector = new StandardGestureDetector(context, this);
-    standardScaleGestureDetector = new StandardScaleGestureDetector(context, this);
     rotateGestureDetector = new RotateGestureDetector(context, this);
+    standardScaleGestureDetector = new StandardScaleGestureDetector(context, this);
     shoveGestureDetector = new ShoveGestureDetector(context, this);
     multiFingerTapGestureDetector = new MultiFingerTapGestureDetector(context, this);
     moveGestureDetector = new MoveGestureDetector(context, this);
+    standardGestureDetector = new StandardGestureDetector(context, this);
 
-    detectors.add(standardGestureDetector);
-    detectors.add(standardScaleGestureDetector);
     detectors.add(rotateGestureDetector);
+    detectors.add(standardScaleGestureDetector);
     detectors.add(shoveGestureDetector);
     detectors.add(multiFingerTapGestureDetector);
     detectors.add(moveGestureDetector);
+    detectors.add(standardGestureDetector);
   }
 
   /**
@@ -226,7 +226,7 @@ public class AndroidGesturesManager {
    * {@link com.mapbox.android.gestures.StandardGestureDetector.StandardOnGestureListener
    * #onScroll(MotionEvent, MotionEvent, float, float)}, however, it's a {@link ProgressiveGesture} that
    * introduces {@link MoveGestureDetector.OnMoveGestureListener#onMoveBegin(MoveGestureDetector)},
-   * {@link MoveGestureDetector.OnMoveGestureListener#onMoveEnd(MoveGestureDetector)},
+   * {@link MoveGestureDetector.OnMoveGestureListener#onMoveEnd(MoveGestureDetector, float, float)},
    * threshold with {@link MoveGestureDetector#setMoveThreshold(float)} and multi finger support thanks to
    * {@link MoveDistancesObject}.
    *

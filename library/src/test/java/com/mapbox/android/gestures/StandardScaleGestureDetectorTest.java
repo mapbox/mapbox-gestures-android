@@ -2,7 +2,7 @@ package com.mapbox.android.gestures;
 
 import org.junit.Test;
 
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -21,7 +21,7 @@ public class StandardScaleGestureDetectorTest extends
   public void analyzeMovementTest() throws Exception {
     when(listener.onScaleBegin(gestureDetector)).thenReturn(true);
     when(listener.onScale(gestureDetector)).thenReturn(true);
-    doNothing().when(gestureDetector).startAnimation(0);
+    doReturn(false).when(gestureDetector).isSloppyGesture();
 
     // threshold not met
     gestureDetector.spanDeltaSinceStart = gestureDetector.getSpanSinceStartThreshold() / 2;
@@ -37,10 +37,28 @@ public class StandardScaleGestureDetectorTest extends
     // stopping
     gestureDetector.innerOnScaleEnd(gestureDetector.getUnderlyingScaleGestureDetector());
 
+    //interrupt
+    gestureDetector.interrupt();
+
     // no threshold, starting immediately
     gestureDetector.setSpanSinceStartThreshold(0);
     gestureDetector.startSpan = 0;
     gestureDetector.innerOnScaleBegin(gestureDetector.getUnderlyingScaleGestureDetector());
+
+    doReturn(emptyMotionEvent).when(gestureDetector).getCurrentEvent();
+    //doesn't call stop because wasn't in progress when interrupted
+    gestureDetector.analyzeEvent(emptyMotionEvent);
+
+    //scale
+    gestureDetector.innerOnScale(gestureDetector.getUnderlyingScaleGestureDetector());
+
+    //interrupt
+    gestureDetector.interrupt();
+    //stopping because was interrupted
+    gestureDetector.analyzeEvent(emptyMotionEvent);
+
+    //starting again because was interrupted
+    gestureDetector.innerOnScale(gestureDetector.getUnderlyingScaleGestureDetector());
 
     //scale
     gestureDetector.innerOnScale(gestureDetector.getUnderlyingScaleGestureDetector());
@@ -50,14 +68,15 @@ public class StandardScaleGestureDetectorTest extends
 
     // threshold not met
     gestureDetector.setSpanSinceStartThreshold(gestureDetector.getDefaultSpanSinceStartThreshold());
-    gestureDetector.startSpan = gestureDetector.getSpanThreshold() / 2;
+    gestureDetector.startSpan = gestureDetector.getSpanSinceStartThreshold() / 2;
     gestureDetector.innerOnScaleBegin(gestureDetector.getUnderlyingScaleGestureDetector());
     gestureDetector.innerOnScale(gestureDetector.getUnderlyingScaleGestureDetector());
     // stopping without surpassing threshold, no callback invocations
     gestureDetector.innerOnScaleEnd(gestureDetector.getUnderlyingScaleGestureDetector());
 
-    verify(listener, times(2)).onScaleBegin(gestureDetector);
-    verify(listener, times(2)).onScale(gestureDetector);
-    verify(listener, times(2)).onScaleEnd(gestureDetector);
+    verify(listener, times(3)).onScaleBegin(gestureDetector);
+    verify(listener, times(3)).onScale(gestureDetector);
+    verify(listener, times(3)).onScaleEnd(
+      gestureDetector, gestureDetector.velocityX, gestureDetector.velocityY);
   }
 }

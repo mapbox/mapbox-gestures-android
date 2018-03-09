@@ -20,7 +20,7 @@ import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_MO
  * {@link com.mapbox.android.gestures.StandardGestureDetector.StandardOnGestureListener
  * #onScroll(MotionEvent, MotionEvent, float, float)}, however, it's a {@link ProgressiveGesture} that
  * introduces {@link OnMoveGestureListener#onMoveBegin(MoveGestureDetector)},
- * {@link OnMoveGestureListener#onMoveEnd(MoveGestureDetector)},
+ * {@link OnMoveGestureListener#onMoveEnd(MoveGestureDetector, float, float)},
  * threshold with {@link MoveGestureDetector#setMoveThreshold(float)} and multi finger support thanks to
  * {@link MoveDistancesObject}.
  */
@@ -40,7 +40,7 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
   private float moveThreshold = Constants.DEFAULT_MOVE_THRESHOLD;
   private final Map<Integer, MoveDistancesObject> moveDistancesObjectMap = new HashMap<>();
 
-  protected MoveGestureDetector(Context context, AndroidGesturesManager gesturesManager) {
+  public MoveGestureDetector(Context context, AndroidGesturesManager gesturesManager) {
     super(context, gesturesManager);
   }
 
@@ -71,9 +71,11 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
     /**
      * Indicates that the move gesture ended.
      *
-     * @param detector this detector
+     * @param velocityX velocityX of the gesture in the moment of lifting the fingers
+     * @param velocityY velocityY of the gesture in the moment of lifting the fingers
+     * @param detector  this detector
      */
-    void onMoveEnd(MoveGestureDetector detector);
+    void onMoveEnd(MoveGestureDetector detector, float velocityX, float velocityY);
   }
 
   public static class SimpleOnMoveGestureListener implements OnMoveGestureListener {
@@ -89,7 +91,7 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
     }
 
     @Override
-    public void onMoveEnd(MoveGestureDetector detector) {
+    public void onMoveEnd(MoveGestureDetector detector, float velocityX, float velocityY) {
       // No implementation
     }
   }
@@ -110,10 +112,17 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
         break;
 
       case MotionEvent.ACTION_UP:
+        moveDistancesObjectMap.clear();
+        break;
+
       case MotionEvent.ACTION_POINTER_UP:
         resetFocal = true; //recalculating focal point
 
         moveDistancesObjectMap.remove(motionEvent.getPointerId(motionEvent.getActionIndex()));
+        break;
+
+      case MotionEvent.ACTION_CANCEL:
+        moveDistancesObjectMap.clear();
         break;
 
       default:
@@ -160,8 +169,8 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
 
   boolean checkAnyMoveAboveThreshold() {
     for (MoveDistancesObject moveDistancesObject : moveDistancesObjectMap.values()) {
-      if (Math.abs(moveDistancesObject.getDistanceXSinceStart()) > moveThreshold
-        || Math.abs(moveDistancesObject.getDistanceYSinceStart()) > moveThreshold) {
+      if (Math.abs(moveDistancesObject.getDistanceXSinceStart()) >= moveThreshold
+        || Math.abs(moveDistancesObject.getDistanceYSinceStart()) >= moveThreshold) {
         return true;
       }
     }
@@ -176,13 +185,12 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
   @Override
   protected void reset() {
     super.reset();
-    moveDistancesObjectMap.clear();
   }
 
   @Override
   protected void gestureStopped() {
     super.gestureStopped();
-    listener.onMoveEnd(this);
+    listener.onMoveEnd(this, velocityX, velocityY);
   }
 
   @Override

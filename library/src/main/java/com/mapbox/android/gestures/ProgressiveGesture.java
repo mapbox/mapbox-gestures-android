@@ -1,12 +1,10 @@
 package com.mapbox.android.gestures;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
-import android.view.animation.Interpolator;
 
 import java.util.Set;
 
@@ -20,16 +18,14 @@ public abstract class ProgressiveGesture<L> extends MultiFingerGesture<L> {
 
   private final Set<Integer> handledTypes = provideHandledTypes();
 
-  private boolean stopOnPointerDown = true;
   private boolean isInProgress;
+  private boolean interrupted;
 
   VelocityTracker velocityTracker;
   float velocityX;
   float velocityY;
-  final ValueAnimator valueAnimator = new ValueAnimator();
-  private Interpolator interpolator;
 
-  protected ProgressiveGesture(Context context, AndroidGesturesManager gesturesManager) {
+  public ProgressiveGesture(Context context, AndroidGesturesManager gesturesManager) {
     super(context, gesturesManager);
   }
 
@@ -38,6 +34,11 @@ public abstract class ProgressiveGesture<L> extends MultiFingerGesture<L> {
 
   @Override
   protected boolean analyzeEvent(MotionEvent motionEvent) {
+    if (interrupted) {
+      interrupted = false;
+      gestureStopped();
+    }
+
     if (velocityTracker != null) {
       velocityTracker.addMovement(getCurrentEvent());
     }
@@ -49,9 +50,6 @@ public abstract class ProgressiveGesture<L> extends MultiFingerGesture<L> {
       switch (action) {
         case MotionEvent.ACTION_DOWN:
         case MotionEvent.ACTION_POINTER_DOWN:
-          if (isVelocityAnimating() && stopOnPointerDown) {
-            valueAnimator.cancel();
-          }
 
           if (velocityTracker != null) {
             velocityTracker.clear();
@@ -103,10 +101,6 @@ public abstract class ProgressiveGesture<L> extends MultiFingerGesture<L> {
     reset();
   }
 
-  protected boolean isVelocityAnimating() {
-    return valueAnimator != null && valueAnimator.isStarted();
-  }
-
   Set<Integer> getHandledTypes() {
     return handledTypes;
   }
@@ -120,39 +114,21 @@ public abstract class ProgressiveGesture<L> extends MultiFingerGesture<L> {
     return isInProgress;
   }
 
-  /**
-   * Check whether velocity animation should be stopped when new gesture starts. True by default.
-   *
-   * @return true if animation should stop on pointer down, false otherwise.
-   */
-  public boolean isStopOnPointerDown() {
-    return stopOnPointerDown;
+  @Override
+  public void setEnabled(boolean enabled) {
+    super.setEnabled(enabled);
+    if (!enabled) {
+      interrupt();
+    }
   }
 
   /**
-   * Set whether velocity animation should be stopped when new gesture starts. True by default.
-   *
-   * @param stopOnPointerDown true if animation should stop on pointer down, false otherwise.
+   * Interrupt a gesture by stopping it's execution immediately.
+   * Forces gesture detector to meet start conditions again in order to resume.
    */
-  public void setStopOnPointerDown(boolean stopOnPointerDown) {
-    this.stopOnPointerDown = stopOnPointerDown;
-  }
-
-  /**
-   * Get current interpolator used for velocity animations.
-   *
-   * @return Currently used interpolator
-   */
-  public Interpolator getInterpolator() {
-    return interpolator;
-  }
-
-  /**
-   * Set new interpolator used for velocity animations.
-   *
-   * @param interpolator new interpolator
-   */
-  public void setInterpolator(Interpolator interpolator) {
-    this.interpolator = interpolator;
+  public void interrupt() {
+    if (isInProgress()) {
+      this.interrupted = true;
+    }
   }
 }
