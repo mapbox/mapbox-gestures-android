@@ -68,7 +68,17 @@ public class AndroidGesturesManager {
    * @param context activity's context
    */
   public AndroidGesturesManager(Context context) {
-    this(context, new ArrayList<Set<Integer>>());
+    this(context, true);
+  }
+
+  /**
+   * Creates a new instance of the {@link AndroidGesturesManager}.
+   *
+   * @param context                activity's context
+   * @param applyDefaultThresholds if true, default gestures thresholds and adjustments will be applied
+   */
+  public AndroidGesturesManager(Context context, boolean applyDefaultThresholds) {
+    this(context, new ArrayList<Set<Integer>>(), applyDefaultThresholds);
   }
 
   /**
@@ -85,22 +95,23 @@ public class AndroidGesturesManager {
    */
   @SafeVarargs
   public AndroidGesturesManager(Context context, Set<Integer>... exclusiveGestures) {
-    this(context, Arrays.asList(exclusiveGestures));
+    this(context, Arrays.asList(exclusiveGestures), true);
   }
 
   /**
    * Creates a new instance of the {@link AndroidGesturesManager}.
    *
-   * @param context           Activity's context
-   * @param exclusiveGestures a list of sets of {@link GestureType}s that <b>should not</b> be invoked at the same.
-   *                          This means that when a set contains a {@link ProgressiveGesture} and this gestures
-   *                          is in progress no other gestures from the set will be invoked.
-   *                          <p>
-   *                          At the moment {@link #GESTURE_TYPE_SCROLL} is not interpreted as a progressive gesture
-   *                          because it is not implemented this way by the
-   *                          {@link android.support.v4.view.GestureDetectorCompat}.
+   * @param context                Activity's context
+   * @param exclusiveGestures      a list of sets of {@link GestureType}s that <b>should not</b> be invoked at the same.
+   *                               This means that when a set contains a {@link ProgressiveGesture} and this gestures
+   *                               is in progress no other gestures from the set will be invoked.
+   *                               <p>
+   *                               At the moment {@link #GESTURE_TYPE_SCROLL} is not interpreted as
+   *                               a progressive gesture because it is not implemented this way by the
+   *                               {@link android.support.v4.view.GestureDetectorCompat}.
+   * @param applyDefaultThresholds if true, default gestures thresholds and adjustments will be applied
    */
-  public AndroidGesturesManager(Context context, List<Set<Integer>> exclusiveGestures) {
+  public AndroidGesturesManager(Context context, List<Set<Integer>> exclusiveGestures, boolean applyDefaultThresholds) {
     this.mutuallyExclusiveGestures.addAll(exclusiveGestures);
 
     rotateGestureDetector = new RotateGestureDetector(context, this);
@@ -116,6 +127,40 @@ public class AndroidGesturesManager {
     detectors.add(multiFingerTapGestureDetector);
     detectors.add(moveGestureDetector);
     detectors.add(standardGestureDetector);
+
+    if (applyDefaultThresholds) {
+      initDefaultThresholds();
+    }
+  }
+
+  private void initDefaultThresholds() {
+    for (BaseGesture detector : detectors) {
+      if (detector instanceof MultiFingerTapGestureDetector) {
+        ((MultiFingerGesture) detector).setSpanThresholdResource(R.dimen.mapbox_defaultMutliFingerSpanThreshold);
+      }
+
+      if (detector instanceof StandardScaleGestureDetector) {
+        ((StandardScaleGestureDetector) detector).setSpanSinceStartThresholdResource(
+          R.dimen.mapbox_defaultScaleSpanSinceStartThreshold);
+      }
+
+      if (detector instanceof ShoveGestureDetector) {
+        ((ShoveGestureDetector) detector).setPixelDeltaThresholdResource(R.dimen.mapbox_defaultShovePixelThreshold);
+        ((ShoveGestureDetector) detector).setMaxShoveAngle(Constants.DEFAULT_SHOVE_MAX_ANGLE);
+      }
+
+      if (detector instanceof MultiFingerTapGestureDetector) {
+        ((MultiFingerTapGestureDetector) detector).setMultiFingerTapMovementThresholdResource(
+          R.dimen.mapbox_defaultMultiTapMovementThreshold);
+
+        ((MultiFingerTapGestureDetector) detector).setMultiFingerTapTimeThreshold(
+          Constants.DEFAULT_MULTI_TAP_TIME_THRESHOLD);
+      }
+
+      if (detector instanceof RotateGestureDetector) {
+        ((RotateGestureDetector) detector).setAngleThreshold(Constants.DEFAULT_ROTATE_ANGLE_THRESHOLD);
+      }
+    }
   }
 
   /**

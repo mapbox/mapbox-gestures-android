@@ -34,7 +34,7 @@ public class MultiFingerTapGestureDetectorTest
 
   @Override
   MultiFingerTapGestureDetector getDetectorObject() {
-    return Mockito.spy(new MultiFingerTapGestureDetector(context, androidGesturesManager));
+    return Mockito.spy(androidGesturesManager.getMultiFingerTapGestureDetector());
   }
 
   @Test
@@ -117,7 +117,7 @@ public class MultiFingerTapGestureDetectorTest
     map.clear();
     map.put(new PointerDistancePair(0, 1), new MultiFingerDistancesObject(
       prevX, prevY,
-      currX + Constants.DEFAULT_MULTI_TAP_MOVEMENT_THRESHOLD + 0.5f, currY
+      currX + gestureDetector.getMultiFingerTapMovementThreshold() + 0.5f, currY
     ));
     assertTrue(gestureDetector.exceededMovementThreshold(map));
   }

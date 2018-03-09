@@ -2,6 +2,7 @@ package com.mapbox.android.gestures;
 
 import android.content.Context;
 import android.graphics.PointF;
+import android.support.annotation.DimenRes;
 import android.support.annotation.UiThread;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -35,7 +36,7 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
 
   private final float edgeSlop;
 
-  private float spanThreshold = Constants.DEFAULT_MULTI_FINGER_SPAN_THRESHOLD;
+  private float spanThreshold;
 
   /**
    * A list that holds IDs of currently active pointers in an order of activation.
@@ -364,7 +365,9 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
   }
 
   /**
-   * Set minimum span between any pair of finger that is required to pass motion events to this detector.
+   * Set minimum span in pixels between any pair of finger that is required to pass motion events to this detector.
+   * <p>
+   * We encourage to set those values from dimens to accommodate for various screen sizes.
    *
    * @param spanThreshold minimum span
    */
@@ -373,12 +376,11 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
   }
 
   /**
-   * Get default minimum span between any pair of finger that is required to pass motion events to this detector.
+   * Set minimum span in dp between any pair of finger that is required to pass motion events to this detector.
    *
-   * @return default minimum span
-   * @see Constants#DEFAULT_MULTI_FINGER_SPAN_THRESHOLD
+   * @param spanThresholdDimen minimum span
    */
-  public float getDefaultSpanThreshold() {
-    return Constants.DEFAULT_MULTI_FINGER_SPAN_THRESHOLD;
+  public void setSpanThresholdResource(@DimenRes int spanThresholdDimen) {
+    setSpanThreshold(context.getResources().getDimension(spanThresholdDimen));
   }
 }

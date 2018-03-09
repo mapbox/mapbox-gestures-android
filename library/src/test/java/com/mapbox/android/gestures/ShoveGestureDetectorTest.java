@@ -15,7 +15,7 @@ public class ShoveGestureDetectorTest extends
 
   @Override
   ShoveGestureDetector getDetectorObject() {
-    return spy(new ShoveGestureDetector(context, androidGesturesManager));
+    return spy(androidGesturesManager.getShoveGestureDetector());
   }
 
   @Test
@@ -26,12 +26,12 @@ public class ShoveGestureDetectorTest extends
     doReturn(true).when(gestureDetector).isAngleAcceptable();
 
     // threshold not met
-    doReturn(Constants.DEFAULT_SHOVE_PIXEL_THRESHOLD / 2)
+    doReturn(gestureDetector.getPixelDeltaThreshold() / 2)
       .when(gestureDetector).getDeltaPixelsSinceLast();
     gestureDetector.analyzeMovement();
 
     // threshold met, starting
-    doReturn(Constants.DEFAULT_SHOVE_PIXEL_THRESHOLD * 2)
+    doReturn(gestureDetector.getPixelDeltaThreshold() * 2)
       .when(gestureDetector).getDeltaPixelsSinceLast();
     gestureDetector.analyzeMovement();
 
@@ -41,7 +41,7 @@ public class ShoveGestureDetectorTest extends
       gestureDetector.deltaPixelSinceLast, gestureDetector.deltaPixelsSinceStart);
 
     // new event, executing onShove() even though below threshold because already started
-    doReturn(Constants.DEFAULT_SHOVE_PIXEL_THRESHOLD / 2)
+    doReturn(gestureDetector.getPixelDeltaThreshold() / 2)
       .when(gestureDetector).getDeltaPixelsSinceLast();
     gestureDetector.analyzeMovement();
     //still 1 invocation because parameters changed, but technically 2
@@ -68,7 +68,7 @@ public class ShoveGestureDetectorTest extends
     gestureDetector.analyzeMovement();
 
     // threshold met again, starting
-    doReturn(Constants.DEFAULT_SHOVE_PIXEL_THRESHOLD * 2)
+    doReturn(gestureDetector.getPixelDeltaThreshold() * 2)
       .when(gestureDetector).getDeltaPixelsSinceLast();
     gestureDetector.analyzeMovement();
 

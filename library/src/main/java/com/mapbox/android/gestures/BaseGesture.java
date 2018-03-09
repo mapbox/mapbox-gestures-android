@@ -13,7 +13,7 @@ import java.util.Set;
  */
 @UiThread
 public abstract class BaseGesture<L> {
-  final Context context;
+  protected final Context context;
   private final AndroidGesturesManager gesturesManager;
   private MotionEvent currentEvent;
   private MotionEvent previousEvent;
@@ -23,7 +23,7 @@ public abstract class BaseGesture<L> {
   /**
    * Listener that will be called with gesture events/updates.
    */
-  L listener;
+  protected L listener;
 
   public BaseGesture(Context context, AndroidGesturesManager gesturesManager) {
     this.context = context;

@@ -1,6 +1,7 @@
 package com.mapbox.android.gestures;
 
 import android.content.Context;
+import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 import android.view.MotionEvent;
@@ -34,7 +35,7 @@ public class StandardScaleGestureDetector extends
 
   float startSpan;
   float spanDeltaSinceStart;
-  private float spanSinceStartThreshold = Constants.DEFAULT_SCALE_SPAN_SINCE_START_THRESHOLD;
+  private float spanSinceStartThreshold;
 
   public StandardScaleGestureDetector(Context context, AndroidGesturesManager androidGesturesManager) {
     super(context, androidGesturesManager);
@@ -205,7 +206,7 @@ public class StandardScaleGestureDetector extends
   }
 
   /**
-   * Get the threshold span between initial fingers position and current needed
+   * Get the threshold span in pixels between initial fingers position and current needed
    * for this detector to qualify it as a scale gesture.
    *
    * @return span threshold
@@ -215,8 +216,10 @@ public class StandardScaleGestureDetector extends
   }
 
   /**
-   * Set the threshold span between initial fingers position and current needed
+   * Set the threshold span in pixels between initial fingers position and current needed
    * for this detector to qualify it as a scale gesture.
+   * <p>
+   * We encourage to set those values from dimens to accommodate for various screen sizes.
    *
    * @param spanSinceStartThreshold delta span threshold
    */
@@ -225,14 +228,13 @@ public class StandardScaleGestureDetector extends
   }
 
   /**
-   * Get the default threshold span between initial fingers position and current needed
+   * Set the threshold span in dp between initial fingers position and current needed
    * for this detector to qualify it as a scale gesture.
    *
-   * @return default span threshold
-   * @see Constants#DEFAULT_SCALE_SPAN_SINCE_START_THRESHOLD
+   * @param spanSinceStartThresholdDimen delta span threshold
    */
-  public float getDefaultSpanSinceStartThreshold() {
-    return Constants.DEFAULT_SCALE_SPAN_SINCE_START_THRESHOLD;
+  public void setSpanSinceStartThresholdResource(@DimenRes int spanSinceStartThresholdDimen) {
+    setSpanSinceStartThreshold(context.getResources().getDimension(spanSinceStartThresholdDimen));
   }
 
   /**

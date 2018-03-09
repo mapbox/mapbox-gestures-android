@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Default minimum span required to process multi finger gestures-->
+    <dimen name="mapbox_defaultMutliFingerSpanThreshold">55dp</dimen>
+
+    <!--Default span change required between ScaleGestureDetector#onScaleBegin
+    to StandardScaleGestureDetector#onScaleBegin.
+    In practice it just represents required span change to register scale gesture-->
+    <dimen name="mapbox_defaultScaleSpanSinceStartThreshold">7dp</dimen>
+
+    <!--Default Y change of pointers position required to register shove gesture-->
+    <dimen name="mapbox_defaultShovePixelThreshold">16dp</dimen>
+
+    <!--Default pointer's position change required to abort tap gesture-->
+    <dimen name="mapbox_defaultMultiTapMovementThreshold">5dp</dimen>
+</resources>

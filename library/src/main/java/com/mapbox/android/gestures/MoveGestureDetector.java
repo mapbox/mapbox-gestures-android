@@ -2,6 +2,7 @@ package com.mapbox.android.gestures;
 
 import android.content.Context;
 import android.graphics.PointF;
+import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 import android.view.MotionEvent;
@@ -37,7 +38,7 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
     handledTypes.add(GESTURE_TYPE_MOVE);
   }
 
-  private float moveThreshold = Constants.DEFAULT_MOVE_THRESHOLD;
+  private float moveThreshold;
   private final Map<Integer, MoveDistancesObject> moveDistancesObjectMap = new HashMap<>();
 
   public MoveGestureDetector(Context context, AndroidGesturesManager gesturesManager) {
@@ -209,21 +210,22 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
 
   /**
    * Set the delta pixel threshold required to qualify it as a move gesture.
+   * <p>
+   * We encourage to set those values from dimens to accommodate for various screen sizes.
    *
-   * @param moveThreshold delta pixel threshold
+   * @param moveThreshold delta threshold
    */
   public void setMoveThreshold(float moveThreshold) {
     this.moveThreshold = moveThreshold;
   }
 
   /**
-   * Get the default delta pixel threshold required to qualify it as a move gesture.
+   * Set the delta dp threshold required to qualify it as a move gesture.
    *
-   * @return delta pixel threshold
-   * @see Constants#DEFAULT_MOVE_THRESHOLD
+   * @param moveThresholdDimen delta threshold
    */
-  public float getDefaultMoveThreshold() {
-    return Constants.DEFAULT_MOVE_THRESHOLD;
+  public void setMoveThresholdResource(@DimenRes int moveThresholdDimen) {
+    setMoveThreshold(context.getResources().getDimension(moveThresholdDimen));
   }
 
   /**

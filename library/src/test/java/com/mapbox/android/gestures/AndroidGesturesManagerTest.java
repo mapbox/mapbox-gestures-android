@@ -38,7 +38,6 @@ public class AndroidGesturesManagerTest {
 
     set3.add(AndroidGesturesManager.GESTURE_TYPE_ROTATE);
     set3.add(AndroidGesturesManager.GESTURE_TYPE_SCALE);
-    //set3.add(AndroidGesturesManager.GESTURE_TYPE_MOVE);
 
     mutuallyExclusivesList.add(set1);
     mutuallyExclusivesList.add(set2);
@@ -47,7 +46,7 @@ public class AndroidGesturesManagerTest {
     androidGesturesManager =
       new AndroidGesturesManager(
         RuntimeEnvironment.application.getApplicationContext(),
-        mutuallyExclusivesList);
+        mutuallyExclusivesList, true);
   }
 
   @Test

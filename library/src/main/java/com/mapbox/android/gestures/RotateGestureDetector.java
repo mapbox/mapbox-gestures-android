@@ -20,7 +20,7 @@ public class RotateGestureDetector extends ProgressiveGesture<RotateGestureDetec
     handledTypes.add(GESTURE_TYPE_ROTATE);
   }
 
-  private float angleThreshold = Constants.DEFAULT_ROTATE_ANGLE_THRESHOLD;
+  private float angleThreshold;
   float deltaSinceStart;
   float deltaSinceLast;
 
@@ -169,16 +169,5 @@ public class RotateGestureDetector extends ProgressiveGesture<RotateGestureDetec
    */
   public void setAngleThreshold(float angleThreshold) {
     this.angleThreshold = angleThreshold;
-  }
-
-  /**
-   * Get the threshold angle between first and current fingers position
-   * for this detector to actually qualify it as a rotation gesture.
-   *
-   * @return Angle threshold for rotation gesture
-   * @see Constants#DEFAULT_ROTATE_ANGLE_THRESHOLD
-   */
-  public float getDefaultAngleThreshold() {
-    return Constants.DEFAULT_ROTATE_ANGLE_THRESHOLD;
   }
 }

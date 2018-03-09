@@ -16,7 +16,7 @@ public class RotateGestureDetectorTest extends
 
   @Override
   RotateGestureDetector getDetectorObject() {
-    return spy(new RotateGestureDetector(context, androidGesturesManager));
+    return spy(androidGesturesManager.getRotateGestureDetector());
   }
 
   @Test
