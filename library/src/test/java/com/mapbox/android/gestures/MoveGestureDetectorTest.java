@@ -14,7 +14,7 @@ public class MoveGestureDetectorTest extends
 
   @Override
   MoveGestureDetector getDetectorObject() {
-    return spy(new MoveGestureDetector(context, androidGesturesManager));
+    return spy(androidGesturesManager.getMoveGestureDetector());
   }
 
   @Test

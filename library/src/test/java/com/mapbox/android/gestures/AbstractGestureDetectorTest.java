@@ -31,6 +31,26 @@ public abstract class AbstractGestureDetectorTest<K extends BaseGesture<L>, L> {
 
     context = RuntimeEnvironment.application.getApplicationContext();
     androidGesturesManager = new AndroidGesturesManager(context);
+
+    // reinitialize dimen thresholds
+    for (BaseGesture detector : androidGesturesManager.getDetectors()) {
+      if (detector instanceof MultiFingerTapGestureDetector) {
+        ((MultiFingerGesture) detector).setSpanThreshold(290f);
+      }
+
+      if (detector instanceof StandardScaleGestureDetector) {
+        ((StandardScaleGestureDetector) detector).setSpanSinceStartThreshold(20f);
+      }
+
+      if (detector instanceof ShoveGestureDetector) {
+        ((ShoveGestureDetector) detector).setPixelDeltaThreshold(100f);
+      }
+
+      if (detector instanceof MultiFingerTapGestureDetector) {
+        ((MultiFingerTapGestureDetector) detector).setMultiFingerTapMovementThreshold(15f);
+      }
+    }
+
     gestureDetector = getDetectorObject();
     gestureDetector.setListener(listener);
     emptyMotionEvent = MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 250.0f, 250.0f, 0);

@@ -14,7 +14,7 @@ public class StandardScaleGestureDetectorTest extends
 
   @Override
   StandardScaleGestureDetector getDetectorObject() {
-    return spy(new StandardScaleGestureDetector(context, androidGesturesManager));
+    return spy(androidGesturesManager.getStandardScaleGestureDetector());
   }
 
   @Test
@@ -40,8 +40,10 @@ public class StandardScaleGestureDetectorTest extends
     //interrupt
     gestureDetector.interrupt();
 
+    float threshold = gestureDetector.getSpanSinceStartThreshold();
+
     // no threshold, starting immediately
-    gestureDetector.setSpanSinceStartThreshold(0);
+    gestureDetector.setSpanSinceStartThreshold(0f);
     gestureDetector.startSpan = 0;
     gestureDetector.innerOnScaleBegin(gestureDetector.getUnderlyingScaleGestureDetector());
 
@@ -67,7 +69,7 @@ public class StandardScaleGestureDetectorTest extends
     gestureDetector.innerOnScaleEnd(gestureDetector.getUnderlyingScaleGestureDetector());
 
     // threshold not met
-    gestureDetector.setSpanSinceStartThreshold(gestureDetector.getDefaultSpanSinceStartThreshold());
+    gestureDetector.setSpanSinceStartThreshold(threshold);
     gestureDetector.startSpan = gestureDetector.getSpanSinceStartThreshold() / 2;
     gestureDetector.innerOnScaleBegin(gestureDetector.getUnderlyingScaleGestureDetector());
     gestureDetector.innerOnScale(gestureDetector.getUnderlyingScaleGestureDetector());

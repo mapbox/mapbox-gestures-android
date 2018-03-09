@@ -11,7 +11,7 @@ public class StandardGestureDetectorTest extends
 
   @Override
   StandardGestureDetector getDetectorObject() {
-    return new StandardGestureDetector(context, androidGesturesManager);
+    return androidGesturesManager.getStandardGestureDetector();
   }
 
   @Test
