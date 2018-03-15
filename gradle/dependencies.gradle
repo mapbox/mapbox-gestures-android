@@ -8,6 +8,7 @@ ext {
 
     version = [
             supportLibVersion: '25.4.0',
+            timber           : '4.6.1',
             junit            : '4.12',
             mockito          : '2.13.0',
             robolectric      : '3.7',
@@ -27,6 +28,9 @@ ext {
             supportAppcompatV7 : "com.android.support:appcompat-v7:${version.supportLibVersion}",
             supportV4          : "com.android.support:support-v4:${version.supportLibVersion}",
             supportDesign      : "com.android.support:design:${version.supportLibVersion}",
+
+            // timber
+            timber             : "com.jakewharton.timber:timber:${version.timber}",
 
             // instrumentation test
             testRunner         : "com.android.support.test:runner:${version.testRunnerVersion}",
