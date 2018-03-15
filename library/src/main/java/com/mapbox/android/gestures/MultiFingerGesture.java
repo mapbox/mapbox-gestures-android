@@ -56,6 +56,11 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
   @Override
   protected boolean analyzeEvent(MotionEvent motionEvent) {
     int action = motionEvent.getActionMasked();
+
+    if (isMissingEvents(action)) {
+      return false;
+    }
+
     switch (action) {
       case MotionEvent.ACTION_DOWN:
       case MotionEvent.ACTION_POINTER_DOWN:
@@ -83,6 +88,43 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
     }
 
     return false;
+  }
+
+  private long allowedActions = MotionEvent.ACTION_DOWN;
+
+  private boolean isMissingEvents(int action) {
+    if (action == allowedActions) {
+      return true;
+    }
+    for (int i = 0; i < 64 / 4; i++) {
+      if (allowedActions == 0) {
+        allowedActions = MotionEvent.ACTION_DOWN;
+        return true;
+      }
+
+      long testCase = allowedActions & 0xb1111;
+      if (action == testCase) {
+        break;
+      }
+
+      allowedActions = allowedActions >> 4;
+    }
+
+    if (pointerIdList.size() == 0) {
+      allowedActions = MotionEvent.ACTION_DOWN;
+    } else if (pointerIdList.size() >= 1) {
+      allowedActions += MotionEvent.ACTION_POINTER_DOWN;
+      allowedActions = allowedActions << 4;
+      allowedActions += MotionEvent.ACTION_MOVE;
+      allowedActions = allowedActions << 4;
+      allowedActions += MotionEvent.ACTION_UP;
+      if (pointerIdList.size() > 1) {
+        allowedActions = allowedActions << 4;
+        allowedActions += MotionEvent.ACTION_POINTER_UP;
+      }
+    }
+
+    return true;
   }
 
   boolean checkPressure() {
