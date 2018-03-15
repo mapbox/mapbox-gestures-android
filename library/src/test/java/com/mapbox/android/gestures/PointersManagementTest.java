@@ -117,38 +117,4 @@ public class PointersManagementTest extends
 
     checkResult(0);
   }
-
-  // TODO: 15.03.18 fix this test
-  /*@Test
-  public void stopAnalysisWhenPointersMisalignedTest() {
-    MotionEvent downEvent = getMotionEvent(MotionEvent.ACTION_DOWN, 0, 0);
-    androidGesturesManager.onTouchEvent(downEvent);
-
-    MotionEvent pointerDownEvent = getMotionEvent(MotionEvent.ACTION_POINTER_DOWN, 0, 0, downEvent);
-    androidGesturesManager.onTouchEvent(pointerDownEvent);
-
-    pointerDownEvent = getMotionEvent(MotionEvent.ACTION_POINTER_DOWN, 0, 0, pointerDownEvent);
-    androidGesturesManager.onTouchEvent(pointerDownEvent);
-
-    pointerDownEvent = getMotionEvent(MotionEvent.ACTION_POINTER_DOWN, 0, 0, pointerDownEvent);
-    androidGesturesManager.onTouchEvent(pointerDownEvent);
-
-    MotionEvent pointerUpEvent = getMotionEvent(MotionEvent.ACTION_POINTER_UP, 0, 0, pointerDownEvent);
-    androidGesturesManager.onTouchEvent(pointerUpEvent);
-
-    MotionEvent upEvent = getMotionEvent(MotionEvent.ACTION_UP, 0, 0, pointerUpEvent);
-    androidGesturesManager.onTouchEvent(upEvent);
-
-    // don't analyze when events out of sync
-    doReturn(true).when(gestureDetector).checkPressure();
-    doReturn(false).when(gestureDetector).isSloppyGesture();
-
-    MotionEvent moveEvent = getMotionEvent(MotionEvent.ACTION_MOVE, 0, 0, upEvent);
-    androidGesturesManager.onTouchEvent(moveEvent);
-
-    verify(gestureDetector, times(0)).analyzeMovement();
-
-    pointerDownEvent = getMotionEvent(MotionEvent.ACTION_POINTER_DOWN, 0, 0, pointerUpEvent);
-    androidGesturesManager.onTouchEvent(pointerDownEvent);
-  }*/
 }
