@@ -149,6 +149,25 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
   }
 
   /**
+   * Returns vertical pixel delta change since the start of the gesture.
+   *
+   * @return pixels delta change since the start of the gesture
+   */
+  public float getDeltaPixelsSinceStart() {
+    return deltaPixelsSinceStart;
+  }
+
+  /**
+   * Returns last vertical pixel delta change
+   * calculated in {@link OnShoveGestureListener#onShove(ShoveGestureDetector, float, float)}.
+   *
+   * @return pixels delta change since the last call
+   */
+  public float getDeltaPixelSinceLast() {
+    return deltaPixelSinceLast;
+  }
+
+  /**
    * Get the delta pixel threshold required to qualify it as a shove gesture.
    *
    * @return delta pixel threshold
