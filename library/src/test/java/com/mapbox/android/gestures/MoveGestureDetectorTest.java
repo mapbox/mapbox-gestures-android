@@ -48,7 +48,7 @@ public class MoveGestureDetectorTest extends
     moveEvent = TestUtils.getMotionEvent(MotionEvent.ACTION_MOVE, 110, 100, moveEvent);
     gestureDetector.onTouchEvent(moveEvent);
     verify(listener, times(1)).onMove(
-      gestureDetector, gestureDetector.focalDistanceX, gestureDetector.focalDistanceY);
+      gestureDetector, gestureDetector.lastDistanceX, gestureDetector.lastDistanceY);
 
     MotionEvent pointerDownEvent = TestUtils.getMotionEvent(MotionEvent.ACTION_POINTER_DOWN, 200, 100, moveEvent);
     gestureDetector.onTouchEvent(pointerDownEvent);
