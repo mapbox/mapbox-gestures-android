@@ -5,7 +5,7 @@ test:
 	./gradlew :library:test
 
 release:
-	./gradlew :library:assembleRelease
+	./gradlew clean :library:assembleRelease
 
 publish:
 	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :library:uploadArchives
