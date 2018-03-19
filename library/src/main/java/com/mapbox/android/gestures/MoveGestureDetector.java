@@ -31,8 +31,8 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
   private static final Set<Integer> handledTypes = new HashSet<>();
   private PointF previousFocalPoint;
   private boolean resetFocal;
-  float focalDistanceX;
-  float focalDistanceY;
+  float lastDistanceX;
+  float lastDistanceY;
 
   static {
     handledTypes.add(GESTURE_TYPE_MOVE);
@@ -64,7 +64,9 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
     /**
      * Called for every move change during the gesture.
      *
-     * @param detector this detector
+     * @param detector  this detector
+     * @param distanceX X distance of the focal point in pixel since last call
+     * @param distanceY Y distance of the focal point in pixel since last call
      * @return true if the gesture was handled, false otherwise
      */
     boolean onMove(MoveGestureDetector detector, float distanceX, float distanceY);
@@ -140,14 +142,14 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
 
     if (isInProgress()) {
       PointF currentFocalPoint = getFocalPoint();
-      focalDistanceX = previousFocalPoint.x - currentFocalPoint.x;
-      focalDistanceY = previousFocalPoint.y - currentFocalPoint.y;
+      lastDistanceX = previousFocalPoint.x - currentFocalPoint.x;
+      lastDistanceY = previousFocalPoint.y - currentFocalPoint.y;
       previousFocalPoint = currentFocalPoint;
       if (resetFocal) {
         resetFocal = false;
         return listener.onMove(this, 0, 0);
       }
-      return listener.onMove(this, focalDistanceX, focalDistanceY);
+      return listener.onMove(this, lastDistanceX, lastDistanceY);
     } else if (canExecute(GESTURE_TYPE_MOVE)) {
       if (listener.onMoveBegin(this)) {
         gestureStarted();
@@ -226,6 +228,26 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
    */
   public void setMoveThresholdResource(@DimenRes int moveThresholdDimen) {
     setMoveThreshold(context.getResources().getDimension(moveThresholdDimen));
+  }
+
+  /**
+   * Returns X distance of the focal point in pixels
+   * calculated during the last {@link OnMoveGestureListener#onMove(MoveGestureDetector, float, float)} call.
+   *
+   * @return X distance of the focal point in pixel
+   */
+  public float getLastDistanceX() {
+    return lastDistanceX;
+  }
+
+  /**
+   * Returns Y distance of the focal point in pixels
+   * calculated during the last {@link OnMoveGestureListener#onMove(MoveGestureDetector, float, float)} call.
+   *
+   * @return Y distance of the focal point in pixel
+   */
+  public float getLastDistanceY() {
+    return lastDistanceY;
   }
 
   /**

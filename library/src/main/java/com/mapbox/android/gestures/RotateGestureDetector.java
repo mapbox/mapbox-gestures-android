@@ -152,6 +152,25 @@ public class RotateGestureDetector extends ProgressiveGesture<RotateGestureDetec
   }
 
   /**
+   * Returns rotation change in degrees since the start of the gesture.
+   *
+   * @return rotation change since the start of the gesture
+   */
+  public float getDeltaSinceStart() {
+    return deltaSinceStart;
+  }
+
+  /**
+   * Returns last rotation change difference in degrees
+   * calculated in {@link OnRotateGestureListener#onRotate(RotateGestureDetector, float, float)}
+   *
+   * @return rotation change since last callback
+   */
+  public float getDeltaSinceLast() {
+    return deltaSinceLast;
+  }
+
+  /**
    * Get the threshold angle between first and current fingers position
    * for this detector to actually qualify it as a rotation gesture.
    *
