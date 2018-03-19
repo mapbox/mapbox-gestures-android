@@ -45,37 +45,23 @@ public abstract class ProgressiveGesture<L> extends MultiFingerGesture<L> {
 
     boolean movementHandled = super.analyzeEvent(motionEvent);
 
-    if (!movementHandled) {
-      int action = motionEvent.getActionMasked();
-      switch (action) {
-        case MotionEvent.ACTION_DOWN:
-        case MotionEvent.ACTION_POINTER_DOWN:
-
-          if (velocityTracker != null) {
-            velocityTracker.clear();
-          }
-          break;
-
-        case MotionEvent.ACTION_UP:
-        case MotionEvent.ACTION_POINTER_UP:
-          if (pointerIdList.size() < getRequiredPointersCount() && isInProgress) {
-            gestureStopped();
-            return true;
-          }
-          break;
-
-        case MotionEvent.ACTION_CANCEL:
-          if (velocityTracker != null) {
-            velocityTracker.clear();
-          }
-          if (isInProgress) {
-            gestureStopped();
-            return true;
-          }
-          break;
-
-        default:
-          break;
+    int action = motionEvent.getActionMasked();
+    if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN) {
+      if (velocityTracker != null) {
+        velocityTracker.clear();
+      }
+    } else if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_POINTER_UP) {
+      if (pointerIdList.size() < getRequiredPointersCount() && isInProgress) {
+        gestureStopped();
+        return true;
+      }
+    } else if (action == MotionEvent.ACTION_CANCEL) {
+      if (velocityTracker != null) {
+        velocityTracker.clear();
+      }
+      if (isInProgress) {
+        gestureStopped();
+        return true;
       }
     }
 
