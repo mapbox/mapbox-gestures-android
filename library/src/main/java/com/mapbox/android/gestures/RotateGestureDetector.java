@@ -41,6 +41,7 @@ public class RotateGestureDetector extends ProgressiveGesture<RotateGestureDetec
     /**
      * Indicates that the rotation gesture started.
      *
+     * @param detector this detector
      * @return true if you want to receive subsequent {@link #onRotate(RotateGestureDetector, float, float)} callbacks,
      * false if you want to ignore this gesture.
      */
