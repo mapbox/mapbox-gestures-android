@@ -146,6 +146,8 @@ public class StandardScaleGestureDetector extends
      * You can retrieve the base {@link ScaleGestureDetector} via {@link #getUnderlyingScaleGestureDetector()}.
      *
      * @param detector this detector
+     * @return true if you want to receive subsequent {@link #onScale(StandardScaleGestureDetector)} callbacks,
+     * false if you want to ignore this gesture.
      * @see android.view.ScaleGestureDetector.OnScaleGestureListener#onScaleBegin(ScaleGestureDetector)
      */
     boolean onScaleBegin(StandardScaleGestureDetector detector);
@@ -154,6 +156,7 @@ public class StandardScaleGestureDetector extends
      * You can retrieve the base {@link ScaleGestureDetector} via {@link #getUnderlyingScaleGestureDetector()}.
      *
      * @param detector this detector
+     * @return Whether or not the detector should consider this event as handled.
      * @see android.view.ScaleGestureDetector.OnScaleGestureListener#onScale(ScaleGestureDetector)
      */
     boolean onScale(StandardScaleGestureDetector detector);
@@ -238,6 +241,7 @@ public class StandardScaleGestureDetector extends
   }
 
   /**
+   * @return Scale factor.
    * @see ScaleGestureDetector#getScaleFactor()
    */
   public float getScaleFactor() {

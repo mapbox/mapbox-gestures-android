@@ -146,6 +146,7 @@ public class StandardGestureDetector extends BaseGesture<StandardGestureDetector
   }
 
   /**
+   * @return True if longpress in enabled, false otherwise.
    * @see GestureDetectorCompat#isLongpressEnabled()
    */
   public boolean isLongpressEnabled() {
@@ -153,6 +154,7 @@ public class StandardGestureDetector extends BaseGesture<StandardGestureDetector
   }
 
   /**
+   * @param enabled True if longpress should be enabled, false otherwise.
    * @see GestureDetectorCompat#setIsLongpressEnabled(boolean)
    */
   public void setIsLongpressEnabled(boolean enabled) {
