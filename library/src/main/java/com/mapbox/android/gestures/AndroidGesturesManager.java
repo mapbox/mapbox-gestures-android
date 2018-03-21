@@ -164,7 +164,15 @@ public class AndroidGesturesManager {
           Constants.DEFAULT_MULTI_TAP_TIME_THRESHOLD);
       }
 
-      // TODO: 21.03.18 init thresholds for shape
+      if (detector instanceof ShapeGestureDetector) {
+        ((ShapeGestureDetector) detector).setMinimumMovementThresholdResource(
+          R.dimen.mapbox_defaultShapeMinimumMovementThreshold);
+
+        ((ShapeGestureDetector) detector).setDashVerticalThresholdResource(
+          R.dimen.mapbox_defaultShapeDashVerticalThreshold);
+
+        // TODO: 21.03.18 init thresholds for shape
+      }
 
       if (detector instanceof RotateGestureDetector) {
         ((RotateGestureDetector) detector).setAngleThreshold(Constants.DEFAULT_ROTATE_ANGLE_THRESHOLD);

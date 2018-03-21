@@ -13,4 +13,10 @@
 
     <!--Default pointer's position change required to abort tap gesture-->
     <dimen name="mapbox_defaultMultiTapMovementThreshold">5dp</dimen>
+
+    <!--Default maximum movement in vertical axis (calculated from average) allowed to accept dash shape-->
+    <dimen name="mapbox_defaultShapeDashVerticalThreshold">30dp</dimen>
+
+    <!--Minimum position change required to consider shape-->
+    <dimen name="mapbox_defaultShapeMinimumMovementThreshold">28dp</dimen>
 </resources>

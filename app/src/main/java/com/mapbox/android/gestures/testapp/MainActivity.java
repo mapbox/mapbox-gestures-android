@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.mapbox.android.gestures.AndroidGesturesManager;
 import com.mapbox.android.gestures.MoveGestureDetector;
@@ -23,10 +24,12 @@ import com.mapbox.android.gestures.RotateGestureDetector;
 import com.mapbox.android.gestures.ShoveGestureDetector;
 import com.mapbox.android.gestures.StandardGestureDetector;
 import com.mapbox.android.gestures.StandardScaleGestureDetector;
+import com.mapbox.android.gestures.shape.ShapeGestureDetector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
@@ -229,6 +232,19 @@ public class MainActivity extends AppCompatActivity {
       public boolean onShove(ShoveGestureDetector detector, float deltaPixelsSinceLast, float deltaPixelsSinceStart) {
         icon.setRotationX(icon.getRotationX() - deltaPixelsSinceLast);
         return true;
+      }
+    });
+
+    androidGesturesManager.setShapeGestureListener(new ShapeGestureDetector.OnShapeDetectedListener() {
+      @Override
+      public void onShapeDetected(ShapeGestureDetector detector, @ShapeGestureDetector.ShapeType int shape) {
+        String shapeName = "none";
+        if (shape == ShapeGestureDetector.SHAPE_DASH) {
+          shapeName = "dash";
+        }
+
+        Toast.makeText(MainActivity.this, String.format(Locale.getDefault(), "Shape detected - %s", shapeName),
+          Toast.LENGTH_SHORT).show();
       }
     });
 
