@@ -168,8 +168,11 @@ public class AndroidGesturesManager {
         ((ShapeGestureDetector) detector).setMinimumMovementThresholdResource(
           R.dimen.mapbox_defaultShapeMinimumMovementThreshold);
 
-        ((ShapeGestureDetector) detector).setDashVerticalThresholdResource(
-          R.dimen.mapbox_defaultShapeDashVerticalThreshold);
+        ((ShapeGestureDetector) detector).setDashMovementBoundsResource(
+          R.dimen.mapbox_defaultShapeDashMovementBounds);
+
+        ((ShapeGestureDetector) detector).setCrossMovementBoundsResource(
+          R.dimen.mapbox_defaultShapeCrossMovementBounds);
 
         // TODO: 21.03.18 init thresholds for shape
       }

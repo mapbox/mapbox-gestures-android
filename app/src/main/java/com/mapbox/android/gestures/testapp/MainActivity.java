@@ -241,6 +241,8 @@ public class MainActivity extends AppCompatActivity {
         String shapeName = "none";
         if (shape == ShapeGestureDetector.SHAPE_DASH) {
           shapeName = "dash";
+        } else if (shape == ShapeGestureDetector.SHAPE_CROSS) {
+          shapeName = "cross";
         }
 
         Toast.makeText(MainActivity.this, String.format(Locale.getDefault(), "Shape detected - %s", shapeName),

@@ -21,8 +21,8 @@ public class ShapeGestureDetector extends BaseGesture<ShapeGestureDetector.OnSha
   @Retention(RetentionPolicy.SOURCE)
   @IntDef( {
     SHAPE_NONE,
-    SHAPE_CROSS,
     SHAPE_DASH,
+    SHAPE_CROSS,
     SHAPE_CIRCLE
   })
 
@@ -30,8 +30,8 @@ public class ShapeGestureDetector extends BaseGesture<ShapeGestureDetector.OnSha
   }
 
   public static final int SHAPE_NONE = 0;
-  public static final int SHAPE_CROSS = 1;
-  public static final int SHAPE_DASH = 2;
+  public static final int SHAPE_DASH = 1;
+  public static final int SHAPE_CROSS = 2;
   public static final int SHAPE_CIRCLE = 3;
 
   private float minimumMovementThreshold;
@@ -40,6 +40,7 @@ public class ShapeGestureDetector extends BaseGesture<ShapeGestureDetector.OnSha
   public final List<Point> motionPoints = new ArrayList<>();
 
   private final DashDetector dashDetector = new DashDetector();
+  private final CrossDetector crossDetector = new CrossDetector();
 
   /**
    * Listener for shape gesture callbacks.
@@ -50,9 +51,9 @@ public class ShapeGestureDetector extends BaseGesture<ShapeGestureDetector.OnSha
      * <p>
      * Available shapes:
      * <br/>
-     * {@link #SHAPE_CROSS}
-     * <br/>
      * {@link #SHAPE_DASH}
+     * <br/>
+     * {@link #SHAPE_CROSS}
      * <br/>
      * {@link #SHAPE_CIRCLE}
      *
@@ -66,6 +67,7 @@ public class ShapeGestureDetector extends BaseGesture<ShapeGestureDetector.OnSha
     super(context, gesturesManager);
 
     detectors.add(dashDetector);
+    detectors.add(crossDetector);
   }
 
   @Override
@@ -148,8 +150,8 @@ public class ShapeGestureDetector extends BaseGesture<ShapeGestureDetector.OnSha
    *
    * @return vertical threshold
    */
-  public float getDashVerticalThreshold() {
-    return dashDetector.getVerticalThreshold();
+  public float getDashMovementBounds() {
+    return dashDetector.getMovementBounds();
   }
 
   /**
@@ -157,18 +159,49 @@ public class ShapeGestureDetector extends BaseGesture<ShapeGestureDetector.OnSha
    * <p>
    * We encourage to set those values from dimens to accommodate for various screen sizes.
    *
-   * @param verticalThreshold vertical threshold
+   * @param movementBounds vertical movementBounds
    */
-  public void setDashVerticalThreshold(float verticalThreshold) {
-    dashDetector.setVerticalThreshold(verticalThreshold);
+  public void setDashMovementBounds(float movementBounds) {
+    dashDetector.setMovementBounds(movementBounds);
   }
 
   /**
    * Set maximum movement in dp in vertical axis (calculated from average) allowed to accept dash shape.
    *
-   * @param verticalThreshold vertical threshold
+   * @param movementBounds vertical movementBounds
    */
-  public void setDashVerticalThresholdResource(@DimenRes int verticalThreshold) {
-    setDashVerticalThreshold(context.getResources().getDimension(verticalThreshold));
+  public void setDashMovementBoundsResource(@DimenRes int movementBounds) {
+    setDashMovementBounds(context.getResources().getDimension(movementBounds));
+  }
+
+  /**
+   * Get maximum movement in pixels in vertical or horizontal axis (calculated from average)
+   * allowed to accept cross shape.
+   *
+   * @return vertical or horizontal threshold
+   */
+  public float getCrossMovementBounds() {
+    return crossDetector.getMovementBounds();
+  }
+
+  /**
+   * Set maximum movement in pixels in vertical or horizontal axis (calculated from average)
+   * allowed to accept cross shape.
+   * <p>
+   * We encourage to set those values from dimens to accommodate for various screen sizes.
+   *
+   * @param movementBounds vertical or horizontal movementBounds
+   */
+  public void setCrossMovementBounds(float movementBounds) {
+    crossDetector.setMovementBounds(movementBounds);
+  }
+
+  /**
+   * Set maximum movement in dp in vertical or horizontal axis (calculated from average) allowed to accept cross shape.
+   *
+   * @param movementBounds vertical or horizontal movementBounds
+   */
+  public void setCrossMovementBoundsResource(@DimenRes int movementBounds) {
+    setCrossMovementBounds(context.getResources().getDimension(movementBounds));
   }
 }

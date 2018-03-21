@@ -5,9 +5,9 @@ import android.view.MotionEvent;
 
 import java.util.List;
 
-public class DashDetector implements ShapeDetector {
+class DashDetector implements ShapeDetector {
 
-  private float verticalThreshold;
+  private float movementBounds;
 
   @Override
   public void onDown(MotionEvent motionEvent) {
@@ -16,14 +16,21 @@ public class DashDetector implements ShapeDetector {
 
   @Override
   public int onUp(MotionEvent motionEvent, List<Point> pointerCoords) {
-    Point firstPoint = pointerCoords.get(0);
-    for (Point point : pointerCoords) {
-      if (Math.abs(firstPoint.y - point.y) > verticalThreshold) {
-        return ShapeGestureDetector.SHAPE_NONE;
-      }
+    if (isBeyondVerticalBounds(pointerCoords)) {
+      return ShapeGestureDetector.SHAPE_NONE;
     }
 
     return ShapeGestureDetector.SHAPE_DASH;
+  }
+
+  private boolean isBeyondVerticalBounds(List<Point> pointerCoords) {
+    Point firstPoint = pointerCoords.get(0);
+    for (Point point : pointerCoords) {
+      if (Math.abs(firstPoint.y - point.y) > movementBounds) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override
@@ -31,11 +38,11 @@ public class DashDetector implements ShapeDetector {
     // do nothing
   }
 
-  float getVerticalThreshold() {
-    return verticalThreshold;
+  float getMovementBounds() {
+    return movementBounds;
   }
 
-  void setVerticalThreshold(float verticalThreshold) {
-    this.verticalThreshold = verticalThreshold;
+  void setMovementBounds(float movementBounds) {
+    this.movementBounds = movementBounds;
   }
 }
