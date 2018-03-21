@@ -7,7 +7,7 @@ import java.util.List;
 
 class DashDetector implements ShapeDetector {
 
-  private float movementBounds;
+  float movementBounds;
 
   @Override
   public void onDown(MotionEvent motionEvent) {
@@ -23,7 +23,7 @@ class DashDetector implements ShapeDetector {
     return ShapeGestureDetector.SHAPE_DASH;
   }
 
-  private boolean isBeyondVerticalBounds(List<Point> pointerCoords) {
+  boolean isBeyondVerticalBounds(List<Point> pointerCoords) {
     Point firstPoint = pointerCoords.get(0);
     for (Point point : pointerCoords) {
       if (Math.abs(firstPoint.y - point.y) > movementBounds) {

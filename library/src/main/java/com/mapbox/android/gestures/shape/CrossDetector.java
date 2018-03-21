@@ -5,9 +5,8 @@ import android.view.MotionEvent;
 
 import java.util.List;
 
-class CrossDetector implements ShapeDetector {
+class CrossDetector extends DashDetector {
 
-  private float movementBounds;
   private boolean hasHorizontalDash;
   private boolean hasVerticalDash;
 
@@ -27,10 +26,9 @@ class CrossDetector implements ShapeDetector {
       return ShapeGestureDetector.SHAPE_NONE;
     }
 
-    // if line is duplicated, abort
+    // if line is duplicated, clear but don't abort
     if ((hasVerticalDash && verticalDash) || (hasHorizontalDash && horizontalDash)) {
       clear();
-      return ShapeGestureDetector.SHAPE_NONE;
     }
 
     if (!hasVerticalDash) {
@@ -51,16 +49,6 @@ class CrossDetector implements ShapeDetector {
     }
   }
 
-  private boolean isBeyondVerticalBounds(List<Point> pointerCoords) {
-    Point firstPoint = pointerCoords.get(0);
-    for (Point point : pointerCoords) {
-      if (Math.abs(firstPoint.y - point.y) > movementBounds) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   private boolean isBeyondHorizontalBounds(List<Point> pointerCoords) {
     Point firstPoint = pointerCoords.get(0);
     for (Point point : pointerCoords) {
@@ -73,19 +61,12 @@ class CrossDetector implements ShapeDetector {
 
   @Override
   public void cancel() {
+    super.cancel();
     clear();
   }
 
   private void clear() {
     hasVerticalDash = false;
     hasHorizontalDash = false;
-  }
-
-  float getMovementBounds() {
-    return movementBounds;
-  }
-
-  void setMovementBounds(float movementBounds) {
-    this.movementBounds = movementBounds;
   }
 }
