@@ -9,16 +9,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_SHOVE;
+import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_SIDEWAYS_SHOVE;
 
 /**
- * Gesture detector handling shove gesture.
+ * Gesture detector handling sideways shove gesture.
  */
 @UiThread
-public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetector.OnShoveGestureListener> {
+public class SidewaysShoveGestureDetector extends
+  ProgressiveGesture<SidewaysShoveGestureDetector.OnSidewaysShoveGestureListener> {
   private static final Set<Integer> handledTypes = new HashSet<>();
 
   static {
-    handledTypes.add(GESTURE_TYPE_SHOVE);
+    handledTypes.add(GESTURE_TYPE_SIDEWAYS_SHOVE);
   }
 
   private float maxShoveAngle;
@@ -26,7 +28,7 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
   float deltaPixelsSinceStart;
   float deltaPixelSinceLast;
 
-  public ShoveGestureDetector(Context context, AndroidGesturesManager gesturesManager) {
+  public SidewaysShoveGestureDetector(Context context, AndroidGesturesManager gesturesManager) {
     super(context, gesturesManager);
   }
 
@@ -37,51 +39,54 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
   }
 
   /**
-   * Listener for shove callbacks.
+   * Listener for sideways shove gesture callbacks.
    */
-  public interface OnShoveGestureListener {
+  public interface OnSidewaysShoveGestureListener {
     /**
-     * Indicates that the shove gesture started.
+     * Indicates that the sideways shove gesture started.
      *
      * @param detector this detector
-     * @return true if you want to receive subsequent {@link #onShove(ShoveGestureDetector, float, float)} callbacks,
+     * @return true if you want to receive subsequent
+     * {@link #onSidewaysShove(SidewaysShoveGestureDetector, float, float)} callbacks,
      * false if you want to ignore this gesture.
      */
-    boolean onShoveBegin(ShoveGestureDetector detector);
+    boolean onSidewaysShoveBegin(SidewaysShoveGestureDetector detector);
 
     /**
-     * Called for every shove change during the gesture.
+     * Called for every sideways shove change during the gesture.
      *
      * @param detector              this detector
      * @param deltaPixelsSinceLast  pixels delta change since the last call
      * @param deltaPixelsSinceStart pixels delta change since the start of the gesture
      * @return true if the gesture was handled, false otherwise
      */
-    boolean onShove(ShoveGestureDetector detector, float deltaPixelsSinceLast, float deltaPixelsSinceStart);
+    boolean onSidewaysShove(SidewaysShoveGestureDetector detector, float deltaPixelsSinceLast,
+                            float deltaPixelsSinceStart);
 
     /**
-     * Indicates that the shove gesture ended.
+     * Indicates that the sideways shove gesture ended.
      *
      * @param velocityX velocityX of the gesture in the moment of lifting the fingers
      * @param velocityY velocityY of the gesture in the moment of lifting the fingers
      * @param detector  this detector
      */
-    void onShoveEnd(ShoveGestureDetector detector, float velocityX, float velocityY);
+    void onSidewaysShoveEnd(SidewaysShoveGestureDetector detector, float velocityX, float velocityY);
   }
 
-  public static class SimpleOnShoveGestureListener implements OnShoveGestureListener {
+  public static class SimpleOnSidewaysShoveGestureListener implements OnSidewaysShoveGestureListener {
     @Override
-    public boolean onShoveBegin(ShoveGestureDetector detector) {
+    public boolean onSidewaysShoveBegin(SidewaysShoveGestureDetector detector) {
       return true;
     }
 
     @Override
-    public boolean onShove(ShoveGestureDetector detector, float deltaPixelsSinceLast, float deltaPixelsSinceStart) {
+    public boolean onSidewaysShove(SidewaysShoveGestureDetector detector, float deltaPixelsSinceLast,
+                                   float deltaPixelsSinceStart) {
       return false;
     }
 
     @Override
-    public void onShoveEnd(ShoveGestureDetector detector, float velocityX, float velocityY) {
+    public void onSidewaysShoveEnd(SidewaysShoveGestureDetector detector, float velocityX, float velocityY) {
       // No Implementation
     }
   }
@@ -94,9 +99,9 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
     deltaPixelsSinceStart += deltaPixelSinceLast;
 
     if (isInProgress() && deltaPixelSinceLast != 0) {
-      return listener.onShove(this, deltaPixelSinceLast, deltaPixelsSinceStart);
+      return listener.onSidewaysShove(this, deltaPixelSinceLast, deltaPixelsSinceStart);
     } else if (canExecute(GESTURE_TYPE_SHOVE)) {
-      if (listener.onShoveBegin(this)) {
+      if (listener.onSidewaysShoveBegin(this)) {
         gestureStarted();
         return true;
       }
@@ -119,7 +124,7 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
   @Override
   protected void gestureStopped() {
     super.gestureStopped();
-    listener.onShoveEnd(this, velocityX, velocityY);
+    listener.onSidewaysShoveEnd(this, velocityX, velocityY);
   }
 
   @Override
@@ -136,23 +141,26 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
     double angle = Math.toDegrees(Math.abs(Math.atan2(
       distancesObject.getCurrFingersDiffY(), distancesObject.getCurrFingersDiffX())));
 
-    return angle <= maxShoveAngle || 180f - angle <= maxShoveAngle;
+    // Making the axis vertical
+    angle = Math.abs(angle - 90);
+
+    return angle <= maxShoveAngle;
   }
 
   float calculateDeltaPixelsSinceLast() {
-    float py0 = getPreviousEvent().getY(getPreviousEvent().findPointerIndex(pointerIdList.get(0)));
-    float py1 = getPreviousEvent().getY(getPreviousEvent().findPointerIndex(pointerIdList.get(1)));
-    float prevAverageY = (py0 + py1) / 2.0f;
+    float px0 = getPreviousEvent().getX(getPreviousEvent().findPointerIndex(pointerIdList.get(0)));
+    float px1 = getPreviousEvent().getX(getPreviousEvent().findPointerIndex(pointerIdList.get(1)));
+    float prevAverageX = (px0 + px1) / 2.0f;
 
-    float cy0 = getCurrentEvent().getY(getCurrentEvent().findPointerIndex(pointerIdList.get(0)));
-    float cy1 = getCurrentEvent().getY(getCurrentEvent().findPointerIndex(pointerIdList.get(1)));
-    float currAverageY = (cy0 + cy1) / 2.0f;
+    float cx0 = getCurrentEvent().getX(getCurrentEvent().findPointerIndex(pointerIdList.get(0)));
+    float cx1 = getCurrentEvent().getX(getCurrentEvent().findPointerIndex(pointerIdList.get(1)));
+    float currAverageX = (cx0 + cx1) / 2.0f;
 
-    return currAverageY - prevAverageY;
+    return currAverageX - prevAverageX;
   }
 
   /**
-   * Returns vertical pixel delta change since the start of the gesture.
+   * Returns horizontal pixel delta change since the start of the gesture.
    *
    * @return pixels delta change since the start of the gesture
    */
@@ -161,8 +169,8 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
   }
 
   /**
-   * Returns last vertical pixel delta change
-   * calculated in {@link OnShoveGestureListener#onShove(ShoveGestureDetector, float, float)}.
+   * Returns last horizontal pixel delta change
+   * calculated in {@link OnSidewaysShoveGestureListener#onSidewaysShove(SidewaysShoveGestureDetector, float, float)}.
    *
    * @return pixels delta change since the last call
    */
@@ -171,7 +179,7 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
   }
 
   /**
-   * Get the delta pixel threshold required to qualify it as a shove gesture.
+   * Get the delta pixel threshold required to qualify it as a sideways shove gesture.
    *
    * @return delta pixel threshold
    */
@@ -180,7 +188,7 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
   }
 
   /**
-   * Set the delta pixel threshold required to qualify it as a shove gesture.
+   * Set the delta pixel threshold required to qualify it as a sideways shove gesture.
    * <p>
    * We encourage to set those values from dimens to accommodate for various screen sizes.
    *
@@ -191,7 +199,7 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
   }
 
   /**
-   * Set the delta dp threshold required to qualify it as a shove gesture.
+   * Set the delta dp threshold required to qualify it as a sideways shove gesture.
    *
    * @param pixelDeltaThresholdDimen delta threshold
    */
@@ -200,7 +208,8 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
   }
 
   /**
-   * Get the maximum allowed angle between fingers, measured from the horizontal line, to qualify it as a shove gesture.
+   * Get the maximum allowed angle between fingers, measured from the vertical line,
+   * to qualify it as a sideways shove gesture.
    *
    * @return maximum allowed angle
    */
@@ -209,7 +218,8 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
   }
 
   /**
-   * Set the maximum allowed angle between fingers, measured from the horizontal line, to qualify it as a shove gesture.
+   * Set the maximum allowed angle between fingers, measured from the vertical line,
+   * to qualify it as a sideways shove gesture.
    *
    * @param maxShoveAngle maximum allowed angle
    */

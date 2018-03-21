@@ -10,19 +10,21 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class ShoveGestureDetectorTest extends
-  AbstractGestureDetectorTest<ShoveGestureDetector, ShoveGestureDetector.OnShoveGestureListener> {
+public class SidewaysShoveGestureDetectorTest extends
+  AbstractGestureDetectorTest<SidewaysShoveGestureDetector,
+    SidewaysShoveGestureDetector.OnSidewaysShoveGestureListener> {
 
   @Override
-  ShoveGestureDetector getDetectorObject() {
-    return spy(androidGesturesManager.getShoveGestureDetector());
+  SidewaysShoveGestureDetector getDetectorObject() {
+    return spy(androidGesturesManager.getSidewaysShoveGestureDetector());
   }
 
   @Test
   public void analyzeMovementTest() throws Exception {
-    when(listener.onShoveBegin(gestureDetector)).thenReturn(true);
-    when(listener.onShove(gestureDetector, gestureDetector.deltaPixelSinceLast, gestureDetector.deltaPixelsSinceStart))
-      .thenReturn(true);
+    when(listener.onSidewaysShoveBegin(gestureDetector)).thenReturn(true);
+    when(listener.onSidewaysShove(
+      gestureDetector, gestureDetector.deltaPixelSinceLast, gestureDetector.deltaPixelsSinceStart)
+    ).thenReturn(true);
     doReturn(true).when(gestureDetector).isAngleAcceptable();
 
     // threshold not met
@@ -37,7 +39,7 @@ public class ShoveGestureDetectorTest extends
 
     // new event, executing onShove()
     gestureDetector.analyzeMovement();
-    verify(listener, times(1)).onShove(gestureDetector,
+    verify(listener, times(1)).onSidewaysShove(gestureDetector,
       gestureDetector.deltaPixelSinceLast, gestureDetector.deltaPixelsSinceStart);
 
     // new event, executing onShove() even though below threshold because already started
@@ -45,7 +47,7 @@ public class ShoveGestureDetectorTest extends
       .when(gestureDetector).calculateDeltaPixelsSinceLast();
     gestureDetector.analyzeMovement();
     //still 1 invocation because parameters changed, but technically 2
-    verify(listener, times(1)).onShove(gestureDetector,
+    verify(listener, times(1)).onSidewaysShove(gestureDetector,
       gestureDetector.deltaPixelSinceLast, gestureDetector.deltaPixelsSinceStart);
 
     // angle exceeded don't execute
@@ -58,7 +60,7 @@ public class ShoveGestureDetectorTest extends
       .when(gestureDetector).isAngleAcceptable();
     gestureDetector.analyzeMovement();
     // 1 invocation because parameters changed, but technically 3
-    verify(listener, times(1)).onShove(gestureDetector,
+    verify(listener, times(1)).onSidewaysShove(gestureDetector,
       gestureDetector.deltaPixelSinceLast, gestureDetector.deltaPixelsSinceStart);
 
     // stopping
@@ -72,8 +74,8 @@ public class ShoveGestureDetectorTest extends
       .when(gestureDetector).calculateDeltaPixelsSinceLast();
     gestureDetector.analyzeMovement();
 
-    verify(listener, times(2)).onShoveBegin(gestureDetector);
-    verify(listener, times(1)).onShoveEnd(
+    verify(listener, times(2)).onSidewaysShoveBegin(gestureDetector);
+    verify(listener, times(1)).onSidewaysShoveEnd(
       gestureDetector, gestureDetector.velocityX, gestureDetector.velocityY);
   }
 
@@ -83,7 +85,7 @@ public class ShoveGestureDetectorTest extends
     gestureDetector.pointerIdList.add(1);
     gestureDetector.pointersDistanceMap.put(
       new PointerDistancePair(0, 1),
-      new MultiFingerDistancesObject(300, 0, 275, 15)
+      new MultiFingerDistancesObject(0, 300, 15, 275)
     );
     assertTrue(gestureDetector.isAngleAcceptable());
 
@@ -93,7 +95,7 @@ public class ShoveGestureDetectorTest extends
     gestureDetector.pointerIdList.add(1);
     gestureDetector.pointersDistanceMap.put(
       new PointerDistancePair(0, 1),
-      new MultiFingerDistancesObject(300, 0, 275, 150)
+      new MultiFingerDistancesObject(0, 300, 150, 275)
     );
     assertFalse(gestureDetector.isAngleAcceptable());
   }

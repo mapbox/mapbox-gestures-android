@@ -21,6 +21,7 @@ import com.mapbox.android.gestures.MoveGestureDetector;
 import com.mapbox.android.gestures.MultiFingerTapGestureDetector;
 import com.mapbox.android.gestures.RotateGestureDetector;
 import com.mapbox.android.gestures.ShoveGestureDetector;
+import com.mapbox.android.gestures.SidewaysShoveGestureDetector;
 import com.mapbox.android.gestures.StandardGestureDetector;
 import com.mapbox.android.gestures.StandardScaleGestureDetector;
 
@@ -96,6 +97,10 @@ public class MainActivity extends AppCompatActivity {
 
         new ExclusiveSetSpinnerObject(AndroidGesturesManager.GESTURE_TYPE_ROTATE,
           AndroidGesturesManager.GESTURE_TYPE_MOVE),
+
+        new ExclusiveSetSpinnerObject(AndroidGesturesManager.GESTURE_TYPE_SCALE,
+          AndroidGesturesManager.GESTURE_TYPE_SCROLL,
+          AndroidGesturesManager.GESTURE_TYPE_SIDEWAYS_SHOVE),
       });
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     mutuallyExclusiveSpinner.setAdapter(adapter);
@@ -232,6 +237,16 @@ public class MainActivity extends AppCompatActivity {
       }
     });
 
+    androidGesturesManager.setSidewaysShoveGestureListener(
+      new SidewaysShoveGestureDetector.SimpleOnSidewaysShoveGestureListener() {
+        @Override
+        public boolean onSidewaysShove(SidewaysShoveGestureDetector detector, float deltaPixelsSinceLast,
+                                       float deltaPixelsSinceStart) {
+          icon.setRotationY(icon.getRotationY() + deltaPixelsSinceLast);
+          return true;
+        }
+      });
+
     androidGesturesManager.setMoveGestureListener(onMoveGestureListener);
   }
 
@@ -345,6 +360,8 @@ public class MainActivity extends AppCompatActivity {
           return "Scale";
         case AndroidGesturesManager.GESTURE_TYPE_SHOVE:
           return "Shove";
+        case AndroidGesturesManager.GESTURE_TYPE_SIDEWAYS_SHOVE:
+          return "Sideways shove";
         case AndroidGesturesManager.GESTURE_TYPE_MOVE:
           return "Move";
         case -1: // (none)
