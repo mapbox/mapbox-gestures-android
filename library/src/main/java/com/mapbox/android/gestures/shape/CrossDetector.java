@@ -18,8 +18,8 @@ class CrossDetector extends DashDetector {
 
   @Override
   public int onUp(MotionEvent motionEvent, List<Point> pointerCoords) {
-    boolean verticalDash = !isBeyondVerticalBounds(pointerCoords);
-    boolean horizontalDash = !isBeyondHorizontalBounds(pointerCoords);
+    boolean verticalDash = !isBeyondHorizontalBounds(pointerCoords);
+    boolean horizontalDash = !isBeyondVerticalBounds(pointerCoords);
 
     // if none fits, abort
     if (!verticalDash && !horizontalDash) {
