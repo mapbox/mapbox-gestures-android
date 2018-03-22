@@ -5,6 +5,7 @@ import android.view.MotionEvent;
 
 import java.util.List;
 
+// TODO: 22.03.18 they need to intersect
 class CrossDetector extends DashDetector {
 
   private boolean hasHorizontalDash;

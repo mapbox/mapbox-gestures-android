@@ -1,5 +1,6 @@
 package com.mapbox.android.gestures;
 
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.support.annotation.NonNull;
 import android.view.MotionEvent;
@@ -55,5 +56,18 @@ public class Utils {
       return event.getY(pointerIndex) + offset;
     }
     return 0.0f;
+  }
+
+  /**
+   * Returns relative distance in pixels between two points on screen.
+   *
+   * @param point1 first point
+   * @param point2 second point
+   * @return relative distance in pixels
+   */
+  public static float calcualteRelativeDistance(@NonNull Point point1, @NonNull Point point2) {
+    float diffX = point2.x - point1.x;
+    float diffY = point2.y - point1.y;
+    return (float) Math.sqrt(diffX * diffX + diffY * diffY);
   }
 }

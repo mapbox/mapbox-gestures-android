@@ -174,7 +174,8 @@ public class AndroidGesturesManager {
         ((ShapeGestureDetector) detector).setCrossMovementBoundsResource(
           R.dimen.mapbox_defaultShapeCrossMovementBounds);
 
-        // TODO: 21.03.18 init thresholds for shape
+        ((ShapeGestureDetector) detector).setCircleMovementBoundsResource(
+          R.dimen.mapbox_defaultShapeCircleMovementBounds);
       }
 
       if (detector instanceof RotateGestureDetector) {

@@ -41,6 +41,7 @@ public class ShapeGestureDetector extends BaseGesture<ShapeGestureDetector.OnSha
 
   private final DashDetector dashDetector = new DashDetector();
   private final CrossDetector crossDetector = new CrossDetector();
+  private final CircleDetector circleDetector = new CircleDetector();
 
   /**
    * Listener for shape gesture callbacks.
@@ -68,6 +69,7 @@ public class ShapeGestureDetector extends BaseGesture<ShapeGestureDetector.OnSha
 
     detectors.add(dashDetector);
     detectors.add(crossDetector);
+    detectors.add(circleDetector);
   }
 
   @Override
@@ -146,62 +148,89 @@ public class ShapeGestureDetector extends BaseGesture<ShapeGestureDetector.OnSha
   }
 
   /**
-   * Get maximum movement in pixels in vertical axis (calculated from average) allowed to accept dash shape.
+   * Get maximum movement in pixels in vertical axis allowed to accept dash shape.
    *
-   * @return vertical threshold
+   * @return vertical movement bounds
    */
   public float getDashMovementBounds() {
     return dashDetector.getMovementBounds();
   }
 
   /**
-   * Set maximum movement in pixels in vertical axis (calculated from average) allowed to accept dash shape.
+   * Set maximum movement in pixels in vertical axis allowed to accept dash shape.
    * <p>
    * We encourage to set those values from dimens to accommodate for various screen sizes.
    *
-   * @param movementBounds vertical movementBounds
+   * @param movementBounds vertical movement bounds
    */
   public void setDashMovementBounds(float movementBounds) {
     dashDetector.setMovementBounds(movementBounds);
   }
 
   /**
-   * Set maximum movement in dp in vertical axis (calculated from average) allowed to accept dash shape.
+   * Set maximum movement in dp in vertical axis allowed to accept dash shape.
    *
-   * @param movementBounds vertical movementBounds
+   * @param movementBounds vertical movement bounds
    */
   public void setDashMovementBoundsResource(@DimenRes int movementBounds) {
     setDashMovementBounds(context.getResources().getDimension(movementBounds));
   }
 
   /**
-   * Get maximum movement in pixels in vertical or horizontal axis (calculated from average)
-   * allowed to accept cross shape.
+   * Get maximum movement in pixels in vertical or horizontal axis allowed to accept cross shape.
    *
-   * @return vertical or horizontal threshold
+   * @return vertical or horizontal movement bounds
    */
   public float getCrossMovementBounds() {
     return crossDetector.getMovementBounds();
   }
 
   /**
-   * Set maximum movement in pixels in vertical or horizontal axis (calculated from average)
-   * allowed to accept cross shape.
+   * Set maximum movement in pixels in vertical or horizontal axis allowed to accept cross shape.
    * <p>
    * We encourage to set those values from dimens to accommodate for various screen sizes.
    *
-   * @param movementBounds vertical or horizontal movementBounds
+   * @param movementBounds vertical or horizontal movement bounds
    */
   public void setCrossMovementBounds(float movementBounds) {
     crossDetector.setMovementBounds(movementBounds);
   }
 
   /**
-   * Set maximum movement in dp in vertical or horizontal axis (calculated from average) allowed to accept cross shape.
+   * Set maximum movement in dp in vertical or horizontal axis allowed to accept cross shape.
    *
-   * @param movementBounds vertical or horizontal movementBounds
+   * @param movementBounds vertical or horizontal movement bounds
    */
   public void setCrossMovementBoundsResource(@DimenRes int movementBounds) {
     setCrossMovementBounds(context.getResources().getDimension(movementBounds));
+  }
+
+  /**
+   * Get maximum deviation in pixels from radius allowed to accept circle shape.
+   *
+   * @return movement bounds
+   */
+  public float getCircleMovementBounds() {
+    return circleDetector.getMovementBounds();
+  }
+
+  /**
+   * Set maximum deviation in pixels from radius allowed to accept circle shape.
+   * <p>
+   * We encourage to set those values from dimens to accommodate for various screen sizes.
+   *
+   * @param movementBounds movement bounds
+   */
+  public void setCircleMovementBounds(float movementBounds) {
+    circleDetector.setMovementBounds(movementBounds);
+  }
+
+  /**
+   * Set maximum deviation in dp from radius allowed to accept circle shape.
+   *
+   * @param movementBounds movement bounds
+   */
+  public void setCircleMovementBoundsResource(@DimenRes int movementBounds) {
+    setCircleMovementBounds(context.getResources().getDimension(movementBounds));
   }
 }

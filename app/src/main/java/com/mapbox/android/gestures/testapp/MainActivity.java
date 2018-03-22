@@ -243,6 +243,8 @@ public class MainActivity extends AppCompatActivity {
           shapeName = "dash";
         } else if (shape == ShapeGestureDetector.SHAPE_CROSS) {
           shapeName = "cross";
+        } else if (shape == ShapeGestureDetector.SHAPE_CIRCLE) {
+          shapeName = "circle";
         }
 
         Toast.makeText(MainActivity.this, String.format(Locale.getDefault(), "Shape detected - %s", shapeName),

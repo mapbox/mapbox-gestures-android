@@ -14,11 +14,14 @@
     <!--Default pointer's position change required to abort tap gesture-->
     <dimen name="mapbox_defaultMultiTapMovementThreshold">5dp</dimen>
 
-    <!--Default maximum movement in vertical axis (calculated from average) allowed to accept dash shape-->
+    <!--Default maximum movement in vertical axis allowed to accept dash shape-->
     <dimen name="mapbox_defaultShapeDashMovementBounds">30dp</dimen>
 
-    <!--Default maximum movement in vertical axis (calculated from average) allowed to accept cross shape-->
+    <!--Default maximum movement in vertical axis allowed to accept cross shape-->
     <dimen name="mapbox_defaultShapeCrossMovementBounds">30dp</dimen>
+
+    <!--Default maximum deviation in pixels from radius allowed to accept circle shape-->
+    <dimen name="mapbox_defaultShapeCircleMovementBounds">50dp</dimen>
 
     <!--Minimum position change required to consider shape-->
     <dimen name="mapbox_defaultShapeMinimumMovementThreshold">28dp</dimen>
