@@ -32,7 +32,8 @@ class CircleDetector implements ShapeDetector {
   }
 
   private Point determineCenterPoint(List<Point> pointerCoords) {
-    int x = 0, y = 0;
+    int x = 0;
+    int y = 0;
     for (Point point : pointerCoords) {
       x += point.x;
       y += point.y;
