@@ -5,6 +5,8 @@ import android.support.annotation.IntDef;
 import android.support.annotation.UiThread;
 import android.view.MotionEvent;
 
+import com.mapbox.android.gestures.shape.ShapeGestureDetector;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
@@ -32,7 +34,8 @@ public class AndroidGesturesManager {
     GESTURE_TYPE_DOUBLE_TAP,
     GESTURE_TYPE_DOUBLE_TAP_EVENT,
     GESTURE_TYPE_SINGLE_TAP_CONFIRMED,
-    GESTURE_TYPE_MOVE
+    GESTURE_TYPE_MOVE,
+    GESTURE_TYPE_SHAPE
   })
   public @interface GestureType {
   }
@@ -51,6 +54,7 @@ public class AndroidGesturesManager {
   public static final int GESTURE_TYPE_DOUBLE_TAP_EVENT = 11;
   public static final int GESTURE_TYPE_SINGLE_TAP_CONFIRMED = 12;
   public static final int GESTURE_TYPE_MOVE = 13;
+  public static final int GESTURE_TYPE_SHAPE = 14;
 
   private final List<Set<Integer>> mutuallyExclusiveGestures = new ArrayList<>();
   private final List<BaseGesture> detectors = new ArrayList<>();
@@ -61,6 +65,7 @@ public class AndroidGesturesManager {
   private final ShoveGestureDetector shoveGestureDetector;
   private final MultiFingerTapGestureDetector multiFingerTapGestureDetector;
   private final MoveGestureDetector moveGestureDetector;
+  private final ShapeGestureDetector shapeGestureDetector;
 
   /**
    * Creates a new instance of the {@link AndroidGesturesManager}.
@@ -120,6 +125,7 @@ public class AndroidGesturesManager {
     multiFingerTapGestureDetector = new MultiFingerTapGestureDetector(context, this);
     moveGestureDetector = new MoveGestureDetector(context, this);
     standardGestureDetector = new StandardGestureDetector(context, this);
+    shapeGestureDetector = new ShapeGestureDetector(context, this);
 
     detectors.add(rotateGestureDetector);
     detectors.add(standardScaleGestureDetector);
@@ -127,6 +133,7 @@ public class AndroidGesturesManager {
     detectors.add(multiFingerTapGestureDetector);
     detectors.add(moveGestureDetector);
     detectors.add(standardGestureDetector);
+    detectors.add(shapeGestureDetector);
 
     if (applyDefaultThresholds) {
       initDefaultThresholds();
@@ -155,6 +162,20 @@ public class AndroidGesturesManager {
 
         ((MultiFingerTapGestureDetector) detector).setMultiFingerTapTimeThreshold(
           Constants.DEFAULT_MULTI_TAP_TIME_THRESHOLD);
+      }
+
+      if (detector instanceof ShapeGestureDetector) {
+        ((ShapeGestureDetector) detector).setMinimumMovementThresholdResource(
+          R.dimen.mapbox_defaultShapeMinimumMovementThreshold);
+
+        ((ShapeGestureDetector) detector).setDashMovementBoundsResource(
+          R.dimen.mapbox_defaultShapeDashMovementBounds);
+
+        ((ShapeGestureDetector) detector).setCrossMovementBoundsResource(
+          R.dimen.mapbox_defaultShapeCrossMovementBounds);
+
+        ((ShapeGestureDetector) detector).setCircleMovementBoundsResource(
+          R.dimen.mapbox_defaultShapeCircleMovementBounds);
       }
 
       if (detector instanceof RotateGestureDetector) {
@@ -246,6 +267,22 @@ public class AndroidGesturesManager {
    */
   public void removeShoveGestureListener() {
     shoveGestureDetector.removeListener();
+  }
+
+  /**
+   * Sets a listener for shape gestures.
+   *
+   * @param listener your gestures listener
+   */
+  public void setShapeGestureListener(ShapeGestureDetector.OnShapeDetectedListener listener) {
+    shapeGestureDetector.setListener(listener);
+  }
+
+  /**
+   * Removes a listener for shape gestures.
+   */
+  public void removeShapeGestureListener() {
+    shapeGestureDetector.removeListener();
   }
 
   /**
@@ -349,6 +386,15 @@ public class AndroidGesturesManager {
    */
   public MoveGestureDetector getMoveGestureDetector() {
     return moveGestureDetector;
+  }
+
+  /**
+   * Get shape gesture detector.
+   *
+   * @return gesture detector
+   */
+  public ShapeGestureDetector getShapeGestureDetector() {
+    return shapeGestureDetector;
   }
 
   /**
