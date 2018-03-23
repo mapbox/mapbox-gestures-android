@@ -81,4 +81,10 @@ public class StandardScaleGestureDetectorTest extends
     verify(listener, times(3)).onScaleEnd(
       gestureDetector, gestureDetector.velocityX, gestureDetector.velocityY);
   }
+
+  @Test
+  public void internalMinSpanSetterTest() throws Exception {
+    // future-proofing against API changes
+    gestureDetector.modifyInternalMinSpanValues();
+  }
 }
