@@ -32,7 +32,8 @@ public class AndroidGesturesManager {
     GESTURE_TYPE_DOUBLE_TAP,
     GESTURE_TYPE_DOUBLE_TAP_EVENT,
     GESTURE_TYPE_SINGLE_TAP_CONFIRMED,
-    GESTURE_TYPE_MOVE
+    GESTURE_TYPE_MOVE,
+    GESTURE_TYPE_SIDEWAYS_SHOVE
   })
   public @interface GestureType {
   }
@@ -51,6 +52,7 @@ public class AndroidGesturesManager {
   public static final int GESTURE_TYPE_DOUBLE_TAP_EVENT = 11;
   public static final int GESTURE_TYPE_SINGLE_TAP_CONFIRMED = 12;
   public static final int GESTURE_TYPE_MOVE = 13;
+  public static final int GESTURE_TYPE_SIDEWAYS_SHOVE = 14;
 
   private final List<Set<Integer>> mutuallyExclusiveGestures = new ArrayList<>();
   private final List<BaseGesture> detectors = new ArrayList<>();
@@ -61,6 +63,7 @@ public class AndroidGesturesManager {
   private final ShoveGestureDetector shoveGestureDetector;
   private final MultiFingerTapGestureDetector multiFingerTapGestureDetector;
   private final MoveGestureDetector moveGestureDetector;
+  private final SidewaysShoveGestureDetector sidewaysShoveGestureDetector;
 
   /**
    * Creates a new instance of the {@link AndroidGesturesManager}.
@@ -117,6 +120,7 @@ public class AndroidGesturesManager {
     rotateGestureDetector = new RotateGestureDetector(context, this);
     standardScaleGestureDetector = new StandardScaleGestureDetector(context, this);
     shoveGestureDetector = new ShoveGestureDetector(context, this);
+    sidewaysShoveGestureDetector = new SidewaysShoveGestureDetector(context, this);
     multiFingerTapGestureDetector = new MultiFingerTapGestureDetector(context, this);
     moveGestureDetector = new MoveGestureDetector(context, this);
     standardGestureDetector = new StandardGestureDetector(context, this);
@@ -124,6 +128,7 @@ public class AndroidGesturesManager {
     detectors.add(rotateGestureDetector);
     detectors.add(standardScaleGestureDetector);
     detectors.add(shoveGestureDetector);
+    detectors.add(sidewaysShoveGestureDetector);
     detectors.add(multiFingerTapGestureDetector);
     detectors.add(moveGestureDetector);
     detectors.add(standardGestureDetector);
@@ -147,6 +152,12 @@ public class AndroidGesturesManager {
       if (detector instanceof ShoveGestureDetector) {
         ((ShoveGestureDetector) detector).setPixelDeltaThresholdResource(R.dimen.mapbox_defaultShovePixelThreshold);
         ((ShoveGestureDetector) detector).setMaxShoveAngle(Constants.DEFAULT_SHOVE_MAX_ANGLE);
+      }
+
+      if (detector instanceof SidewaysShoveGestureDetector) {
+        ((SidewaysShoveGestureDetector) detector).setPixelDeltaThresholdResource(
+          R.dimen.mapbox_defaultShovePixelThreshold);
+        ((SidewaysShoveGestureDetector) detector).setMaxShoveAngle(Constants.DEFAULT_SHOVE_MAX_ANGLE);
       }
 
       if (detector instanceof MultiFingerTapGestureDetector) {
@@ -289,6 +300,22 @@ public class AndroidGesturesManager {
   }
 
   /**
+   * Sets a listener for sideways shove gestures.
+   *
+   * @param listener your gestures listener
+   */
+  public void setSidewaysShoveGestureListener(SidewaysShoveGestureDetector.OnSidewaysShoveGestureListener listener) {
+    sidewaysShoveGestureDetector.setListener(listener);
+  }
+
+  /**
+   * Removes a listener for sideways shove gestures.
+   */
+  public void removeSidewaysShoveGestureListener() {
+    sidewaysShoveGestureDetector.removeListener();
+  }
+
+  /**
    * Get a list of all active gesture detectors.
    *
    * @return list of all gesture detectors
@@ -349,6 +376,15 @@ public class AndroidGesturesManager {
    */
   public MoveGestureDetector getMoveGestureDetector() {
     return moveGestureDetector;
+  }
+
+  /**
+   * Get sideways shove gesture detector.
+   *
+   * @return gesture detector
+   */
+  public SidewaysShoveGestureDetector getSidewaysShoveGestureDetector() {
+    return sidewaysShoveGestureDetector;
   }
 
   /**

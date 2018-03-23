@@ -46,6 +46,10 @@ public abstract class AbstractGestureDetectorTest<K extends BaseGesture<L>, L> {
         ((ShoveGestureDetector) detector).setPixelDeltaThreshold(100f);
       }
 
+      if (detector instanceof SidewaysShoveGestureDetector) {
+        ((SidewaysShoveGestureDetector) detector).setPixelDeltaThreshold(100f);
+      }
+
       if (detector instanceof MultiFingerTapGestureDetector) {
         ((MultiFingerTapGestureDetector) detector).setMultiFingerTapMovementThreshold(15f);
       }
