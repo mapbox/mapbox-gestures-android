@@ -34,6 +34,8 @@ android {
 
 dependencies {
     implementation dependenciesList.supportAppcompatV7
+    implementation dependenciesList.timber
+
     testImplementation dependenciesList.junit
     testImplementation dependenciesList.mockito
     testImplementation dependenciesList.robolectric
