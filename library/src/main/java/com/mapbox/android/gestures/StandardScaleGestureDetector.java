@@ -64,9 +64,9 @@ public class StandardScaleGestureDetector extends
 
     try {
       modifyInternalMinSpanValues();
-    } catch (NoSuchFieldException e) {
+    } catch (NoSuchFieldException ex) {
       // ignore
-    } catch (IllegalAccessException e) {
+    } catch (IllegalAccessException ex) {
       // ignore
     }
   }
@@ -77,7 +77,8 @@ public class StandardScaleGestureDetector extends
    * and https://issuetracker.google.com/issues/37131665.
    */
   void modifyInternalMinSpanValues() throws NoSuchFieldException, IllegalAccessException {
-    final Field minSpanField = scaleGestureDetector.getClass().getDeclaredField(Constants.internal_scaleGestureDetectorMinSpanField);
+    final Field minSpanField =
+      scaleGestureDetector.getClass().getDeclaredField(Constants.internal_scaleGestureDetectorMinSpanField);
     minSpanField.setAccessible(true);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
       minSpanField.set(
