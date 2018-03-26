@@ -1,7 +1,11 @@
 package com.mapbox.android.gestures;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.PointF;
 import android.support.annotation.NonNull;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 
 public class Utils {
@@ -55,5 +59,37 @@ public class Utils {
       return event.getY(pointerIndex) + offset;
     }
     return 0.0f;
+  }
+
+  /**
+   * Converts DIP to PX.
+   *
+   * @param dp initial value
+   * @return converted value
+   */
+  public static float dpToPx(float dp) {
+    return dp * Resources.getSystem().getDisplayMetrics().density;
+  }
+
+  /**
+   * Converts PX to DIP.
+   *
+   * @param px initial value
+   * @return converted value
+   */
+  public static float pxToDp(float px) {
+    return px / Resources.getSystem().getDisplayMetrics().density;
+  }
+
+  /**
+   * Converts PX to MM (millimeters).
+   *
+   * @param px      initial value
+   * @param context context
+   * @return converted value
+   */
+  public static float pxToMm(final float px, final Context context) {
+    final DisplayMetrics dm = context.getResources().getDisplayMetrics();
+    return px / TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, 1, dm);
   }
 }

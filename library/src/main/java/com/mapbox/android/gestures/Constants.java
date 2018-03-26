@@ -16,4 +16,9 @@ public final class Constants {
    * Default time within which pointers need to leave the screen to register tap gesture.
    */
   public static final long DEFAULT_MULTI_TAP_TIME_THRESHOLD = 150L;
+
+
+  /*Private constants*/
+  static final String internal_scaleGestureDetectorMinSpanField = "mMinSpan";
+  static final String internal_scaleGestureDetectorSpanSlopField = "mSpanSlop";
 }
