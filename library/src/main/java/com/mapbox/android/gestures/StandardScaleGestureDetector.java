@@ -1,13 +1,16 @@
 package com.mapbox.android.gestures;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.VelocityTracker;
+import android.view.ViewConfiguration;
 
+import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -58,6 +61,37 @@ public class StandardScaleGestureDetector extends
     };
 
     scaleGestureDetector = new ScaleGestureDetector(context, innerListener);
+
+    try {
+      modifyInternalMinSpanValues();
+    } catch (NoSuchFieldException ex) {
+      // ignore
+    } catch (IllegalAccessException ex) {
+      // ignore
+    }
+  }
+
+  /**
+   * Workaround to allow scaling when pointers are close to each other.
+   * References https://github.com/mapbox/mapbox-gestures-android/issues/15
+   * and https://issuetracker.google.com/issues/37131665.
+   */
+  void modifyInternalMinSpanValues() throws NoSuchFieldException, IllegalAccessException {
+    final Field minSpanField =
+      scaleGestureDetector.getClass().getDeclaredField(Constants.internal_scaleGestureDetectorMinSpanField);
+    minSpanField.setAccessible(true);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+      minSpanField.set(
+        scaleGestureDetector, (int) context.getResources().getDimension(R.dimen.mapbox_internalScaleMinSpan24));
+    } else {
+      minSpanField.set(
+        scaleGestureDetector, (int) context.getResources().getDimension(R.dimen.mapbox_internalScaleMinSpan23));
+    }
+
+    final Field spanSlopField =
+      scaleGestureDetector.getClass().getDeclaredField(Constants.internal_scaleGestureDetectorSpanSlopField);
+    spanSlopField.setAccessible(true);
+    spanSlopField.set(scaleGestureDetector, ViewConfiguration.get(context).getScaledTouchSlop());
   }
 
   boolean innerOnScale(ScaleGestureDetector detector) {
