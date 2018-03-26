@@ -7,6 +7,7 @@ ext {
     ]
 
     version = [
+            mapboxSdkVersion: '6.0.0-beta.4',
             supportLibVersion: '25.4.0',
             timber           : '4.5.1',
             junit            : '4.12',
@@ -22,6 +23,9 @@ ext {
     ]
 
     dependenciesList = [
+
+            // mapbox
+            mapboxSdk: "com.mapbox.mapboxsdk:mapbox-android-sdk:${version.mapboxSdkVersion}",
 
             // support
             supportAnnotation  : "com.android.support:support-annotations:${version.supportLibVersion}",

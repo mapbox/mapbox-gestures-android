@@ -35,6 +35,9 @@ android {
 dependencies {
     implementation dependenciesList.supportAppcompatV7
     implementation dependenciesList.timber
+    implementation(dependenciesList.mapboxSdk) {
+        exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-gestures'
+    }
 
     testImplementation dependenciesList.junit
     testImplementation dependenciesList.mockito
