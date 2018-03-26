@@ -15,10 +15,11 @@ import timber.log.Timber;
 public class MapboxActivity extends AppCompatActivity {
 
   private static final String DEFAULT_MAPBOX_ACCESS_TOKEN = "YOUR_MAPBOX_ACCESS_TOKEN_GOES_HERE";
-  private static final String ACCESS_TOKEN_NOT_SET_MESSAGE = "In order to run the Mapbox map Activity you need to set a valid "
-    + "access token. During development, you can set the MAPBOX_ACCESS_TOKEN environment variable for the SDK to "
-    + "automatically include it in the Test App. Otherwise, you can manually include it in the "
-    + "res/values/developer-config.xml file in the mapbox-gestures-android/app folder.";
+  private static final String ACCESS_TOKEN_NOT_SET_MESSAGE =
+    "In order to run the Mapbox map Activity you need to set a valid "
+      + "access token. During development, you can set the MAPBOX_ACCESS_TOKEN environment variable for the SDK to "
+      + "automatically include it in the Test App. Otherwise, you can manually include it in the "
+      + "res/values/developer-config.xml file in the mapbox-gestures-android/app folder.";
 
   private MapView mapView;
 
