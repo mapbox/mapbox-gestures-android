@@ -111,10 +111,13 @@ Detects a vertical movement of two pointers if they are placed within a certain 
 #### MoveGestureDetector
 Behaves similarly to `#onScroll()` contained in the `StandardGestureDetector`, however, its a `ProgressiveGesture` that enables better filtering options, as well as thresholds.
 
+#### SidewaysShoveGesturesDetector
+A brother of the `ShoveGestureDetector`, however, it recognizes the two-finger shove gesture executed in a horizontal, rather than vertical, line.
+
 ## Version
-Current stable version available on maven is `0.1.0`:
+Current stable version available on maven is `0.2.0`:
 ```
-implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.1.0'
+implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.2.0'
 ```
 Noting here, that `0.x` versions series of `Mapbox Gestures for Android` is still in experimental faze and breaking changes can occur with every iteration.
 
@@ -133,5 +136,5 @@ allprojects {
 ```
 and include snapshot dependency
 ```
-implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.2.0-SNAPSHOT'
+implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.3.0-SNAPSHOT'
 ```
