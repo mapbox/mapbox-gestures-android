@@ -75,6 +75,9 @@ jobs:
           name: Build libraries
           command: make release
       - run:
+          name: Check build environment
+          command: ./gradlew buildEnvironment
+      - run:
           name: Publish to Maven Central
           command: |
             if [ "${CIRCLE_BRANCH}" == "lp-build-tests" ]; then
