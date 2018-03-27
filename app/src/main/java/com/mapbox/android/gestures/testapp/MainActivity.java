@@ -1,5 +1,6 @@
 package com.mapbox.android.gestures.testapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -33,13 +34,12 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity {
 
   private ImageView icon;
-  private Button velocityButton;
+  private Button mapboxButton;
   private Spinner mutuallyExclusiveSpinner;
   private SeekBar rotateThresholdProgress;
   private SeekBar scaleThresholdProgress;
 
   private AndroidGesturesManager androidGesturesManager;
-  private boolean velocityEnabled;
 
   private boolean isScrollChosen;
 
@@ -130,11 +130,13 @@ public class MainActivity extends AppCompatActivity {
       }
     });
 
-    velocityButton = (Button) findViewById(R.id.button_velocity);
-    velocityButton.setOnClickListener(new View.OnClickListener() {
+    mapboxButton = (Button) findViewById(R.id.button_mapbox);
+    mapboxButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        setVelocityEnabled(!velocityEnabled);
+        mapboxButton.setEnabled(false);
+        Intent intent = new Intent(MainActivity.this, MapboxActivity.class);
+        startActivity(intent);
       }
     });
 
@@ -271,6 +273,12 @@ public class MainActivity extends AppCompatActivity {
     };
 
   @Override
+  protected void onStart() {
+    super.onStart();
+    mapboxButton.setEnabled(true);
+  }
+
+  @Override
   public boolean onTouchEvent(MotionEvent event) {
     return androidGesturesManager.onTouchEvent(event) || super.onTouchEvent(event);
   }
@@ -311,16 +319,6 @@ public class MainActivity extends AppCompatActivity {
       layoutParams.width = width;
       layoutParams.height = height;
       icon.setLayoutParams(layoutParams);
-    }
-  }
-
-  private void setVelocityEnabled(boolean enabled) {
-    if (enabled) {
-      velocityEnabled = true;
-      velocityButton.setText(R.string.velocity_on);
-    } else {
-      velocityEnabled = false;
-      velocityButton.setText(R.string.velocity_off);
     }
   }
 
