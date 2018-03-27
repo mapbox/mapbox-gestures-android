@@ -8,7 +8,6 @@ import android.support.annotation.UiThread;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_SHOVE;
 import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_SIDEWAYS_SHOVE;
 
 /**
@@ -100,7 +99,7 @@ public class SidewaysShoveGestureDetector extends
 
     if (isInProgress() && deltaPixelSinceLast != 0) {
       return listener.onSidewaysShove(this, deltaPixelSinceLast, deltaPixelsSinceStart);
-    } else if (canExecute(GESTURE_TYPE_SHOVE)) {
+    } else if (canExecute(GESTURE_TYPE_SIDEWAYS_SHOVE)) {
       if (listener.onSidewaysShoveBegin(this)) {
         gestureStarted();
         return true;
