@@ -72,8 +72,8 @@ jobs:
             signing.password=$SIGNING_PASSWORD
             signing.secretKeyRingFile=../secring.gpg" >> gradle.properties
       - run:
-          name: Check environment
-          command: ./gradlew buildEnvironment
+          name: Check library deps
+          command: ./gradlew library:dependencies
       - run:
           name: Build libraries
           command: make release
