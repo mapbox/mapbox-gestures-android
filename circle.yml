@@ -27,11 +27,8 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
-          name: Check code style
-          command: make checkstyle
-      - run:
-          name: Run Lint
-          command: ./gradlew lint
+          name: Check code style and run Lint
+          command: make check
       - run:
           name: Run unit-test in Android libraries
           command: make test
@@ -71,6 +68,9 @@ jobs:
             signing.keyId=$SIGNING_KEYID
             signing.password=$SIGNING_PASSWORD
             signing.secretKeyRingFile=../secring.gpg" >> gradle.properties
+      - run:
+          name: Build release version of the Test App
+          command: make testAppRelease
       - run:
           name: Build libraries
           command: make release

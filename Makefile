@@ -1,11 +1,14 @@
-checkstyle:
-	./gradlew checkstyle
+check:
+	./gradlew checkstyle && ./gradlew lint
 
 test:
 	./gradlew :library:test
 
 release:
 	./gradlew :library:assembleRelease
+
+testAppRelease:
+	./gradlew :app:assembleRelease
 
 publish:
 	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :library:uploadArchives
