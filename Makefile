@@ -1,6 +1,10 @@
 checkstyle:
 	./gradlew checkstyle
 
+javadoc:
+	# Output is (module)/build/docs/javadoc/release
+	./gradlew javadocrelease
+
 test:
 	./gradlew :library:test
 
