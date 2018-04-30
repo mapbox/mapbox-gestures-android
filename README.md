@@ -33,11 +33,11 @@ repositories {
 ```java
 // In the app build.gradle file
 dependencies {
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-offline:0.1.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-gestures-android:0.2.0'
 }
 ```
 
-The library is published to Maven Central and nightly SNAPSHOTs are available on Sonatype:
+The library is published to Maven Central and SNAPSHOTS are available whenver new code is pushed to this repo's `master` branch for testing the latest build:
 
 ```java
 // In the root build.gradle file
@@ -53,7 +53,7 @@ dependencies {
 }
 ```
 
-To run the [sample code](#sample-code) on a device or emulator, include your [developer access token](https://www.mapbox.com/help/define-access-token/) in `developer-config.xml` found in the project. 
+To run the specific Mapbox activity in this repo's test application, include your [developer access token](https://www.mapbox.com/help/define-access-token/) in the `developer-config.xml` file. An access token is not required to run this repo's test application.
 
 ## Getting Help
 
@@ -67,7 +67,9 @@ To run the [sample code](#sample-code) on a device or emulator, include your [de
 
 ## Contributing
 
-We welcome feedback, translations, and code contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.## Version
+We welcome feedback, translations, and code contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+## Version
 
 Noting here, that `0.x` versions series of `Mapbox Gestures for Android` is still in an experimental phase. Breaking changes can occur with every iteration.
 
