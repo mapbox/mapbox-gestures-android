@@ -1,140 +1,77 @@
 # Mapbox Gestures for Android
-This library wraps [GestureDetectorCompat](https://developer.android.com/reference/android/support/v4/view/GestureDetectorCompat.html) and [ScaleGestureDetector](https://developer.android.com/reference/android/view/ScaleGestureDetector.html) as well as introduces implementation of rotate, move, shove and tap gesture detectors.
 
-`Mapbox Gestures for Android` was inspired by [Android Gesture Detector Framework](https://github.com/Almeros/android-gesture-detectors) and offers the same functionality with some additional features on top.
+The Mapbox Gestures for Android library wraps [GestureDetectorCompat](https://developer.android.com/reference/android/support/v4/view/GestureDetectorCompat.html) and [ScaleGestureDetector](https://developer.android.com/reference/android/view/ScaleGestureDetector.html) as well as introduces implementation of rotate, move, shove and tap gesture detectors.
 
-The library is implemented in the projects found below where you can head for more examples:
-- [Mapbox Maps SDK for Android](https://github.com/mapbox/mapbox-gl-native)
-- [Sample App](https://github.com/mapbox/mapbox-gestures-android/tree/master/TestApp) included in this repository
+Mapbox Gestures for Android was inspired by [Android Gesture Detector Framework](https://github.com/Almeros/android-gesture-detectors) and offers the same functionality with some additional features on top.
+
+The library is implemented in the projects found below, where you can head for more examples:
+
+- [The Mapbox Maps SDK for Android](https://github.com/mapbox/mapbox-gl-native)
+- [This library's sample app](https://github.com/mapbox/mapbox-gestures-android/tree/master/TestApp) included in this repository
 
 Are you using the library in your project as well? Let us know or create a PR, we'll be more than happy to add it to the list!
 
-## Usage
-To start gestures processing you have to instantiate `AndroidGestureManager`, set any gesture listeners that you are interested in and pass all `MotionEvent` objects from your Activity/Fragment to `AndroidGestureManager#onTouchEvent()`.
 
-#### Mutually exclusive gestures
-Thanks to the single entry point to all gesture detectors with `AndroidGestureManager` class, we are able to introduce mutually exclusive gestures.
+## Documentation
 
-This means that you can pass a list of `GestureType` sets and whenever a gesture is detected it will check whether there are any `ProgressiveGesture`s currently started that are contained within the same set. If there are any, listener for our detected gesture will not be notified.
+You'll find all of this library's documentation on [our Mapbox Gestures page](https://www.mapbox.com/android-docs/gestures/overview). This includes information on installation, using the API, and links to the API reference.
 
-You can pass mutually exclusive gesture sets in a constructor of `AndroidGestureManager` or with `AndroidGestureManager#setMutuallyExclusiveGestures()`.
 
-Example:
-```
-    Set<Integer> mutuallyExclusive1 = new HashSet<>();
-    mutuallyExclusive1.add(AndroidGesturesManager.GESTURE_TYPE_SHOVE);
-    mutuallyExclusive1.add(AndroidGesturesManager.GESTURE_TYPE_SCROLL);
+## Getting Started
 
-    Set<Integer> mutuallyExclusive2 = new HashSet<>();
-    mutuallyExclusive2.add(AndroidGesturesManager.GESTURE_TYPE_SHOVE);
-    mutuallyExclusive2.add(AndroidGesturesManager.GESTURE_TYPE_SCALE);
+If you are looking to include Mapbox Gestures for Android inside of your project, please take a look at [the detailed instructions](https://www.mapbox.com/android-docs/map-sdk/overview/gestures/) found in our docs. If you are interested in building from source, read the contributing guide inside of this project.
 
-    AndroidGesturesManager androidGesturesManager = new AndroidGesturesManager(
-      context,
-      mutuallyExclusive1,
-      mutuallyExclusive2
-    );
-```
+To use the Gestures library, include it in your app-level `build.gradle` file.
 
-The first set makes it certain that when we detect shove, we will no longer be notified about scroll (shove will be able to execute because scroll is not a `ProgressiveGesture`).
-The second, that when we detect either shove or scale we won't be notified about the other one until the first gesture finishes.
-
-#### Thresholds
-You can set thresholds for supported gestures, which means that gesture detector won't fire until the threshold (like minimum rotation angle) is met. This allows you to personalize gestures experience however you like.
-
-We encourage to set thresholds using `dimen` values, rather than raw pixels, to accommodate for various screen sizes and pixel densities across Android devices. For example:
-
-```
-androidGesturesManager.getStandardScaleGestureDetector()
-.setSpanSinceStartThresholdResource(R.dimen.scaleSpanSinceStartThreshold);
-```
-and for thresholds that are not expressed in pixels:
-```
-androidGesturesManager.getRotateGestureDetector().setAngleThreshold(ROTATE_ANGLE_THRESHOLD);
-```
-
-#### Velocity
-Each progressive gesture with its respective `#onEnd()` callback will provide `X velocity` and `Y velocity` of the gesture at the moment of pointers leaving the screen.
-
-#### Enable/disable and interrupt
-Every gesture detector can be enabled/disable at any point in time using `#setEnabled()` method.
-
-Additionally, every progressive gesture can be interrupted, which will force it to meet start conditions again in order to resume. Popular use case would be to increase gesture's threshold when other is detected:
-```
-    @Override
-    public boolean onScaleBegin(StandardScaleGestureDetector detector) {
-      // forbid movement when scaling
-      androidGesturesManager.getMoveGestureDetector().setEnabled(false); // this interrupts a gesture as well
-    
-      // increase rotate angle threshold when scale is detected, then interrupt to force re-check
-      RotateGestureDetector rotateGestureDetector = androidGesturesManager.getRotateGestureDetector();
-      rotateGestureDetector.setAngleThreshold(ROTATION_THRESHOLD_WHEN_SCALING);
-      rotateGestureDetector.interrupt();
-
-      return true;
-    }
-        
-    @Override
-    public boolean onScale(StandardScaleGestureDetector detector) {
-      float scaleFactor = detector.getScaleFactor();
-      ...
-      ...
-      return true;
-    }
-    
-    @Override
-    public void onScaleEnd(StandardScaleGestureDetector detector) {
-      // revert thresholds values
-      RotateGestureDetector rotateGestureDetector = androidGesturesManager.getRotateGestureDetector();
-      rotateGestureDetector.setAngleThreshold(Constants.DEFAULT_ROTATE_ANGLE_THRESHOLD);
-    }
-```
-
-## Detectors
-With this library you will be able to recognize gestures using detectors provided by the Support Library and more.
-
-#### StandardGestureDetector
-Wraps [GestureDetectorCompat](https://developer.android.com/reference/android/support/v4/view/GestureDetectorCompat.html) exposed via the Support Library that recognizes gestures like tap, double tap or scroll.
-
-#### StandardScaleGestureDetector
-Wraps [ScaleGestureDetector](https://developer.android.com/reference/android/view/ScaleGestureDetector.html) exposed via the Support Library that recognizes scale/pinch gesture.
-
-#### MultiFingerTapGestureDetector
-Simple gesture detector that notify listeners whenever a multi finger tap occurred and how many fingers where involved.
-
-#### RotateGestureDetector
-A detector that finds the angle difference between previous and current line made with two pointers (fingers).
-
-#### ShoveGestureDetector
-Detects a vertical movement of two pointers if they are placed within a certain horizontal angle.
-
-#### MoveGestureDetector
-Behaves similarly to `#onScroll()` contained in the `StandardGestureDetector`, however, its a `ProgressiveGesture` that enables better filtering options, as well as thresholds.
-
-#### SidewaysShoveGesturesDetector
-A brother of the `ShoveGestureDetector`, however, it recognizes the two-finger shove gesture executed in a horizontal, rather than vertical, line.
-
-## Version
-Current stable version available on maven is `0.2.0`:
-```
-implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.2.0'
-```
-Noting here, that `0.x` versions series of `Mapbox Gestures for Android` is still in experimental faze and breaking changes can occur with every iteration.
-
-## Snapshots
-Feel free to test out snapshots that are built with every new commit to the `master` branch.
-
-Add snapshot repository path
-```
-allprojects {
-    repositories {
-        google()
-        jcenter()
-        maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
-    }
+```java
+// In the root build.gradle file
+repositories {
+    mavenCentral()
 }
 ```
-and include snapshot dependency
+
+```java
+// In the app build.gradle file
+dependencies {
+    implementation 'com.mapbox.mapboxsdk:mapbox-gestures-android:0.2.0'
+}
 ```
-implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.3.0-SNAPSHOT'
+
+The library is published to Maven Central and SNAPSHOTS are available whenver new code is pushed to this repo's `master` branch for testing the latest build:
+
+```java
+// In the root build.gradle file
+repositories {
+    mavenCentral()
+    maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
+}
 ```
+```java
+// In the app build.gradle file
+dependencies {
+	implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.3.0-SNAPSHOT'
+}
+```
+
+To run the specific Mapbox activity in this repo's test application, include your [developer access token](https://www.mapbox.com/help/define-access-token/) in the `developer-config.xml` file. An access token is not required to run this repo's test application.
+
+## Getting Help
+
+- **Need help with your code?**: Look for previous questions on the [#mapbox tag](https://stackoverflow.com/questions/tagged/mapbox+android) — or [ask a new question](https://stackoverflow.com/questions/tagged/mapbox+android).
+- **Have a bug to report?** [Open an issue](https://github.com/mapbox/mapbox-gestures-android/issues). If possible, include the version of Mapbox Core that you're using, a full log, and a project that shows the issue.
+- **Have a feature request?** [Open an issue](https://github.com/mapbox/mapbox-gestures-android/issues/new). Tell us what the feature should do and why you want the feature.
+
+## Sample code
+
+[This repo's test app](https://github.com/mapbox/mapbox-gestures-android/tree/master/app/src/main/java/com/mapbox/android/gestures/testapp) can also help you get started with the Gestures library.
+
+## Contributing
+
+We welcome feedback, translations, and code contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+## Version
+
+Noting here, that `0.x` versions series of `Mapbox Gestures for Android` is still in an experimental phase. Breaking changes can occur with every iteration.
+
+
+
