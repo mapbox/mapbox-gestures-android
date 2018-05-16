@@ -7,14 +7,14 @@ Mapbox Gestures for Android was inspired by [Android Gesture Detector Framework]
 The library is implemented in the projects found below, where you can head for more examples:
 
 - [The Mapbox Maps SDK for Android](https://github.com/mapbox/mapbox-gl-native)
-- [This library's sample app](https://github.com/mapbox/mapbox-gestures-android/tree/master/TestApp) included in this repository
+- [This library's sample app](https://github.com/mapbox/mapbox-gestures-android/tree/master/app/src/main/java/com/mapbox/android/gestures/testapp) included in this repository
 
 Are you using the library in your project as well? Let us know or create a PR, we'll be more than happy to add it to the list!
 
 
 ## Documentation
 
-You'll find all of this library's documentation on [our Mapbox Gestures page](https://www.mapbox.com/android-docs/gestures/overview). This includes information on installation, using the API, and links to the API reference.
+You'll find all of this library's documentation on [our Mapbox Gestures page](https://www.mapbox.com/android-docs/map-sdk/overview/gestures). This includes information on installation, using the API, and links to the API reference.
 
 
 ## Getting Started
