@@ -14,8 +14,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     buildTypes {
@@ -38,15 +38,13 @@ dependencies {
     implementation(dependenciesList.mapboxSdk) {
         exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-gestures'
     }
-
     testImplementation dependenciesList.junit
     testImplementation dependenciesList.mockito
     testImplementation dependenciesList.robolectric
     androidTestImplementation dependenciesList.mockitoAndroid
     androidTestImplementation dependenciesList.testRunner
     androidTestImplementation dependenciesList.testEspressoCore
-
-    implementation project(":library")
+    implementation project(':library')
 }
 
 apply from: "${rootDir}/gradle/checkstyle.gradle"

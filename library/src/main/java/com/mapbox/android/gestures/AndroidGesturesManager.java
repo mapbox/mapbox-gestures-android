@@ -33,7 +33,8 @@ public class AndroidGesturesManager {
     GESTURE_TYPE_DOUBLE_TAP_EVENT,
     GESTURE_TYPE_SINGLE_TAP_CONFIRMED,
     GESTURE_TYPE_MOVE,
-    GESTURE_TYPE_SIDEWAYS_SHOVE
+    GESTURE_TYPE_SIDEWAYS_SHOVE,
+    GESTURE_TYPE_STROKE
   })
   public @interface GestureType {
   }
@@ -53,6 +54,7 @@ public class AndroidGesturesManager {
   public static final int GESTURE_TYPE_SINGLE_TAP_CONFIRMED = 12;
   public static final int GESTURE_TYPE_MOVE = 13;
   public static final int GESTURE_TYPE_SIDEWAYS_SHOVE = 14;
+  public static final int GESTURE_TYPE_STROKE = 15;
 
   private final List<Set<Integer>> mutuallyExclusiveGestures = new ArrayList<>();
   private final List<BaseGesture> detectors = new ArrayList<>();
@@ -64,6 +66,7 @@ public class AndroidGesturesManager {
   private final MultiFingerTapGestureDetector multiFingerTapGestureDetector;
   private final MoveGestureDetector moveGestureDetector;
   private final SidewaysShoveGestureDetector sidewaysShoveGestureDetector;
+  private final StrokeGestureDetector strokeGestureDetector;
 
   /**
    * Creates a new instance of the {@link AndroidGesturesManager}.
@@ -124,6 +127,7 @@ public class AndroidGesturesManager {
     multiFingerTapGestureDetector = new MultiFingerTapGestureDetector(context, this);
     moveGestureDetector = new MoveGestureDetector(context, this);
     standardGestureDetector = new StandardGestureDetector(context, this);
+    strokeGestureDetector = new StrokeGestureDetector(context, this);
 
     detectors.add(rotateGestureDetector);
     detectors.add(standardScaleGestureDetector);
@@ -132,6 +136,7 @@ public class AndroidGesturesManager {
     detectors.add(multiFingerTapGestureDetector);
     detectors.add(moveGestureDetector);
     detectors.add(standardGestureDetector);
+    detectors.add(strokeGestureDetector);
 
     if (applyDefaultThresholds) {
       initDefaultThresholds();
@@ -315,6 +320,14 @@ public class AndroidGesturesManager {
     sidewaysShoveGestureDetector.removeListener();
   }
 
+  public void setStrokeGestureDetectorListener(StrokeGestureDetector.OnStrokeListener listener) {
+    strokeGestureDetector.setListener(listener);
+  }
+
+  public void removeStrokeGestureDetectorListener() {
+    strokeGestureDetector.removeListener();
+  }
+
   /**
    * Get a list of all active gesture detectors.
    *
@@ -385,6 +398,10 @@ public class AndroidGesturesManager {
    */
   public SidewaysShoveGestureDetector getSidewaysShoveGestureDetector() {
     return sidewaysShoveGestureDetector;
+  }
+
+  public StrokeGestureDetector getStrokeGestureDetector() {
+    return strokeGestureDetector;
   }
 
   /**

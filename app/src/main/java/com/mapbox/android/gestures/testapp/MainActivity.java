@@ -25,6 +25,7 @@ import com.mapbox.android.gestures.ShoveGestureDetector;
 import com.mapbox.android.gestures.SidewaysShoveGestureDetector;
 import com.mapbox.android.gestures.StandardGestureDetector;
 import com.mapbox.android.gestures.StandardScaleGestureDetector;
+import com.mapbox.android.gestures.StrokeGestureDetector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -250,6 +251,13 @@ public class MainActivity extends AppCompatActivity {
       });
 
     androidGesturesManager.setMoveGestureListener(onMoveGestureListener);
+
+    androidGesturesManager.setStrokeGestureDetectorListener(new StrokeGestureDetector.OnStrokeListener() {
+      @Override
+      public void onStrokeDetected(String match, double maxScore) {
+
+      }
+    });
   }
 
   private final MoveGestureDetector.OnMoveGestureListener onMoveGestureListener =
