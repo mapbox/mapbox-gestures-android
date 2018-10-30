@@ -40,6 +40,8 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
 
   private float spanThreshold;
 
+  private final PermittedActionsGuard permittedActionsGuard = new PermittedActionsGuard();
+
   /**
    * A list that holds IDs of currently active pointers in an order of activation.
    * First element is the oldest active pointer and last element is the most recently activated pointer.
@@ -47,14 +49,6 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
   final List<Integer> pointerIdList = new ArrayList<>();
   final HashMap<PointerDistancePair, MultiFingerDistancesObject> pointersDistanceMap = new HashMap<>();
   private PointF focalPoint = new PointF();
-
-  private static final int BITS_PER_ALLOWED_ACTION = 4;
-  private static final int ALLOWED_ACTION_MASK = ((1 << BITS_PER_ALLOWED_ACTION) - 1);
-  /**
-   * Variable that holds all possible at this point MotionEvents based on the previous one.
-   * Each one of them is written on {@link #BITS_PER_ALLOWED_ACTION} successive bits.
-   */
-  private long allowedActions = MotionEvent.ACTION_DOWN;
 
   public MultiFingerGesture(Context context, AndroidGesturesManager gesturesManager) {
     super(context, gesturesManager);
@@ -67,7 +61,9 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
   protected boolean analyzeEvent(MotionEvent motionEvent) {
     int action = motionEvent.getActionMasked();
 
-    boolean isMissingActions = isMissingAction(action);
+    boolean isMissingActions =
+      permittedActionsGuard.isMissingActions(action, motionEvent.getPointerCount(), pointerIdList.size());
+
     if (isMissingActions) {
       // stopping ProgressiveGestures and clearing pointers
       if (this instanceof ProgressiveGesture && ((ProgressiveGesture) this).isInProgress()) {
@@ -75,15 +71,12 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
       }
       pointerIdList.clear();
       pointersDistanceMap.clear();
-
-      allowedActions = MotionEvent.ACTION_DOWN;
     }
 
     if (!isMissingActions || action == MotionEvent.ACTION_DOWN) {
       // if we are not missing any actions or the invalid one happens
       // to be ACTION_DOWN (therefore, we can start over immediately), then update pointers
       updatePointerList(motionEvent);
-      updateAllowedActions();
     }
 
     if (isMissingActions) {
@@ -111,50 +104,6 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
       pointerIdList.add(motionEvent.getPointerId(motionEvent.getActionIndex()));
     } else if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_POINTER_UP) {
       pointerIdList.remove(Integer.valueOf(motionEvent.getPointerId(motionEvent.getActionIndex())));
-    }
-  }
-
-  private boolean isMissingAction(int action) {
-    if (action == allowedActions) {
-      // this will only happen for action == allowedActions == ACTION_DOWN
-      return false;
-    }
-
-    while (allowedActions != 0) {
-      // get one of actions, the one on the first BITS_PER_ALLOWED_ACTION bits
-      long testCase = allowedActions & ALLOWED_ACTION_MASK;
-      if (action == testCase) {
-        // we got a match, all good
-        return false;
-      }
-
-      // remove the one we just checked and iterate
-      allowedActions = allowedActions >> BITS_PER_ALLOWED_ACTION;
-    }
-
-    // no available matching actions, we are missing some!
-    return true;
-  }
-
-  private void updateAllowedActions() {
-    allowedActions = 0;
-
-    if (pointerIdList.size() == 0) {
-      // only ACTION_DOWN available when no other pointers registered
-      allowedActions = MotionEvent.ACTION_DOWN;
-    } else if (pointerIdList.size() >= 1) {
-      // add available actions accordingly, shifting by BITS_PER_ALLOWED_ACTION with each addition
-      allowedActions += MotionEvent.ACTION_POINTER_DOWN;
-      allowedActions = allowedActions << BITS_PER_ALLOWED_ACTION;
-      allowedActions += MotionEvent.ACTION_MOVE;
-
-      if (pointerIdList.size() == 1) {
-        allowedActions = allowedActions << BITS_PER_ALLOWED_ACTION;
-        allowedActions += MotionEvent.ACTION_UP;
-      } else if (pointerIdList.size() > 1) {
-        allowedActions = allowedActions << BITS_PER_ALLOWED_ACTION;
-        allowedActions += MotionEvent.ACTION_POINTER_UP;
-      }
     }
   }
 

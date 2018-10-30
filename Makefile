@@ -6,7 +6,7 @@ javadoc:
 	./gradlew javadocrelease
 
 test:
-	./gradlew :library:test
+	./gradlew :library:test -i
 
 release:
 	./gradlew :library:assembleRelease
