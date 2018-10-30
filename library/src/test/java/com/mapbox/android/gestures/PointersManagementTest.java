@@ -9,6 +9,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import static com.mapbox.android.gestures.TestUtils.getMotionEvent;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class PointersManagementTest extends
@@ -22,10 +23,8 @@ public class PointersManagementTest extends
 
   private void checkResult(int expected) {
     int pointersCount = androidGesturesManager.getStandardScaleGestureDetector().getPointersCount();
-    Assert.assertTrue(
-      String.format("Expected %d pointers, was %d.", expected, pointersCount),
-      pointersCount == expected
-    );
+    Assert.assertEquals(
+      String.format("Expected %d pointers, was %d.", expected, pointersCount), pointersCount, expected);
   }
 
   @Test
@@ -116,5 +115,135 @@ public class PointersManagementTest extends
     androidGesturesManager.onTouchEvent(upEvent);
 
     checkResult(0);
+  }
+
+  @Test
+  public void eventCanceledTest() {
+    MotionEvent downEvent = getMotionEvent(MotionEvent.ACTION_DOWN, 0, 0);
+    androidGesturesManager.onTouchEvent(downEvent);
+
+    MotionEvent pointerDownEvent = getMotionEvent(MotionEvent.ACTION_POINTER_DOWN, 0, 0, downEvent);
+    androidGesturesManager.onTouchEvent(pointerDownEvent);
+
+    pointerDownEvent = getMotionEvent(MotionEvent.ACTION_POINTER_DOWN, 0, 0, pointerDownEvent);
+    androidGesturesManager.onTouchEvent(pointerDownEvent);
+
+    MotionEvent pointerUpEvent = getMotionEvent(MotionEvent.ACTION_POINTER_UP, 0, 0, pointerDownEvent);
+    androidGesturesManager.onTouchEvent(pointerUpEvent);
+
+    MotionEvent cancelEvent = getMotionEvent(MotionEvent.ACTION_CANCEL, 0, 0, pointerUpEvent);
+    androidGesturesManager.onTouchEvent(cancelEvent);
+
+    checkResult(0);
+  }
+
+  @Test
+  public void movingWithMissingPointersTest() {
+    MotionEvent downEvent = getMotionEvent(MotionEvent.ACTION_DOWN, 0, 0);
+    androidGesturesManager.onTouchEvent(downEvent);
+
+    MotionEvent pointerDownEvent = getMotionEvent(MotionEvent.ACTION_POINTER_DOWN, 0, 0, downEvent);
+    androidGesturesManager.onTouchEvent(pointerDownEvent);
+
+    pointerDownEvent = getMotionEvent(MotionEvent.ACTION_POINTER_DOWN, 0, 0, pointerDownEvent);
+    androidGesturesManager.onTouchEvent(pointerDownEvent);
+
+    MotionEvent moveEvent = getMotionEvent(MotionEvent.ACTION_MOVE, 0, 0, pointerDownEvent);
+    when(moveEvent.getPointerCount()).thenReturn(2);
+    androidGesturesManager.onTouchEvent(moveEvent);
+
+    checkResult(0);
+  }
+
+  @Test
+  public void movingWithTooManyPointersTest() {
+    MotionEvent downEvent = getMotionEvent(MotionEvent.ACTION_DOWN, 0, 0);
+    androidGesturesManager.onTouchEvent(downEvent);
+
+    MotionEvent pointerDownEvent = getMotionEvent(MotionEvent.ACTION_POINTER_DOWN, 0, 0, downEvent);
+    androidGesturesManager.onTouchEvent(pointerDownEvent);
+
+    pointerDownEvent = getMotionEvent(MotionEvent.ACTION_POINTER_DOWN, 0, 0, pointerDownEvent);
+    androidGesturesManager.onTouchEvent(pointerDownEvent);
+
+    MotionEvent moveEvent = getMotionEvent(MotionEvent.ACTION_MOVE, 0, 0, pointerDownEvent);
+    when(moveEvent.getPointerCount()).thenReturn(4);
+    androidGesturesManager.onTouchEvent(moveEvent);
+
+    checkResult(0);
+  }
+
+  @Test
+  public void movingWithRightAmountOfPointersTest() {
+    MotionEvent downEvent = getMotionEvent(MotionEvent.ACTION_DOWN, 0, 0);
+    androidGesturesManager.onTouchEvent(downEvent);
+
+    MotionEvent pointerDownEvent = getMotionEvent(MotionEvent.ACTION_POINTER_DOWN, 0, 0, downEvent);
+    androidGesturesManager.onTouchEvent(pointerDownEvent);
+
+    pointerDownEvent = getMotionEvent(MotionEvent.ACTION_POINTER_DOWN, 0, 0, pointerDownEvent);
+    androidGesturesManager.onTouchEvent(pointerDownEvent);
+
+    MotionEvent moveEvent = getMotionEvent(MotionEvent.ACTION_MOVE, 0, 0, pointerDownEvent);
+    when(moveEvent.getPointerCount()).thenReturn(3);
+    androidGesturesManager.onTouchEvent(moveEvent);
+
+    checkResult(3);
+  }
+
+  @Test
+  public void missingPointerUpAndMovementTest() {
+    PermittedActionsGuard guard = new PermittedActionsGuard();
+    boolean result = guard.isMissingActions(MotionEvent.ACTION_MOVE, 1, 2);
+    Assert.assertTrue("Should miss action", result);
+  }
+
+  @Test
+  public void missingPointerDownAndMovementTest() {
+    PermittedActionsGuard guard = new PermittedActionsGuard();
+    boolean result = guard.isMissingActions(MotionEvent.ACTION_MOVE, 2, 1);
+    Assert.assertTrue("Should miss action", result);
+  }
+
+  @Test
+  public void noPointersAndMovementTest() {
+    PermittedActionsGuard guard = new PermittedActionsGuard();
+    boolean result = guard.isMissingActions(MotionEvent.ACTION_MOVE, 1, 0);
+    Assert.assertTrue("Should miss action", result);
+  }
+
+  @Test
+  public void onePointerAndDownTest() {
+    PermittedActionsGuard guard = new PermittedActionsGuard();
+    boolean result = guard.isMissingActions(MotionEvent.ACTION_DOWN, 0, 1);
+    Assert.assertTrue("Should miss action", result);
+  }
+
+  @Test
+  public void twoPointersAndDownTest() {
+    PermittedActionsGuard guard = new PermittedActionsGuard();
+    boolean result = guard.isMissingActions(MotionEvent.ACTION_DOWN, 0, 2);
+    Assert.assertTrue("Should miss action", result);
+  }
+
+  @Test
+  public void onePointerAndPointerUpTest() {
+    PermittedActionsGuard guard = new PermittedActionsGuard();
+    boolean result = guard.isMissingActions(MotionEvent.ACTION_POINTER_UP, 1, 1);
+    Assert.assertTrue("Should miss action", result);
+  }
+
+  @Test
+  public void noPointersAndPointerUpTest() {
+    PermittedActionsGuard guard = new PermittedActionsGuard();
+    boolean result = guard.isMissingActions(MotionEvent.ACTION_POINTER_DOWN, 2, 0);
+    Assert.assertTrue("Should miss action", result);
+  }
+
+  @Test
+  public void onePointerAndUpTest() {
+    PermittedActionsGuard guard = new PermittedActionsGuard();
+    boolean result = guard.isMissingActions(MotionEvent.ACTION_UP, 1, 1);
+    Assert.assertFalse("Should not miss action", result);
   }
 }
