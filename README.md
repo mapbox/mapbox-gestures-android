@@ -33,11 +33,11 @@ repositories {
 ```java
 // In the app build.gradle file
 dependencies {
-    implementation 'com.mapbox.mapboxsdk:mapbox-gestures-android:0.2.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-gestures-android:0.3.0'
 }
 ```
 
-The library is published to Maven Central and SNAPSHOTS are available whenver new code is pushed to this repo's `master` branch for testing the latest build:
+The library is published to Maven Central and SNAPSHOTS are available whenever new code is pushed to this repo's `master` branch for testing the latest build:
 
 ```java
 // In the root build.gradle file
@@ -49,7 +49,7 @@ repositories {
 ```java
 // In the app build.gradle file
 dependencies {
-	implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.3.0-SNAPSHOT'
+	implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.4.0-SNAPSHOT'
 }
 ```
 
