@@ -5,7 +5,6 @@ android.libraryVariants.all { variant ->
         failOnError = false
         destinationDir = new File(destinationDir, variant.baseName)
         source = files(variant.javaCompile.source)
-        classpath = files(variant.javaCompile.classpath.files) + files(android.bootClasspath)
         options.windowTitle("Mapbox Android Gestures $VERSION_NAME Reference")
         options.docTitle("Mapbox Android Gestures $VERSION_NAME")
         options.tags("attr")
