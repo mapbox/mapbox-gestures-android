@@ -5,6 +5,7 @@ import android.graphics.PointF;
 import android.support.annotation.DimenRes;
 import android.support.annotation.UiThread;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 
@@ -12,8 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
-
-import timber.log.Timber;
 
 /**
  * Base class for all multi finger gesture detectors.
@@ -80,7 +79,7 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
     }
 
     if (isMissingActions) {
-      Timber.w("Some MotionEvents were not passed to the library.");
+      Log.w("MultiFingerGesture", "Some MotionEvents were not passed to the library.");
       return false;
     } else {
       if (action == MotionEvent.ACTION_MOVE) {

@@ -33,9 +33,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation dependenciesList.timber
-
     implementation dependenciesList.supportCompat
+
     testImplementation dependenciesList.junit
     testImplementation dependenciesList.mockito
     testImplementation dependenciesList.robolectric
