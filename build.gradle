@@ -21,8 +21,13 @@ allprojects {
     }
 }
 
-subprojects {
+subprojects { subproject ->
     apply plugin: 'idea'
+
+    if (subproject.name == "library") {
+        apply from: "../gradle/mvn-push-android.gradle"
+        apply from: "../gradle/checkstyle.gradle"
+    }
 }
 
 task clean(type: Delete) {

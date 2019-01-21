@@ -44,5 +44,3 @@ dependencies {
 }
 
 apply from: 'javadoc.gradle'
-apply from: "../gradle/mvn-push-android.gradle"
-apply from: "../gradle/checkstyle.gradle"
