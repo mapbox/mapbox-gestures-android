@@ -4,7 +4,7 @@ android.libraryVariants.all { variant ->
         description = "Generates javadoc for build $name"
         failOnError = false
         destinationDir = new File(destinationDir, variant.baseName)
-        source = files(variant.javaCompile.source)
+        source = variant.sourceSets.collect { it.java.sourceFiles }.inject { m, i -> m + i }
         options.windowTitle("Mapbox Android Gestures $VERSION_NAME Reference")
         options.docTitle("Mapbox Android Gestures $VERSION_NAME")
         options.tags("attr")
