@@ -2,6 +2,7 @@ package com.mapbox.android.gestures;
 
 import android.content.Context;
 import android.graphics.PointF;
+import android.os.Build;
 import android.support.annotation.DimenRes;
 import android.support.annotation.UiThread;
 import android.util.DisplayMetrics;
@@ -140,7 +141,22 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
    */
   protected boolean isSloppyGesture() {
     // As orientation can change, query the metrics in touch down
-    DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+    DisplayMetrics metrics;
+    if (windowManager != null) {
+      metrics = new DisplayMetrics();
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        // get real metrics to take into account multi-window where application's visible bounds might be offset,
+        // but we still need to operate on raw values
+        windowManager.getDefaultDisplay().getRealMetrics(metrics);
+      } else {
+        // this method is relative to the applications visible bounds and will not return raw values
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+      }
+    } else {
+      // this method is relative to the applications visible bounds and will not return raw values
+      metrics = context.getResources().getDisplayMetrics();
+    }
+
     float rightSlopEdge = metrics.widthPixels - edgeSlop;
     float bottomSlopEdge = metrics.heightPixels - edgeSlop;
 

@@ -3,6 +3,7 @@ package com.mapbox.android.gestures;
 import android.content.Context;
 import android.support.annotation.UiThread;
 import android.view.MotionEvent;
+import android.view.WindowManager;
 
 import java.util.Set;
 
@@ -14,6 +15,7 @@ import java.util.Set;
 @UiThread
 public abstract class BaseGesture<L> {
   protected final Context context;
+  protected final WindowManager windowManager;
   private final AndroidGesturesManager gesturesManager;
   private MotionEvent currentEvent;
   private MotionEvent previousEvent;
@@ -27,6 +29,7 @@ public abstract class BaseGesture<L> {
 
   public BaseGesture(Context context, AndroidGesturesManager gesturesManager) {
     this.context = context;
+    this.windowManager = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE));
     this.gesturesManager = gesturesManager;
   }
 
@@ -123,6 +126,7 @@ public abstract class BaseGesture<L> {
 
   /**
    * Check whether this detector accepts and analyzes motion events. Default is true.
+   *
    * @return true if it analyzes, false otherwise
    */
   public boolean isEnabled() {
@@ -131,6 +135,7 @@ public abstract class BaseGesture<L> {
 
   /**
    * Set whether this detector should accept and analyze motion events. Default is true.
+   *
    * @param enabled true if it should analyze, false otherwise
    */
   public void setEnabled(boolean enabled) {
