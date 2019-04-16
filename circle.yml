@@ -77,7 +77,7 @@ jobs:
       - deploy:
           name: Publish to Maven Central
           command: |
-            if [ "${CIRCLE_BRANCH}" == "release-v0.4.1" ]; then
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
             make publish ;
             fi
       - store_artifacts:
