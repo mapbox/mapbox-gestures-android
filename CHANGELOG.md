@@ -1,5 +1,9 @@
 # Changelog for the Mapbox Gestures for Android
 
+## 0.4.1 - April 16, 2019
+ - Try getting real device display metrics for sloppy gesture calculations [#61](https://github.com/mapbox/mapbox-gestures-android/pull/61)
+ - Remove obsolete string values [#62](https://github.com/mapbox/mapbox-gestures-android/pull/62)
+
 ## 0.4.0 - January 31, 2019
  - Removed Timber dependency [#54](https://github.com/mapbox/mapbox-gestures-android/pull/54)
  - Prepare the project to be consumed as a submodule [#55](https://github.com/mapbox/mapbox-gestures-android/pull/55)
