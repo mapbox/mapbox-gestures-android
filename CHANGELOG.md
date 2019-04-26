@@ -1,5 +1,8 @@
 # Changelog for the Mapbox Gestures for Android
 
+## 0.4.2 - April 26, 2019
+ - Query display metrics only in touch down [#67](https://github.com/mapbox/mapbox-gestures-android/pull/67)
+
 ## 0.4.1 - April 16, 2019
  - Try getting real device display metrics for sloppy gesture calculations [#61](https://github.com/mapbox/mapbox-gestures-android/pull/61)
  - Remove obsolete string values [#62](https://github.com/mapbox/mapbox-gestures-android/pull/62)
