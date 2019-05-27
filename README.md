@@ -42,8 +42,8 @@ The library is published to Maven Central and SNAPSHOTS are available whenever n
 ```java
 // In the root build.gradle file
 repositories {
-    mavenCentral()
-    maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
+	jcenter()
+	maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
 ```
 ```java

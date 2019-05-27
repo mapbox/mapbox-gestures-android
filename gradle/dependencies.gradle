@@ -17,8 +17,11 @@ ext {
     ]
 
     pluginVersion = [
-            checkstyle: '8.4',
-            gradle    : '3.3.0'
+            checkstyle      : '8.4',
+            gradle          : '3.3.0',
+            bintray         : '1.8.4',
+            androidPublish  : '3.6.2',
+            artifactory     : '4.9.3',
     ]
 
     dependenciesList = [
@@ -47,7 +50,10 @@ ext {
     ]
 
     pluginDependencies = [
-            gradle    : "com.android.tools.build:gradle:${pluginVersion.gradle}",
-            checkstyle: "com.puppycrawl.tools:checkstyle:${pluginVersion.checkstyle}"
+            gradle               : "com.android.tools.build:gradle:${pluginVersion.gradle}",
+            checkstyle           : "com.puppycrawl.tools:checkstyle:${pluginVersion.checkstyle}",
+            bintrayPlugin        : "com.jfrog.bintray.gradle:gradle-bintray-plugin:${pluginVersion.bintray}",
+            androidPublishPlugin : "digital.wup:android-maven-publish:${pluginVersion.androidPublish}",
+            artifactory          : "org.jfrog.buildinfo:build-info-extractor-gradle:${pluginVersion.artifactory}"
     ]
 }
