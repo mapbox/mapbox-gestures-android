@@ -70,10 +70,11 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
       queryDisplayMetrics();
     }
 
-    boolean isMissingActions =
-      permittedActionsGuard.isMissingActions(action, motionEvent.getPointerCount(), pointerIdList.size());
+    boolean isMissingEvents =
+      permittedActionsGuard.isMissingActions(action, motionEvent.getPointerCount(), pointerIdList.size())
+        || (action == MotionEvent.ACTION_MOVE && isMissingPointers(motionEvent));
 
-    if (isMissingActions) {
+    if (isMissingEvents) {
       // stopping ProgressiveGestures and clearing pointers
       if (this instanceof ProgressiveGesture && ((ProgressiveGesture) this).isInProgress()) {
         ((ProgressiveGesture) this).gestureStopped();
@@ -82,14 +83,15 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
       pointersDistanceMap.clear();
     }
 
-    if (!isMissingActions || action == MotionEvent.ACTION_DOWN) {
+    if (!isMissingEvents || action == MotionEvent.ACTION_DOWN) {
       // if we are not missing any actions or the invalid one happens
       // to be ACTION_DOWN (therefore, we can start over immediately), then update pointers
       updatePointerList(motionEvent);
     }
 
-    if (isMissingActions) {
-      Log.w("MultiFingerGesture", "Some MotionEvents were not passed to the library.");
+    if (isMissingEvents) {
+      Log.w("MultiFingerGesture", "Some MotionEvents were not passed to the library "
+        + "or events from different view trees are merged.");
       return false;
     } else {
       if (action == MotionEvent.ACTION_MOVE) {
@@ -132,6 +134,16 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
     } else if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_POINTER_UP) {
       pointerIdList.remove(Integer.valueOf(motionEvent.getPointerId(motionEvent.getActionIndex())));
     }
+  }
+
+  private boolean isMissingPointers(MotionEvent motionEvent) {
+    for (int pointerId : pointerIdList) {
+      boolean hasPointer = motionEvent.findPointerIndex(pointerId) != -1;
+      if (!hasPointer) {
+        return true;
+      }
+    }
+    return false;
   }
 
   boolean checkPressure() {
