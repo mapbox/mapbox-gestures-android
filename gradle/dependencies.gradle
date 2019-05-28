@@ -6,7 +6,7 @@ ext {
     ]
 
     version = [
-            mapboxSdkVersion : '6.6.2',
+            mapboxSdkVersion : '8.0.0',
             supportLibVersion: '27.1.1',
             timber           : '4.7.1',
             junit            : '4.12',
