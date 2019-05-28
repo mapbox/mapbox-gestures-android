@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.Style;
 
 import timber.log.Timber;
 
@@ -26,7 +27,6 @@ public class MapboxActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_mapbox);
 
     String mapboxAccessToken = Utils.getMapboxAccessToken(getApplicationContext());
     if (TextUtils.isEmpty(mapboxAccessToken) || mapboxAccessToken.equals(DEFAULT_MAPBOX_ACCESS_TOKEN)) {
@@ -35,8 +35,11 @@ public class MapboxActivity extends AppCompatActivity {
 
     Mapbox.getInstance(getApplicationContext(), mapboxAccessToken);
 
+    setContentView(R.layout.activity_mapbox);
+
     mapView = (MapView) findViewById(R.id.map_view);
     mapView.onCreate(savedInstanceState);
+    mapView.getMapAsync(mapboxMap -> mapboxMap.setStyle(Style.MAPBOX_STREETS));
   }
 
   @Override
