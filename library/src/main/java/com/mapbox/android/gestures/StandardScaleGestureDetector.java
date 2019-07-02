@@ -1,26 +1,22 @@
 package com.mapbox.android.gestures;
 
 import android.content.Context;
-import android.os.Build;
+import android.graphics.PointF;
 import android.support.annotation.DimenRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
+import android.support.v4.view.GestureDetectorCompat;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
-import android.view.VelocityTracker;
-import android.view.ViewConfiguration;
 
-import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_QUICK_SCALE;
 import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_SCALE;
 
 /**
- * Detector that wraps {@link ScaleGestureDetector}.
- * <p>
- * To get access to all the methods found in {@link ScaleGestureDetector}
- * use {@link #getUnderlyingScaleGestureDetector()}.
+ * Gesture detector handling scale gesture.
  */
 @UiThread
 public class StandardScaleGestureDetector extends
@@ -29,144 +25,134 @@ public class StandardScaleGestureDetector extends
 
   static {
     handledTypes.add(GESTURE_TYPE_SCALE);
+    handledTypes.add(GESTURE_TYPE_QUICK_SCALE);
   }
 
-  private ScaleGestureDetector scaleGestureDetector;
-  ScaleGestureDetector.OnScaleGestureListener innerListener;
-  private boolean stopConfirmed;
-  private boolean isScalingOut;
+  private static final float QUICK_SCALE_MULTIPLIER = 0.5f;
 
-  float startSpan;
-  float spanDeltaSinceStart;
+  private final GestureDetectorCompat innerGestureDetector;
+
+  private boolean quickScale;
+  private PointF quickScaleFocalPoint;
+  private float startSpan;
+  private float currentSpan;
+  private float previousSpan;
+  private float spanDeltaSinceStart;
   private float spanSinceStartThreshold;
+
+  private boolean isScalingOut;
+  private float scaleFactor;
 
   public StandardScaleGestureDetector(Context context, AndroidGesturesManager androidGesturesManager) {
     super(context, androidGesturesManager);
-
-    innerListener = new ScaleGestureDetector.OnScaleGestureListener() {
+    GestureDetector.OnGestureListener doubleTapEventListener = new GestureDetector.SimpleOnGestureListener() {
       @Override
-      public boolean onScale(ScaleGestureDetector detector) {
-        return innerOnScale(detector);
-      }
-
-      @Override
-      public boolean onScaleBegin(ScaleGestureDetector detector) {
-        return innerOnScaleBegin(detector);
-      }
-
-      @Override
-      public void onScaleEnd(final ScaleGestureDetector detector) {
-        innerOnScaleEnd(detector);
+      public boolean onDoubleTapEvent(MotionEvent event) {
+        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+          quickScale = true;
+          quickScaleFocalPoint = new PointF(event.getX(), event.getY());
+        }
+        return true;
       }
     };
-
-    scaleGestureDetector = new ScaleGestureDetector(context, innerListener);
-
-    try {
-      modifyInternalMinSpanValues();
-    } catch (NoSuchFieldException ex) {
-      // ignore
-    } catch (IllegalAccessException ex) {
-      // ignore
-    }
-  }
-
-  /**
-   * Workaround to allow scaling when pointers are close to each other.
-   * References https://github.com/mapbox/mapbox-gestures-android/issues/15
-   * and https://issuetracker.google.com/issues/37131665.
-   */
-  void modifyInternalMinSpanValues() throws NoSuchFieldException, IllegalAccessException {
-    final Field minSpanField =
-      scaleGestureDetector.getClass().getDeclaredField(Constants.internal_scaleGestureDetectorMinSpanField);
-    minSpanField.setAccessible(true);
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-      minSpanField.set(
-        scaleGestureDetector, (int) context.getResources().getDimension(R.dimen.mapbox_internalScaleMinSpan24));
-    } else {
-      minSpanField.set(
-        scaleGestureDetector, (int) context.getResources().getDimension(R.dimen.mapbox_internalScaleMinSpan23));
-    }
-
-    final Field spanSlopField =
-      scaleGestureDetector.getClass().getDeclaredField(Constants.internal_scaleGestureDetectorSpanSlopField);
-    spanSlopField.setAccessible(true);
-    spanSlopField.set(scaleGestureDetector, ViewConfiguration.get(context).getScaledTouchSlop());
-  }
-
-  boolean innerOnScale(ScaleGestureDetector detector) {
-    if (startSpan == 0) {
-      startSpan = detector.getCurrentSpan();
-    }
-
-    spanDeltaSinceStart = Math.abs(startSpan - detector.getCurrentSpan());
-
-    // If we can execute but haven't started immediately because there is a threshold as well, check it
-    if (!isInProgress() && canExecute(GESTURE_TYPE_SCALE) && spanDeltaSinceStart >= spanSinceStartThreshold) {
-      if (listener.onScaleBegin(StandardScaleGestureDetector.this)) {
-        gestureStarted();
-        return true;
-      } else {
-        return false;
-      }
-    }
-
-    if (isInProgress()) {
-      isScalingOut = detector.getScaleFactor() < 1.0f;
-      return listener.onScale(StandardScaleGestureDetector.this);
-    }
-
-    return true;
-  }
-
-  boolean innerOnScaleBegin(ScaleGestureDetector detector) {
-    startSpan = detector.getCurrentSpan();
-    if (canExecute(GESTURE_TYPE_SCALE)) {
-      // Obtaining velocity animator to start gathering gestures for short, quick movements
-      velocityTracker = VelocityTracker.obtain();
-
-      // If scale can execute and there is no threshold, start gesture
-      if (spanSinceStartThreshold == 0) {
-        if (listener.onScaleBegin(StandardScaleGestureDetector.this)) {
-          gestureStarted();
-        }
-      }
-
-      return true;
-    }
-    return false;
-  }
-
-  void innerOnScaleEnd(ScaleGestureDetector detector) {
-    stopConfirmed = true;
-    gestureStopped();
+    innerGestureDetector = new GestureDetectorCompat(context, doubleTapEventListener);
   }
 
   @Override
-  protected boolean analyzeEvent(MotionEvent motionEvent) {
-    super.analyzeEvent(motionEvent);
-    return scaleGestureDetector.onTouchEvent(motionEvent);
+  protected boolean analyzeMovement() {
+    super.analyzeMovement();
+
+    if (isInProgress() && quickScale && getPointersCount() > 1) {
+      // additional pointer has been placed during quick scale
+      // abort and start a traditional pinch next
+      gestureStopped();
+      return false;
+    }
+
+    PointF focal = quickScale ? quickScaleFocalPoint : getFocalPoint();
+
+    float currentSpanX = 0;
+    float currentSpanY = 0;
+    for (int i = 0; i < getPointersCount(); i++) {
+      currentSpanX += Math.abs(getCurrentEvent().getX(i) - focal.x);
+      currentSpanY += Math.abs(getCurrentEvent().getY(i) - focal.y);
+    }
+    currentSpanX *= 2;
+    currentSpanY *= 2;
+
+    if (quickScale) {
+      currentSpan = currentSpanY;
+    } else {
+      currentSpan = (float) Math.hypot(currentSpanX, currentSpanY);
+    }
+
+    if (startSpan == 0) {
+      startSpan = currentSpan;
+    }
+
+    spanDeltaSinceStart = Math.abs(startSpan - currentSpan);
+
+    scaleFactor = calculateScaleFactor();
+    isScalingOut = scaleFactor < 1f;
+
+    boolean handled = false;
+    if (isInProgress() && currentSpan > 0) {
+      handled = listener.onScale(this);
+    } else if (canExecute(quickScale ? GESTURE_TYPE_QUICK_SCALE : GESTURE_TYPE_SCALE)
+      && (spanDeltaSinceStart >= spanSinceStartThreshold)) {
+      handled = listener.onScaleBegin(this);
+      if (handled) {
+        gestureStarted();
+      }
+    }
+    previousSpan = currentSpan;
+    return handled;
   }
 
   @Override
   protected void gestureStopped() {
-    if (!isInProgress()) {
-      // Cleaning up resources after a gesture that did not exceed the threshold
-      super.gestureStopped();
-      return;
-    }
-
-    if (stopConfirmed) {
-      super.gestureStopped();
-      listener.onScaleEnd(StandardScaleGestureDetector.this, velocityX, velocityY);
-      stopConfirmed = false;
-    }
+    super.gestureStopped();
+    listener.onScaleEnd(StandardScaleGestureDetector.this, velocityX, velocityY);
+    quickScale = false;
   }
 
   @Override
-  public void interrupt() {
-    super.interrupt();
-    stopConfirmed = true;
+  protected void reset() {
+    super.reset();
+    startSpan = 0;
+    spanDeltaSinceStart = 0;
+    currentSpan = 0;
+    previousSpan = 0;
+    scaleFactor = 1f;
+  }
+
+  @Override
+  protected boolean analyzeEvent(MotionEvent motionEvent) {
+    int action = motionEvent.getActionMasked();
+    if (action == MotionEvent.ACTION_POINTER_DOWN || action == MotionEvent.ACTION_CANCEL) {
+      if (quickScale) {
+        if (isInProgress()) {
+          interrupt();
+        } else if (quickScale) {
+          // since the double tap has been registered and canceled but the gesture wasn't started,
+          // we need to mark it manually
+          quickScale = false;
+        }
+      }
+    }
+    boolean handled = super.analyzeEvent(motionEvent);
+    return handled | innerGestureDetector.onTouchEvent(motionEvent);
+  }
+
+  @Override
+  protected int getRequiredPointersCount() {
+    return 1;
+  }
+
+  @Override
+  protected boolean isSloppyGesture() {
+    // do not accept move events if there are less than 2 pointers and we are not quick scaling
+    return super.isSloppyGesture() || (!quickScale && getPointersCount() < 2);
   }
 
   @NonNull
@@ -175,33 +161,33 @@ public class StandardScaleGestureDetector extends
     return handledTypes;
   }
 
+  /**
+   * Listener for scale gesture callbacks.
+   */
   public interface StandardOnScaleGestureListener {
     /**
-     * You can retrieve the base {@link ScaleGestureDetector} via {@link #getUnderlyingScaleGestureDetector()}.
+     * Indicates that the scale gesture started.
      *
      * @param detector this detector
      * @return true if you want to receive subsequent {@link #onScale(StandardScaleGestureDetector)} callbacks,
      * false if you want to ignore this gesture.
-     * @see android.view.ScaleGestureDetector.OnScaleGestureListener#onScaleBegin(ScaleGestureDetector)
      */
     boolean onScaleBegin(StandardScaleGestureDetector detector);
 
     /**
-     * You can retrieve the base {@link ScaleGestureDetector} via {@link #getUnderlyingScaleGestureDetector()}.
+     * Called for every scale change during the gesture.
      *
      * @param detector this detector
      * @return Whether or not the detector should consider this event as handled.
-     * @see android.view.ScaleGestureDetector.OnScaleGestureListener#onScale(ScaleGestureDetector)
      */
     boolean onScale(StandardScaleGestureDetector detector);
 
     /**
-     * You can retrieve the base {@link ScaleGestureDetector} via {@link #getUnderlyingScaleGestureDetector()}.
+     * Indicates that the scale gesture ended.
      *
      * @param detector  this detector
      * @param velocityX velocityX of the gesture in the moment of lifting the fingers
      * @param velocityY velocityY of the gesture in the moment of lifting the fingers
-     * @see android.view.ScaleGestureDetector.OnScaleGestureListener#onScaleEnd(ScaleGestureDetector)
      */
     void onScaleEnd(StandardScaleGestureDetector detector, float velocityX, float velocityY);
   }
@@ -231,15 +217,6 @@ public class StandardScaleGestureDetector extends
    */
   public boolean isScalingOut() {
     return isScalingOut;
-  }
-
-  /**
-   * Get the underlying {@link ScaleGestureDetector}.
-   *
-   * @return underlying {@link ScaleGestureDetector}
-   */
-  public ScaleGestureDetector getUnderlyingScaleGestureDetector() {
-    return scaleGestureDetector;
   }
 
   /**
@@ -276,9 +253,22 @@ public class StandardScaleGestureDetector extends
 
   /**
    * @return Scale factor.
-   * @see ScaleGestureDetector#getScaleFactor()
    */
   public float getScaleFactor() {
-    return scaleGestureDetector.getScaleFactor();
+    return scaleFactor;
+  }
+
+  private float calculateScaleFactor() {
+    if (quickScale) {
+      final boolean scaleOut =
+        // below focal point moving up
+        getCurrentEvent().getY() < quickScaleFocalPoint.y && currentSpan < previousSpan
+          // above focal point moving up
+          || getCurrentEvent().getY() > quickScaleFocalPoint.y && currentSpan > previousSpan;
+      final float spanDiff = Math.abs(1 - (currentSpan / previousSpan)) * QUICK_SCALE_MULTIPLIER;
+      return previousSpan <= 0 ? 1 : scaleOut ? (1 + spanDiff) : (1 - spanDiff);
+    } else {
+      return previousSpan > 0 ? currentSpan / previousSpan : 1;
+    }
   }
 }

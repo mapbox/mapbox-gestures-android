@@ -79,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
         new ExclusiveSetSpinnerObject(AndroidGesturesManager.GESTURE_TYPE_SCALE,
           AndroidGesturesManager.GESTURE_TYPE_SCROLL),
 
+        new ExclusiveSetSpinnerObject(AndroidGesturesManager.GESTURE_TYPE_QUICK_SCALE,
+          AndroidGesturesManager.GESTURE_TYPE_MOVE),
+
         new ExclusiveSetSpinnerObject(AndroidGesturesManager.GESTURE_TYPE_ROTATE,
           AndroidGesturesManager.GESTURE_TYPE_SCROLL,
           AndroidGesturesManager.GESTURE_TYPE_SCALE),
@@ -356,6 +359,8 @@ public class MainActivity extends AppCompatActivity {
           return "Rotate";
         case AndroidGesturesManager.GESTURE_TYPE_SCALE:
           return "Scale";
+        case AndroidGesturesManager.GESTURE_TYPE_QUICK_SCALE:
+          return "QuickScale";
         case AndroidGesturesManager.GESTURE_TYPE_SHOVE:
           return "Shove";
         case AndroidGesturesManager.GESTURE_TYPE_SIDEWAYS_SHOVE:
