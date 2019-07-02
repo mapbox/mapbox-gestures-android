@@ -1,6 +1,6 @@
 # Mapbox Gestures for Android
 
-The Mapbox Gestures for Android library wraps [GestureDetectorCompat](https://developer.android.com/reference/android/support/v4/view/GestureDetectorCompat.html) and [ScaleGestureDetector](https://developer.android.com/reference/android/view/ScaleGestureDetector.html) as well as introduces implementation of rotate, move, shove and tap gesture detectors.
+The Mapbox Gestures for Android library wraps [GestureDetectorCompat](https://developer.android.com/reference/android/support/v4/view/GestureDetectorCompat.html) and introduces implementation of scale, rotate, move, shove and tap gesture detectors.
 
 Mapbox Gestures for Android was inspired by [Android Gesture Detector Framework](https://github.com/Almeros/android-gesture-detectors) and offers the same functionality with some additional features on top.
 

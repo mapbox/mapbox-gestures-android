@@ -6,7 +6,7 @@ ext {
     ]
 
     version = [
-            mapboxSdkVersion : '8.0.0',
+            mapboxSdkVersion : '8.1.0',
             supportLibVersion: '27.1.1',
             timber           : '4.7.1',
             junit            : '4.12',
@@ -14,14 +14,15 @@ ext {
             robolectric      : '3.8',
             testRunnerVersion: '1.0.2',
             espressoVersion  : '3.0.2',
+            kotlin           : '1.3.41',
     ]
 
     pluginVersion = [
-            checkstyle      : '8.4',
-            gradle          : '3.3.0',
-            bintray         : '1.8.4',
-            androidPublish  : '3.6.2',
-            artifactory     : '4.9.3',
+            checkstyle    : '8.4',
+            gradle        : '3.3.0',
+            bintray       : '1.8.4',
+            androidPublish: '3.6.2',
+            artifactory   : '4.9.3',
     ]
 
     dependenciesList = [
@@ -35,6 +36,9 @@ ext {
 
             // timber
             timber             : "com.jakewharton.timber:timber:${version.timber}",
+
+            // kotlin
+            kotlinLib          : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${version.kotlin}",
 
             // instrumentation test
             testRunner         : "com.android.support.test:runner:${version.testRunnerVersion}",
@@ -50,10 +54,11 @@ ext {
     ]
 
     pluginDependencies = [
-            gradle               : "com.android.tools.build:gradle:${pluginVersion.gradle}",
-            checkstyle           : "com.puppycrawl.tools:checkstyle:${pluginVersion.checkstyle}",
-            bintrayPlugin        : "com.jfrog.bintray.gradle:gradle-bintray-plugin:${pluginVersion.bintray}",
-            androidPublishPlugin : "digital.wup:android-maven-publish:${pluginVersion.androidPublish}",
-            artifactory          : "org.jfrog.buildinfo:build-info-extractor-gradle:${pluginVersion.artifactory}"
+            gradle              : "com.android.tools.build:gradle:${pluginVersion.gradle}",
+            checkstyle          : "com.puppycrawl.tools:checkstyle:${pluginVersion.checkstyle}",
+            bintrayPlugin       : "com.jfrog.bintray.gradle:gradle-bintray-plugin:${pluginVersion.bintray}",
+            androidPublishPlugin: "digital.wup:android-maven-publish:${pluginVersion.androidPublish}",
+            artifactory         : "org.jfrog.buildinfo:build-info-extractor-gradle:${pluginVersion.artifactory}",
+            kotlinPlugin       : "org.jetbrains.kotlin:kotlin-gradle-plugin:${version.kotlin}"
     ]
 }

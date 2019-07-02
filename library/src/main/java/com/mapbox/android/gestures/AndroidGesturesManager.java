@@ -1,6 +1,7 @@
 package com.mapbox.android.gestures;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.IntDef;
 import android.support.annotation.UiThread;
 import android.view.MotionEvent;
@@ -33,7 +34,8 @@ public class AndroidGesturesManager {
     GESTURE_TYPE_DOUBLE_TAP_EVENT,
     GESTURE_TYPE_SINGLE_TAP_CONFIRMED,
     GESTURE_TYPE_MOVE,
-    GESTURE_TYPE_SIDEWAYS_SHOVE
+    GESTURE_TYPE_SIDEWAYS_SHOVE,
+    GESTURE_TYPE_QUICK_SCALE
   })
   public @interface GestureType {
   }
@@ -53,6 +55,7 @@ public class AndroidGesturesManager {
   public static final int GESTURE_TYPE_SINGLE_TAP_CONFIRMED = 12;
   public static final int GESTURE_TYPE_MOVE = 13;
   public static final int GESTURE_TYPE_SIDEWAYS_SHOVE = 14;
+  public static final int GESTURE_TYPE_QUICK_SCALE = 15;
 
   private final List<Set<Integer>> mutuallyExclusiveGestures = new ArrayList<>();
   private final List<BaseGesture> detectors = new ArrayList<>();
@@ -140,8 +143,12 @@ public class AndroidGesturesManager {
 
   private void initDefaultThresholds() {
     for (BaseGesture detector : detectors) {
-      if (detector instanceof MultiFingerTapGestureDetector) {
-        ((MultiFingerGesture) detector).setSpanThresholdResource(R.dimen.mapbox_defaultMutliFingerSpanThreshold);
+      if (detector instanceof MultiFingerGesture) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+          ((MultiFingerGesture) detector).setSpanThresholdResource(R.dimen.mapbox_internalMinSpan23);
+        } else {
+          ((MultiFingerGesture) detector).setSpanThresholdResource(R.dimen.mapbox_internalMinSpan24);
+        }
       }
 
       if (detector instanceof StandardScaleGestureDetector) {
@@ -210,18 +217,16 @@ public class AndroidGesturesManager {
   }
 
   /**
-   * Sets a listener for all the events normally returned by the {@link android.view.ScaleGestureDetector}.
+   * Sets a listener for scale gestures.
    *
    * @param listener your gestures listener
-   * @see <a href="https://developer.android.com/training/gestures/index.html">Using Touch Gestures</a>
-   * @see <a href="https://developer.android.com/reference/android/view/ScaleGestureDetector.html">ScaleGestureDetector</a>
    */
   public void setStandardScaleGestureListener(StandardScaleGestureDetector.StandardOnScaleGestureListener listener) {
     standardScaleGestureDetector.setListener(listener);
   }
 
   /**
-   * Removes a listener for all the events normally returned by the {@link android.view.ScaleGestureDetector}.
+   * Removes a listener for scale gestures.
    */
   public void removeStandardScaleGestureListener() {
     standardScaleGestureDetector.removeListener();
@@ -334,7 +339,7 @@ public class AndroidGesturesManager {
   }
 
   /**
-   * Get gesture detector that wraps {@link android.view.ScaleGestureDetector}.
+   * Get scale gesture detector.
    *
    * @return gesture detector
    */
