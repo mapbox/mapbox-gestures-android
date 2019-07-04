@@ -43,4 +43,4 @@ dependencies {
     androidTestImplementation dependenciesList.testEspressoCore
 }
 
-apply from: 'javadoc.gradle'
+apply from: "${rootDir}/gradle/gradle-bintray.gradle"

@@ -11,9 +11,8 @@ test:
 release:
 	./gradlew :library:assembleRelease
 
-publish:
-	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :library:uploadArchives
+publish-stable:
+	./gradlew :library:bintrayUpload
 
-publish-local:
-	# This publishes to ~/.m2/repository/com/mapbox/mapboxsdk
-	export IS_LOCAL_DEVELOPMENT=true; ./gradlew :library:uploadArchives
+publish-snapshot-to-artifactory:
+	./gradlew :library:artifactoryPublish
