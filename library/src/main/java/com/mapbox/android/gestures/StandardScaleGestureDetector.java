@@ -146,7 +146,11 @@ public class StandardScaleGestureDetector extends
 
   @Override
   protected int getRequiredPointersCount() {
-    return 1;
+    if (isInProgress()) {
+      return quickScale ? 1 : 2;
+    } else {
+      return 1;
+    }
   }
 
   @Override
