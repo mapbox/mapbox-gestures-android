@@ -35,8 +35,14 @@ public class StandardScaleGestureDetector extends
   private boolean quickScale;
   private PointF quickScaleFocalPoint;
   private float startSpan;
+  private float startSpanX;
+  private float startSpanY;
   private float currentSpan;
+  private float currentSpanX;
+  private float currentSpanY;
   private float previousSpan;
+  private float previousSpanX;
+  private float previousSpanY;
   private float spanDeltaSinceStart;
   private float spanSinceStartThreshold;
 
@@ -71,8 +77,8 @@ public class StandardScaleGestureDetector extends
 
     PointF focal = quickScale ? quickScaleFocalPoint : getFocalPoint();
 
-    float currentSpanX = 0;
-    float currentSpanY = 0;
+    currentSpanX = 0;
+    currentSpanY = 0;
     for (int i = 0; i < getPointersCount(); i++) {
       currentSpanX += Math.abs(getCurrentEvent().getX(i) - focal.x);
       currentSpanY += Math.abs(getCurrentEvent().getY(i) - focal.y);
@@ -88,6 +94,8 @@ public class StandardScaleGestureDetector extends
 
     if (startSpan == 0) {
       startSpan = currentSpan;
+      startSpanX = currentSpanX;
+      startSpanY = currentSpanY;
     }
 
     spanDeltaSinceStart = Math.abs(startSpan - currentSpan);
@@ -106,6 +114,8 @@ public class StandardScaleGestureDetector extends
       }
     }
     previousSpan = currentSpan;
+    previousSpanX = currentSpanX;
+    previousSpanY = currentSpanY;
     return handled;
   }
 
@@ -260,6 +270,96 @@ public class StandardScaleGestureDetector extends
    */
   public float getScaleFactor() {
     return scaleFactor;
+  }
+
+  /**
+   * Return the average distance between each of the pointers forming the
+   * gesture in progress through the focal point, when the gesture was started.
+   *
+   * @return Distance between pointers in pixels.
+   */
+  public float getStartSpan() {
+    return startSpan;
+  }
+
+  /**
+   * Return the average X distance between each of the pointers forming the
+   * gesture in progress through the focal point, when the gesture was started.
+   *
+   * @return Distance between pointers in pixels.
+   */
+  public float getStartSpanX() {
+    return startSpanX;
+  }
+
+  /**
+   * Return the average Y distance between each of the pointers forming the
+   * gesture in progress through the focal point, when the gesture was started.
+   *
+   * @return Distance between pointers in pixels.
+   */
+  public float getStartSpanY() {
+    return startSpanY;
+  }
+
+  /**
+   * Return the average distance between each of the pointers forming the
+   * gesture in progress through the focal point.
+   *
+   * @return Distance between pointers in pixels.
+   */
+  public float getCurrentSpan() {
+    return currentSpan;
+  }
+
+  /**
+   * Return the average X distance between each of the pointers forming the
+   * gesture in progress through the focal point.
+   *
+   * @return Distance between pointers in pixels.
+   */
+  public float getCurrentSpanX() {
+    return currentSpanX;
+  }
+
+  /**
+   * Return the average Y distance between each of the pointers forming the
+   * gesture in progress through the focal point.
+   *
+   * @return Distance between pointers in pixels.
+   */
+  public float getCurrentSpanY() {
+    return currentSpanY;
+  }
+
+  /**
+   * Return the previous average distance between each of the pointers forming the
+   * gesture in progress through the focal point.
+   *
+   * @return Previous distance between pointers in pixels.
+   */
+  public float getPreviousSpan() {
+    return previousSpan;
+  }
+
+  /**
+   * Return the previous average X distance between each of the pointers forming the
+   * gesture in progress through the focal point.
+   *
+   * @return Previous distance between pointers in pixels.
+   */
+  public float getPreviousSpanX() {
+    return previousSpanX;
+  }
+
+  /**
+   * Return the previous average Y distance between each of the pointers forming the
+   * gesture in progress through the focal point.
+   *
+   * @return Previous distance between pointers in pixels.
+   */
+  public float getPreviousSpanY() {
+    return previousSpanY;
   }
 
   private float calculateScaleFactor() {
