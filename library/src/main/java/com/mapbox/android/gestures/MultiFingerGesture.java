@@ -89,6 +89,8 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
       updatePointerList(motionEvent);
     }
 
+    focalPoint = Utils.determineFocalPoint(motionEvent);
+
     if (isMissingEvents) {
       Log.w("MultiFingerGesture", "Some MotionEvents were not passed to the library "
         + "or events from different view trees are merged.");
@@ -98,7 +100,6 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
         if (pointerIdList.size() >= getRequiredPointersCount() && checkPressure()) {
           calculateDistances();
           if (!isSloppyGesture()) {
-            focalPoint = Utils.determineFocalPoint(motionEvent);
             return analyzeMovement();
           }
         }
