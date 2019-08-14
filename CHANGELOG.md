@@ -1,5 +1,15 @@
 # Changelog for the Mapbox Gestures for Android
 
+## 0.5.0 - August 14, 2019
+#### Major changes
+- Introduce a custom scale gesture detector implementation. The library doesn't rely on the compat gesture detector anymore. This is a breaking changing because the underlying scale gesture detector reference has been removed. [#73](https://github.com/mapbox/mapbox-gestures-android/pull/73)
+
+#### Minor features and bug fixes
+- Calculate focal point for every motion event, not only MOVE. Fixes an issue where detectors that do not rely on movement would return cached, historic focal points. [#77](https://github.com/mapbox/mapbox-gestures-android/pull/77)
+- Adjust scale gesture's required pointer count based on type. Fixes an issue where quick-scale was not properly interrupted. [#74](https://github.com/mapbox/mapbox-gestures-android/pull/74)
+- Guard against move events coming from different view trees. Might prevent rare crashes that are out of control of the gestures library. [#71](https://github.com/mapbox/mapbox-gestures-android/pull/71)
+- Expose scale span getters. [#75](https://github.com/mapbox/mapbox-gestures-android/pull/75)
+
 ## 0.4.2 - April 26, 2019
  - Query display metrics only in touch down [#67](https://github.com/mapbox/mapbox-gestures-android/pull/67)
 
