@@ -46,3 +46,4 @@ dependencies {
 }
 
 apply from: "${rootDir}/gradle/gradle-bintray.gradle"
+apply from: "${rootDir}/gradle/javadoc.gradle"
