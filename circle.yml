@@ -77,7 +77,7 @@ jobs:
           name: Update version name
           command: |
             if [[ $CIRCLE_TAG == v* ]]; then
-              sed -i -e "s/^VERSION_NAME=.*/VERSION_NAME=${CIRCLE_TAG:9}/" library/gradle.properties
+              sed -i -e "s/^VERSION_NAME=.*/VERSION_NAME=${CIRCLE_TAG:1}/" library/gradle.properties
             fi      
       - run:
           name: Build libraries
