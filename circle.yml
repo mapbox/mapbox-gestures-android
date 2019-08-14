@@ -5,7 +5,10 @@ workflows:
   default:
     jobs:
       - build
-      - release
+      - release:
+          filters:
+            tags:
+              only: /v.*/
 jobs:
   build:
     working_directory: ~/code
