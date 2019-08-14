@@ -3,7 +3,7 @@ checkstyle:
 
 javadoc:
 	# Output is (module)/build/docs/javadoc/release
-	./gradlew javadocrelease
+	./gradlew library:javadocrelease
 
 test:
 	./gradlew :library:test -i
