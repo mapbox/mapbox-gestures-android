@@ -13,7 +13,6 @@ publishing {
             version project.ext.versionName
 
             afterEvaluate {
-                artifact("$buildDir/outputs/aar/${project.name}-release.aar")
                 artifact(androidSourcesJar)
                 artifact(androidJavadocsJar)
             }
