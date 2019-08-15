@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply from: "../gradle/dependencies.gradle"
 
 android {
@@ -35,6 +37,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation dependenciesList.supportCompat
 
+    testImplementation dependenciesList.kotlinLib
     testImplementation dependenciesList.junit
     testImplementation dependenciesList.mockito
     testImplementation dependenciesList.robolectric

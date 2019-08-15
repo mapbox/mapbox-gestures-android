@@ -74,6 +74,8 @@ public class MultiFingerTapGestureDetectorTest
     dispatchPointerUp(10, pointerDownMotionEvent);
     dispatchPointerDown(10, pointerUpMotionEvent);
     dispatchPointerUp(10, pointerDownMotionEvent);
+    // tricking test setup to not subtract missing pointers
+    pointerUpMotionEvent.setAction(MotionEvent.ACTION_MOVE);
     dispatchUp(10, pointerUpMotionEvent);
     verify(listener, times(0)).onMultiFingerTap(gestureDetector, 2);
   }
@@ -123,14 +125,14 @@ public class MultiFingerTapGestureDetectorTest
   }
 
   private void dispatchDown() {
-    downMotionEvent = TestUtils.getMotionEvent(MotionEvent.ACTION_DOWN, 0, 0);
+    downMotionEvent = TestUtils.INSTANCE.getMotionEvent(MotionEvent.ACTION_DOWN, 0, 0, null);
     gestureDetector.onTouchEvent(downMotionEvent);
   }
 
   private void dispatchPointerDown(long delay, MotionEvent previous) {
     try {
       Thread.sleep(delay);
-      pointerDownMotionEvent = TestUtils.getMotionEvent(MotionEvent.ACTION_POINTER_DOWN, 0, 0, previous);
+      pointerDownMotionEvent = TestUtils.INSTANCE.getMotionEvent(MotionEvent.ACTION_POINTER_DOWN, 0, 0, previous);
       gestureDetector.onTouchEvent(pointerDownMotionEvent);
     } catch (InterruptedException ex) {
       ex.printStackTrace();
@@ -140,7 +142,7 @@ public class MultiFingerTapGestureDetectorTest
   private void dispatchPointerUp(long delay, MotionEvent previous) {
     try {
       Thread.sleep(delay);
-      pointerUpMotionEvent = TestUtils.getMotionEvent(MotionEvent.ACTION_POINTER_UP, 0, 0, previous);
+      pointerUpMotionEvent = TestUtils.INSTANCE.getMotionEvent(MotionEvent.ACTION_POINTER_UP, 0, 0, previous);
       gestureDetector.onTouchEvent(pointerUpMotionEvent);
     } catch (InterruptedException ex) {
       ex.printStackTrace();
@@ -150,7 +152,7 @@ public class MultiFingerTapGestureDetectorTest
   private void dispatchUp(long delay, MotionEvent previous) {
     try {
       Thread.sleep(delay);
-      upMotionEvent = TestUtils.getMotionEvent(MotionEvent.ACTION_UP, 0, 0, previous);
+      upMotionEvent = TestUtils.INSTANCE.getMotionEvent(MotionEvent.ACTION_UP, 0, 0, previous);
       gestureDetector.onTouchEvent(upMotionEvent);
     } catch (InterruptedException ex) {
       ex.printStackTrace();
@@ -160,7 +162,7 @@ public class MultiFingerTapGestureDetectorTest
   private void dispatchMove(long delay, MotionEvent previous) {
     try {
       Thread.sleep(delay);
-      moveMotionEvent = TestUtils.getMotionEvent(MotionEvent.ACTION_MOVE, 0, 0, previous);
+      moveMotionEvent = TestUtils.INSTANCE.getMotionEvent(MotionEvent.ACTION_MOVE, 0, 0, previous);
       gestureDetector.onTouchEvent(moveMotionEvent);
     } catch (InterruptedException ex) {
       ex.printStackTrace();

@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion androidVersions.compileSdkVersion
@@ -28,6 +28,10 @@ android {
 
     testOptions {
         unitTests {
+            returnDefaultValues true
+            // Roboelectric 4.0 required config
+            // http://robolectric.org/migrating/#migrating-to-40
+
             includeAndroidResources = true
         }
     }

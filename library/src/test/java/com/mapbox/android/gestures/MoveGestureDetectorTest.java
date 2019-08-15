@@ -39,27 +39,28 @@ public class MoveGestureDetectorTest extends
     doReturn(true).when(gestureDetector).checkPressure();
     doReturn(false).when(gestureDetector).isSloppyGesture();
 
-    MotionEvent downEvent = TestUtils.getMotionEvent(MotionEvent.ACTION_DOWN, 100, 100);
-    MotionEvent moveEvent = TestUtils.getMotionEvent(MotionEvent.ACTION_MOVE, 105, 100, downEvent);
+    MotionEvent downEvent = TestUtils.INSTANCE.getMotionEvent(MotionEvent.ACTION_DOWN, 100, 100, null);
     gestureDetector.onTouchEvent(downEvent);
+    MotionEvent moveEvent = TestUtils.INSTANCE.getMotionEvent(MotionEvent.ACTION_MOVE, 105, 100, downEvent);
     gestureDetector.onTouchEvent(moveEvent);
     verify(listener, times(1)).onMoveBegin(gestureDetector);
 
-    moveEvent = TestUtils.getMotionEvent(MotionEvent.ACTION_MOVE, 110, 100, moveEvent);
+    moveEvent = TestUtils.INSTANCE.getMotionEvent(MotionEvent.ACTION_MOVE, 110, 100, moveEvent);
     gestureDetector.onTouchEvent(moveEvent);
     verify(listener, times(1)).onMove(
       gestureDetector, gestureDetector.lastDistanceX, gestureDetector.lastDistanceY);
 
-    MotionEvent pointerDownEvent = TestUtils.getMotionEvent(MotionEvent.ACTION_POINTER_DOWN, 200, 100, moveEvent);
+    MotionEvent pointerDownEvent = TestUtils.INSTANCE.getMotionEvent(MotionEvent.ACTION_POINTER_DOWN, 200, 100,
+      moveEvent);
     gestureDetector.onTouchEvent(pointerDownEvent);
-    moveEvent = TestUtils.getMotionEvent(MotionEvent.ACTION_MOVE, 115, 100, downEvent);
+    moveEvent = TestUtils.INSTANCE.getMotionEvent(MotionEvent.ACTION_MOVE, 115, 100, pointerDownEvent);
     gestureDetector.onTouchEvent(moveEvent);
     // checking for 0, 0 difference because focal point should be reset with pointer count change
     verify(listener, times(1)).onMove(gestureDetector, 0, 0);
 
-    MotionEvent pointerUpEvent = TestUtils.getMotionEvent(MotionEvent.ACTION_POINTER_UP, 200, 100, pointerDownEvent);
+    MotionEvent pointerUpEvent = TestUtils.INSTANCE.getMotionEvent(MotionEvent.ACTION_POINTER_UP, 200, 100, moveEvent);
     gestureDetector.onTouchEvent(pointerUpEvent);
-    MotionEvent upEvent = TestUtils.getMotionEvent(MotionEvent.ACTION_POINTER_UP, 200, 100, pointerUpEvent);
+    MotionEvent upEvent = TestUtils.INSTANCE.getMotionEvent(MotionEvent.ACTION_POINTER_UP, 200, 100, pointerUpEvent);
     gestureDetector.onTouchEvent(upEvent);
     verify(listener, times(1)).onMoveEnd(
       gestureDetector, gestureDetector.velocityX, gestureDetector.velocityY
