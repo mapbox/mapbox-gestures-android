@@ -1,6 +1,7 @@
 package com.mapbox.android.gestures
 
 import GesturesUiTestUtils.DEFAULT_GESTURE_DURATION
+import GesturesUiTestUtils.move
 import GesturesUiTestUtils.pinch
 import GesturesUiTestUtils.quickScale
 import android.os.Build
@@ -11,7 +12,7 @@ import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import com.mapbox.android.gestures.testapp.R
 import com.mapbox.android.gestures.testapp.TestActivity
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -596,4 +597,25 @@ class ScaleGestureDetectorTest {
     onView(withId(R.id.content)).perform(quickScale(delta))
   }
 
+  @Test
+  fun doubleTap_move_doNotQuickZoom() {
+    gesturesManager.setStandardScaleGestureListener(object : StandardScaleGestureDetector.StandardOnScaleGestureListener {
+      override fun onScaleBegin(detector: StandardScaleGestureDetector): Boolean {
+        Assert.fail("scale detector should not be called")
+        return true
+      }
+
+      override fun onScale(detector: StandardScaleGestureDetector): Boolean {
+        Assert.fail("scale detector should not be called")
+        return true
+      }
+
+      override fun onScaleEnd(detector: StandardScaleGestureDetector, velocityX: Float, velocityY: Float) {
+        Assert.fail("scale detector should not be called")
+      }
+    })
+
+    onView(withId(R.id.content)).perform(quickScale(gesturesManager.standardScaleGestureDetector.spanSinceStartThreshold / 2, withVelocity = false, duration = 50L))
+    onView(withId(R.id.content)).perform(move(300f, 300f, withVelocity = false))
+  }
 }
