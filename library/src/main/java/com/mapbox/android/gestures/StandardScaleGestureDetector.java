@@ -139,17 +139,23 @@ public class StandardScaleGestureDetector extends
   @Override
   protected boolean analyzeEvent(MotionEvent motionEvent) {
     int action = motionEvent.getActionMasked();
-    if (action == MotionEvent.ACTION_POINTER_DOWN || action == MotionEvent.ACTION_CANCEL) {
-      if (quickScale) {
+
+    if (quickScale) {
+      if (action == MotionEvent.ACTION_POINTER_DOWN || action == MotionEvent.ACTION_CANCEL) {
         if (isInProgress()) {
           interrupt();
-        } else if (quickScale) {
+        } else {
           // since the double tap has been registered and canceled but the gesture wasn't started,
           // we need to mark it manually
           quickScale = false;
         }
+      } else if (!isInProgress() && action == MotionEvent.ACTION_UP) {
+        // if double tap has been registered but the threshold was not met and gesture is not in progress,
+        // we need to manually mark the finish of a double tap
+        quickScale = false;
       }
     }
+
     boolean handled = super.analyzeEvent(motionEvent);
     return handled | innerGestureDetector.onTouchEvent(motionEvent);
   }
