@@ -1,5 +1,9 @@
 # Changelog for the Mapbox Gestures for Android
 
+## 0.5.1 - August 20, 2019
+#### Bug fixes
+- Fixed a bug where quick-scale was registered during a move gesture that followed a double-tap [#88](https://github.com/mapbox/mapbox-gestures-android/pull/88)
+
 ## 0.5.0 - August 14, 2019
 #### Major changes
 - Introduce a custom scale gesture detector implementation. The library doesn't rely on the compat gesture detector anymore. This is a breaking changing because the underlying scale gesture detector reference has been removed. [#73](https://github.com/mapbox/mapbox-gestures-android/pull/73)
