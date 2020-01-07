@@ -2,8 +2,8 @@ package com.mapbox.android.gestures;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.IntDef;
-import android.support.annotation.UiThread;
+import androidx.annotation.IntDef;
+import androidx.annotation.UiThread;
 import android.view.MotionEvent;
 
 import java.lang.annotation.Retention;
@@ -97,7 +97,7 @@ public class AndroidGesturesManager {
    *                          <p>
    *                          At the moment {@link #GESTURE_TYPE_SCROLL} is not interpreted as a progressive gesture
    *                          because it is not implemented this way by the
-   *                          {@link android.support.v4.view.GestureDetectorCompat}.
+   *                          {@link androidx.core.view.GestureDetectorCompat}.
    */
   @SafeVarargs
   public AndroidGesturesManager(Context context, Set<Integer>... exclusiveGestures) {
@@ -114,7 +114,7 @@ public class AndroidGesturesManager {
    *                               <p>
    *                               At the moment {@link #GESTURE_TYPE_SCROLL} is not interpreted as
    *                               a progressive gesture because it is not implemented this way by the
-   *                               {@link android.support.v4.view.GestureDetectorCompat}.
+   *                               {@link androidx.core.view.GestureDetectorCompat}.
    * @param applyDefaultThresholds if true, default gestures thresholds and adjustments will be applied
    */
   public AndroidGesturesManager(Context context, List<Set<Integer>> exclusiveGestures, boolean applyDefaultThresholds) {
@@ -198,7 +198,7 @@ public class AndroidGesturesManager {
   }
 
   /**
-   * Sets a listener for all the events normally returned by the {@link android.support.v4.view.GestureDetectorCompat}.
+   * Sets a listener for all the events normally returned by the {@link androidx.core.view.GestureDetectorCompat}.
    *
    * @param listener your gestures listener
    * @see <a href="https://developer.android.com/training/gestures/index.html">Using Touch Gestures</a>
@@ -210,7 +210,7 @@ public class AndroidGesturesManager {
 
   /**
    * Removes a listener for all the events normally returned by the
-   * {@link android.support.v4.view.GestureDetectorCompat}.
+   * {@link androidx.core.view.GestureDetectorCompat}.
    */
   public void removeStandardGestureListener() {
     standardGestureDetector.removeListener();
@@ -330,7 +330,7 @@ public class AndroidGesturesManager {
   }
 
   /**
-   * Get gesture detector that wraps {@link android.support.v4.view.GestureDetectorCompat}.
+   * Get gesture detector that wraps {@link androidx.core.view.GestureDetectorCompat}.
    *
    * @return gesture detector
    */
@@ -401,7 +401,7 @@ public class AndroidGesturesManager {
    *                          <p>
    *                          At the moment {@link #GESTURE_TYPE_SCROLL} is not interpreted as a progressive gesture
    *                          because it is not interpreted this way by the
-   *                          {@link android.support.v4.view.GestureDetectorCompat}.
+   *                          {@link androidx.core.view.GestureDetectorCompat}.
    */
   @SafeVarargs
   public final void setMutuallyExclusiveGestures(Set<Integer>... exclusiveGestures) {
@@ -417,7 +417,7 @@ public class AndroidGesturesManager {
    *                          <p>
    *                          At the moment {@link #GESTURE_TYPE_SCROLL} is not interpreted as a progressive gesture
    *                          because it is not interpreted this way by the
-   *                          {@link android.support.v4.view.GestureDetectorCompat}.
+   *                          {@link androidx.core.view.GestureDetectorCompat}.
    */
   public void setMutuallyExclusiveGestures(List<Set<Integer>> exclusiveGestures) {
     this.mutuallyExclusiveGestures.clear();

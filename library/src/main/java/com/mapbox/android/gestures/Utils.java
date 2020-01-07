@@ -3,7 +3,7 @@ package com.mapbox.android.gestures;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.PointF;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.MotionEvent;

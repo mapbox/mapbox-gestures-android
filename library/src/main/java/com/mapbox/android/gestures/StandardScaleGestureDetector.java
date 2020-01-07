@@ -2,10 +2,10 @@ package com.mapbox.android.gestures;
 
 import android.content.Context;
 import android.graphics.PointF;
-import android.support.annotation.DimenRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.UiThread;
-import android.support.v4.view.GestureDetectorCompat;
+import androidx.annotation.DimenRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.UiThread;
+import androidx.core.view.GestureDetectorCompat;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 

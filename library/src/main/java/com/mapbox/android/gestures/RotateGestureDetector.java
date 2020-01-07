@@ -1,8 +1,8 @@
 package com.mapbox.android.gestures;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.UiThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.UiThread;
 
 import java.util.HashSet;
 import java.util.Set;
