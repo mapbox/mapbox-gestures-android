@@ -1,8 +1,8 @@
 package com.mapbox.android.gestures;
 
 import android.content.Context;
-import android.support.annotation.UiThread;
-import android.support.v4.view.GestureDetectorCompat;
+import androidx.annotation.UiThread;
+import androidx.core.view.GestureDetectorCompat;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 

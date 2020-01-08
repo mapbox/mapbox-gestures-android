@@ -1,6 +1,6 @@
 package com.mapbox.android.gestures;
 
-import android.support.annotation.IntRange;
+import androidx.annotation.IntRange;
 import android.view.MotionEvent;
 
 class PermittedActionsGuard {

@@ -2,10 +2,10 @@ package com.mapbox.android.gestures
 
 import GesturesUiTestUtils.DEFAULT_GESTURE_DURATION
 import GesturesUiTestUtils.twoTap
-import android.support.test.espresso.Espresso
-import android.support.test.espresso.matcher.ViewMatchers
-import android.support.test.rule.ActivityTestRule
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.rule.ActivityTestRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.mapbox.android.gestures.testapp.R
 import com.mapbox.android.gestures.testapp.TestActivity
 import org.junit.Assert

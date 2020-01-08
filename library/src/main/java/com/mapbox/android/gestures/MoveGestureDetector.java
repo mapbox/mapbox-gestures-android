@@ -2,9 +2,9 @@ package com.mapbox.android.gestures;
 
 import android.content.Context;
 import android.graphics.PointF;
-import android.support.annotation.DimenRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.UiThread;
+import androidx.annotation.DimenRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.UiThread;
 import android.view.MotionEvent;
 
 import java.util.HashMap;
