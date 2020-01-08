@@ -1,7 +1,9 @@
 package com.mapbox.android.gestures;
 
 import android.content.Context;
+
 import androidx.annotation.UiThread;
+import androidx.annotation.NonNull;
 import androidx.core.view.GestureDetectorCompat;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -95,53 +97,53 @@ public class StandardGestureDetector extends BaseGesture<StandardGestureDetector
    */
   public static class SimpleStandardOnGestureListener implements StandardOnGestureListener {
     @Override
-    public boolean onSingleTapConfirmed(MotionEvent e) {
+    public boolean onSingleTapConfirmed(@NonNull MotionEvent e) {
       return false;
     }
 
     @Override
-    public boolean onDoubleTap(MotionEvent e) {
+    public boolean onDoubleTap(@NonNull MotionEvent e) {
       return false;
     }
 
     @Override
-    public boolean onDoubleTapEvent(MotionEvent e) {
+    public boolean onDoubleTapEvent(@NonNull MotionEvent e) {
       return false;
     }
 
     @Override
-    public boolean onDown(MotionEvent e) {
+    public boolean onDown(@NonNull MotionEvent e) {
       return false;
     }
 
     @Override
-    public void onShowPress(MotionEvent e) {
+    public void onShowPress(@NonNull MotionEvent e) {
 
     }
 
     @Override
-    public boolean onSingleTapUp(MotionEvent e) {
+    public boolean onSingleTapUp(@NonNull MotionEvent e) {
       return false;
     }
 
     @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+    public boolean onScroll(@NonNull MotionEvent e1, @NonNull MotionEvent e2, float distanceX, float distanceY) {
       return false;
     }
 
     @Override
-    public void onLongPress(MotionEvent e) {
+    public void onLongPress(@NonNull MotionEvent e) {
 
     }
 
     @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+    public boolean onFling(@NonNull MotionEvent e1, @NonNull  MotionEvent e2, float velocityX, float velocityY) {
       return false;
     }
   }
 
   @Override
-  protected boolean analyzeEvent(MotionEvent motionEvent) {
+  protected boolean analyzeEvent(@NonNull MotionEvent motionEvent) {
     return gestureDetector.onTouchEvent(motionEvent);
   }
 

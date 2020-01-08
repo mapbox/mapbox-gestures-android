@@ -137,7 +137,7 @@ public class StandardScaleGestureDetector extends
   }
 
   @Override
-  protected boolean analyzeEvent(MotionEvent motionEvent) {
+  protected boolean analyzeEvent(@NonNull MotionEvent motionEvent) {
     int action = motionEvent.getActionMasked();
 
     if (quickScale) {
@@ -192,7 +192,7 @@ public class StandardScaleGestureDetector extends
      * @return true if you want to receive subsequent {@link #onScale(StandardScaleGestureDetector)} callbacks,
      * false if you want to ignore this gesture.
      */
-    boolean onScaleBegin(StandardScaleGestureDetector detector);
+    boolean onScaleBegin(@NonNull StandardScaleGestureDetector detector);
 
     /**
      * Called for every scale change during the gesture.
@@ -200,7 +200,7 @@ public class StandardScaleGestureDetector extends
      * @param detector this detector
      * @return Whether or not the detector should consider this event as handled.
      */
-    boolean onScale(StandardScaleGestureDetector detector);
+    boolean onScale(@NonNull StandardScaleGestureDetector detector);
 
     /**
      * Indicates that the scale gesture ended.
@@ -209,23 +209,23 @@ public class StandardScaleGestureDetector extends
      * @param velocityX velocityX of the gesture in the moment of lifting the fingers
      * @param velocityY velocityY of the gesture in the moment of lifting the fingers
      */
-    void onScaleEnd(StandardScaleGestureDetector detector, float velocityX, float velocityY);
+    void onScaleEnd(@NonNull StandardScaleGestureDetector detector, float velocityX, float velocityY);
   }
 
   public static class SimpleStandardOnScaleGestureListener implements StandardOnScaleGestureListener {
 
     @Override
-    public boolean onScaleBegin(StandardScaleGestureDetector detector) {
+    public boolean onScaleBegin(@NonNull StandardScaleGestureDetector detector) {
       return true;
     }
 
     @Override
-    public boolean onScale(StandardScaleGestureDetector detector) {
+    public boolean onScale(@NonNull StandardScaleGestureDetector detector) {
       return false;
     }
 
     @Override
-    public void onScaleEnd(StandardScaleGestureDetector detector, float velocityX, float velocityY) {
+    public void onScaleEnd(@NonNull StandardScaleGestureDetector detector, float velocityX, float velocityY) {
       // No implementation
     }
   }

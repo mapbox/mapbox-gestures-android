@@ -1,5 +1,12 @@
 # Changelog for the Mapbox Gestures for Android
 
+## 0.6.0 - January 8, 2020
+#### Major changes
+ - Replace appcompat dependencies with AndroidX [#94](https://github.com/mapbox/mapbox-gestures-android/pull/94)
+
+#### Minor features and bug fixes
+ - Use NonNull in gesture listener interfaces to improve consumption with the Kotlin programming language [#95](https://github.com/mapbox/mapbox-gestures-android/pull/95)
+
 ## 0.5.1 - August 20, 2019
 #### Bug fixes
 - Fixed a bug where quick-scale was registered during a move gesture that followed a double-tap [#88](https://github.com/mapbox/mapbox-gestures-android/pull/88)

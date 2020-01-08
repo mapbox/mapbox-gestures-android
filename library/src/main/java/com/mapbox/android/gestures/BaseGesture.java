@@ -2,6 +2,8 @@ package com.mapbox.android.gestures;
 
 import android.content.Context;
 import androidx.annotation.UiThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 
@@ -37,7 +39,7 @@ public abstract class BaseGesture<L> {
     return analyze(motionEvent);
   }
 
-  private boolean analyze(MotionEvent motionEvent) {
+  private boolean analyze(@Nullable MotionEvent motionEvent) {
     if (motionEvent == null) {
       return false;
     }
@@ -59,7 +61,7 @@ public abstract class BaseGesture<L> {
     return analyzeEvent(motionEvent);
   }
 
-  protected abstract boolean analyzeEvent(MotionEvent motionEvent);
+  protected abstract boolean analyzeEvent(@NonNull MotionEvent motionEvent);
 
   protected boolean canExecute(@AndroidGesturesManager.GestureType int invokedGestureType) {
     if (listener == null || !isEnabled) {

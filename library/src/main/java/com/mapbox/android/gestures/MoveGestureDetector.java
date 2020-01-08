@@ -59,7 +59,7 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
      * @return true if you want to receive subsequent {@link #onMove(MoveGestureDetector, float, float)} callbacks,
      * false if you want to ignore this gesture.
      */
-    boolean onMoveBegin(MoveGestureDetector detector);
+    boolean onMoveBegin(@NonNull MoveGestureDetector detector);
 
     /**
      * Called for every move change during the gesture.
@@ -69,7 +69,7 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
      * @param distanceY Y distance of the focal point in pixel since last call
      * @return true if the gesture was handled, false otherwise
      */
-    boolean onMove(MoveGestureDetector detector, float distanceX, float distanceY);
+    boolean onMove(@NonNull MoveGestureDetector detector, float distanceX, float distanceY);
 
     /**
      * Indicates that the move gesture ended.
@@ -78,29 +78,29 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
      * @param velocityY velocityY of the gesture in the moment of lifting the fingers
      * @param detector  this detector
      */
-    void onMoveEnd(MoveGestureDetector detector, float velocityX, float velocityY);
+    void onMoveEnd(@NonNull MoveGestureDetector detector, float velocityX, float velocityY);
   }
 
   public static class SimpleOnMoveGestureListener implements OnMoveGestureListener {
 
     @Override
-    public boolean onMoveBegin(MoveGestureDetector detector) {
+    public boolean onMoveBegin(@NonNull MoveGestureDetector detector) {
       return true;
     }
 
     @Override
-    public boolean onMove(MoveGestureDetector detector, float distanceX, float distanceY) {
+    public boolean onMove(@NonNull MoveGestureDetector detector, float distanceX, float distanceY) {
       return false;
     }
 
     @Override
-    public void onMoveEnd(MoveGestureDetector detector, float velocityX, float velocityY) {
+    public void onMoveEnd(@NonNull MoveGestureDetector detector, float velocityX, float velocityY) {
       // No implementation
     }
   }
 
   @Override
-  protected boolean analyzeEvent(MotionEvent motionEvent) {
+  protected boolean analyzeEvent(@NonNull MotionEvent motionEvent) {
     switch (motionEvent.getActionMasked()) {
       case MotionEvent.ACTION_DOWN:
       case MotionEvent.ACTION_POINTER_DOWN:

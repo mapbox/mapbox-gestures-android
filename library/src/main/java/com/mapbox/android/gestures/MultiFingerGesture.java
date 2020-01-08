@@ -3,8 +3,11 @@ package com.mapbox.android.gestures;
 import android.content.Context;
 import android.graphics.PointF;
 import android.os.Build;
+
 import androidx.annotation.DimenRes;
 import androidx.annotation.UiThread;
+import androidx.annotation.NonNull;
+
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -62,7 +65,7 @@ public abstract class MultiFingerGesture<L> extends BaseGesture<L> {
   }
 
   @Override
-  protected boolean analyzeEvent(MotionEvent motionEvent) {
+  protected boolean analyzeEvent(@NonNull MotionEvent motionEvent) {
     int action = motionEvent.getActionMasked();
 
     if (action == MotionEvent.ACTION_DOWN) {

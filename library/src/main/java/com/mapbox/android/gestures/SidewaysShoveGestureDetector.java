@@ -49,7 +49,7 @@ public class SidewaysShoveGestureDetector extends
      * {@link #onSidewaysShove(SidewaysShoveGestureDetector, float, float)} callbacks,
      * false if you want to ignore this gesture.
      */
-    boolean onSidewaysShoveBegin(SidewaysShoveGestureDetector detector);
+    boolean onSidewaysShoveBegin(@NonNull SidewaysShoveGestureDetector detector);
 
     /**
      * Called for every sideways shove change during the gesture.
@@ -59,7 +59,7 @@ public class SidewaysShoveGestureDetector extends
      * @param deltaPixelsSinceStart pixels delta change since the start of the gesture
      * @return true if the gesture was handled, false otherwise
      */
-    boolean onSidewaysShove(SidewaysShoveGestureDetector detector, float deltaPixelsSinceLast,
+    boolean onSidewaysShove(@NonNull SidewaysShoveGestureDetector detector, float deltaPixelsSinceLast,
                             float deltaPixelsSinceStart);
 
     /**
@@ -69,23 +69,23 @@ public class SidewaysShoveGestureDetector extends
      * @param velocityY velocityY of the gesture in the moment of lifting the fingers
      * @param detector  this detector
      */
-    void onSidewaysShoveEnd(SidewaysShoveGestureDetector detector, float velocityX, float velocityY);
+    void onSidewaysShoveEnd(@NonNull SidewaysShoveGestureDetector detector, float velocityX, float velocityY);
   }
 
   public static class SimpleOnSidewaysShoveGestureListener implements OnSidewaysShoveGestureListener {
     @Override
-    public boolean onSidewaysShoveBegin(SidewaysShoveGestureDetector detector) {
+    public boolean onSidewaysShoveBegin(@NonNull SidewaysShoveGestureDetector detector) {
       return true;
     }
 
     @Override
-    public boolean onSidewaysShove(SidewaysShoveGestureDetector detector, float deltaPixelsSinceLast,
+    public boolean onSidewaysShove(@NonNull SidewaysShoveGestureDetector detector, float deltaPixelsSinceLast,
                                    float deltaPixelsSinceStart) {
       return false;
     }
 
     @Override
-    public void onSidewaysShoveEnd(SidewaysShoveGestureDetector detector, float velocityX, float velocityY) {
+    public void onSidewaysShoveEnd(@NonNull SidewaysShoveGestureDetector detector, float velocityX, float velocityY) {
       // No Implementation
     }
   }
