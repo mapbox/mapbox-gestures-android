@@ -1,8 +1,11 @@
 package com.mapbox.android.gestures;
 
 import android.content.Context;
+
 import androidx.annotation.DimenRes;
 import androidx.annotation.UiThread;
+import androidx.annotation.NonNull;
+
 import android.view.MotionEvent;
 
 import java.util.HashMap;
@@ -34,11 +37,11 @@ public class MultiFingerTapGestureDetector extends
   }
 
   public interface OnMultiFingerTapGestureListener {
-    boolean onMultiFingerTap(MultiFingerTapGestureDetector detector, int pointersCount);
+    boolean onMultiFingerTap(@NonNull MultiFingerTapGestureDetector detector, int pointersCount);
   }
 
   @Override
-  protected boolean analyzeEvent(MotionEvent motionEvent) {
+  protected boolean analyzeEvent(@NonNull MotionEvent motionEvent) {
     super.analyzeEvent(motionEvent);
 
     int action = motionEvent.getActionMasked();

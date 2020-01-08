@@ -47,7 +47,7 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
      * @return true if you want to receive subsequent {@link #onShove(ShoveGestureDetector, float, float)} callbacks,
      * false if you want to ignore this gesture.
      */
-    boolean onShoveBegin(ShoveGestureDetector detector);
+    boolean onShoveBegin(@NonNull ShoveGestureDetector detector);
 
     /**
      * Called for every shove change during the gesture.
@@ -57,7 +57,7 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
      * @param deltaPixelsSinceStart pixels delta change since the start of the gesture
      * @return true if the gesture was handled, false otherwise
      */
-    boolean onShove(ShoveGestureDetector detector, float deltaPixelsSinceLast, float deltaPixelsSinceStart);
+    boolean onShove(@NonNull ShoveGestureDetector detector, float deltaPixelsSinceLast, float deltaPixelsSinceStart);
 
     /**
      * Indicates that the shove gesture ended.
@@ -66,22 +66,24 @@ public class ShoveGestureDetector extends ProgressiveGesture<ShoveGestureDetecto
      * @param velocityY velocityY of the gesture in the moment of lifting the fingers
      * @param detector  this detector
      */
-    void onShoveEnd(ShoveGestureDetector detector, float velocityX, float velocityY);
+    void onShoveEnd(@NonNull ShoveGestureDetector detector, float velocityX, float velocityY);
   }
 
   public static class SimpleOnShoveGestureListener implements OnShoveGestureListener {
     @Override
-    public boolean onShoveBegin(ShoveGestureDetector detector) {
+    public boolean onShoveBegin(@NonNull ShoveGestureDetector detector) {
       return true;
     }
 
     @Override
-    public boolean onShove(ShoveGestureDetector detector, float deltaPixelsSinceLast, float deltaPixelsSinceStart) {
+    public boolean onShove(@NonNull ShoveGestureDetector detector,
+                           float deltaPixelsSinceLast,
+                           float deltaPixelsSinceStart) {
       return false;
     }
 
     @Override
-    public void onShoveEnd(ShoveGestureDetector detector, float velocityX, float velocityY) {
+    public void onShoveEnd(@NonNull ShoveGestureDetector detector, float velocityX, float velocityY) {
       // No Implementation
     }
   }

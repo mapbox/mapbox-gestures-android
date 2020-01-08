@@ -45,7 +45,7 @@ public class RotateGestureDetector extends ProgressiveGesture<RotateGestureDetec
      * @return true if you want to receive subsequent {@link #onRotate(RotateGestureDetector, float, float)} callbacks,
      * false if you want to ignore this gesture.
      */
-    boolean onRotateBegin(RotateGestureDetector detector);
+    boolean onRotateBegin(@NonNull RotateGestureDetector detector);
 
     /**
      * Called for every rotation change during the gesture.
@@ -55,7 +55,9 @@ public class RotateGestureDetector extends ProgressiveGesture<RotateGestureDetec
      * @param rotationDegreesSinceFirst rotation change since the start of the gesture
      * @return true if the gesture was handled, false otherwise
      */
-    boolean onRotate(RotateGestureDetector detector, float rotationDegreesSinceLast, float rotationDegreesSinceFirst);
+    boolean onRotate(@NonNull RotateGestureDetector detector,
+                     float rotationDegreesSinceLast,
+                     float rotationDegreesSinceFirst);
 
     /**
      * Indicates that the rotation gesture ended.
@@ -65,24 +67,27 @@ public class RotateGestureDetector extends ProgressiveGesture<RotateGestureDetec
      * @param angularVelocity angularVelocity of the gesture in the moment of lifting the fingers
      * @param detector        this detector
      */
-    void onRotateEnd(RotateGestureDetector detector, float velocityX, float velocityY, float angularVelocity);
+    void onRotateEnd(@NonNull RotateGestureDetector detector, float velocityX, float velocityY, float angularVelocity);
   }
 
   public static class SimpleOnRotateGestureListener implements OnRotateGestureListener {
 
     @Override
-    public boolean onRotateBegin(RotateGestureDetector detector) {
+    public boolean onRotateBegin(@NonNull RotateGestureDetector detector) {
       return true;
     }
 
     @Override
-    public boolean onRotate(RotateGestureDetector detector, float rotationDegreesSinceLast,
+    public boolean onRotate(@NonNull RotateGestureDetector detector, float rotationDegreesSinceLast,
                             float rotationDegreesSinceFirst) {
       return true;
     }
 
     @Override
-    public void onRotateEnd(RotateGestureDetector detector, float velocityX, float velocityY, float angularVelocity) {
+    public void onRotateEnd(@NonNull RotateGestureDetector detector,
+                            float velocityX,
+                            float velocityY,
+                            float angularVelocity) {
       // No implementation
     }
   }

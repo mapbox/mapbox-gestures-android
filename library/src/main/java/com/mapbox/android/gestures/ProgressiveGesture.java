@@ -33,7 +33,7 @@ public abstract class ProgressiveGesture<L> extends MultiFingerGesture<L> {
   protected abstract Set<Integer> provideHandledTypes();
 
   @Override
-  protected boolean analyzeEvent(MotionEvent motionEvent) {
+  protected boolean analyzeEvent(@NonNull MotionEvent motionEvent) {
     int action = motionEvent.getActionMasked();
     if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN
       || action == MotionEvent.ACTION_POINTER_UP

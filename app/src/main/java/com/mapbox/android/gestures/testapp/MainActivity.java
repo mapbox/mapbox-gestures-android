@@ -3,6 +3,7 @@ package com.mapbox.android.gestures.testapp;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -197,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
 
     androidGesturesManager.setRotateGestureListener(new RotateGestureDetector.SimpleOnRotateGestureListener() {
       @Override
-      public boolean onRotate(RotateGestureDetector detector, float rotationDegreesSinceLast,
+      public boolean onRotate(@NonNull RotateGestureDetector detector, float rotationDegreesSinceLast,
                               float rotationDegreesSinceFirst) {
         icon.setRotation(icon.getRotation() - rotationDegreesSinceLast);
         return true;
@@ -226,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
       new MultiFingerTapGestureDetector.OnMultiFingerTapGestureListener() {
 
         @Override
-        public boolean onMultiFingerTap(MultiFingerTapGestureDetector detector, int pointersCount) {
+        public boolean onMultiFingerTap(@NonNull MultiFingerTapGestureDetector detector, int pointersCount) {
           if (pointersCount == 2) {
             rescaleIcon(0.65f);
           }
@@ -236,7 +237,9 @@ public class MainActivity extends AppCompatActivity {
 
     androidGesturesManager.setShoveGestureListener(new ShoveGestureDetector.SimpleOnShoveGestureListener() {
       @Override
-      public boolean onShove(ShoveGestureDetector detector, float deltaPixelsSinceLast, float deltaPixelsSinceStart) {
+      public boolean onShove(@NonNull ShoveGestureDetector detector,
+                             float deltaPixelsSinceLast,
+                             float deltaPixelsSinceStart) {
         icon.setRotationX(icon.getRotationX() - deltaPixelsSinceLast);
         return true;
       }
@@ -245,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
     androidGesturesManager.setSidewaysShoveGestureListener(
       new SidewaysShoveGestureDetector.SimpleOnSidewaysShoveGestureListener() {
         @Override
-        public boolean onSidewaysShove(SidewaysShoveGestureDetector detector, float deltaPixelsSinceLast,
+        public boolean onSidewaysShove(@NonNull SidewaysShoveGestureDetector detector, float deltaPixelsSinceLast,
                                        float deltaPixelsSinceStart) {
           icon.setRotationY(icon.getRotationY() + deltaPixelsSinceLast);
           return true;
@@ -258,19 +261,19 @@ public class MainActivity extends AppCompatActivity {
   private final MoveGestureDetector.OnMoveGestureListener onMoveGestureListener =
     new MoveGestureDetector.OnMoveGestureListener() {
       @Override
-      public boolean onMoveBegin(MoveGestureDetector detector) {
+      public boolean onMoveBegin(@NonNull MoveGestureDetector detector) {
         return true;
       }
 
       @Override
-      public boolean onMove(MoveGestureDetector detector, float distanceX, float distanceY) {
+      public boolean onMove(@NonNull MoveGestureDetector detector, float distanceX, float distanceY) {
         icon.setTranslationX(icon.getTranslationX() - distanceX);
         icon.setTranslationY(icon.getTranslationY() - distanceY);
         return true;
       }
 
       @Override
-      public void onMoveEnd(MoveGestureDetector detector, float velocityX, float velocityY) {
+      public void onMoveEnd(@NonNull MoveGestureDetector detector, float velocityX, float velocityY) {
 
       }
     };
