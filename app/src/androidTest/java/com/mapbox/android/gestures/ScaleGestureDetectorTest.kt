@@ -8,8 +8,8 @@ import android.os.Build
 import android.os.Handler
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.rule.ActivityTestRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.rule.ActivityTestRule
 import com.mapbox.android.gestures.testapp.R
 import com.mapbox.android.gestures.testapp.TestActivity
 import org.junit.Assert
@@ -449,11 +449,9 @@ class ScaleGestureDetectorTest {
       override fun onScaleEnd(detector: StandardScaleGestureDetector, velocityX: Float, velocityY: Float) {
         endInvocations[0]++
         gesturesManager.setMoveGestureListener(object : MoveGestureDetector.OnMoveGestureListener {
-          override fun onMoveBegin(detector: MoveGestureDetector?): Boolean {
-            return true
-          }
+          override fun onMoveBegin(detector: MoveGestureDetector) = true
 
-          override fun onMove(detector: MoveGestureDetector?, distanceX: Float, distanceY: Float): Boolean {
+          override fun onMove(detector: MoveGestureDetector, distanceX: Float, distanceY: Float): Boolean {
             if (endInvocations[0] == 1) {
               moveAfterInterruption = true
             } else {
@@ -462,8 +460,7 @@ class ScaleGestureDetectorTest {
             return true
           }
 
-          override fun onMoveEnd(detector: MoveGestureDetector?, velocityX: Float, velocityY: Float) {
-          }
+          override fun onMoveEnd(detector: MoveGestureDetector, velocityX: Float, velocityY: Float) {}
         })
       }
     })
@@ -615,7 +612,6 @@ class ScaleGestureDetectorTest {
       }
     })
 
-    onView(withId(R.id.content)).perform(quickScale(gesturesManager.standardScaleGestureDetector.spanSinceStartThreshold / 2, withVelocity = false, duration = 50L))
     onView(withId(R.id.content)).perform(move(300f, 300f, withVelocity = false))
   }
 }
