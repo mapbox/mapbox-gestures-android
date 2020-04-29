@@ -2,10 +2,13 @@ package com.mapbox.android.gestures;
 
 import android.content.Context;
 import android.graphics.PointF;
+import android.graphics.RectF;
+import android.view.MotionEvent;
+
 import androidx.annotation.DimenRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
-import android.view.MotionEvent;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,7 +41,10 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
     handledTypes.add(GESTURE_TYPE_MOVE);
   }
 
+  @Nullable
+  private RectF moveThresholdRect;
   private float moveThreshold;
+
   private final Map<Integer, MoveDistancesObject> moveDistancesObjectMap = new HashMap<>();
 
   public MoveGestureDetector(Context context, AndroidGesturesManager gesturesManager) {
@@ -172,10 +178,11 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
 
   boolean checkAnyMoveAboveThreshold() {
     for (MoveDistancesObject moveDistancesObject : moveDistancesObjectMap.values()) {
-      if (Math.abs(moveDistancesObject.getDistanceXSinceStart()) >= moveThreshold
-        || Math.abs(moveDistancesObject.getDistanceYSinceStart()) >= moveThreshold) {
-        return true;
-      }
+      boolean thresholdExceeded = Math.abs(moveDistancesObject.getDistanceXSinceStart()) >= moveThreshold
+        || Math.abs(moveDistancesObject.getDistanceYSinceStart()) >= moveThreshold;
+
+      boolean isInRect = moveThresholdRect != null && moveThresholdRect.contains(getFocalPoint().x, getFocalPoint().y);
+      return !isInRect && thresholdExceeded;
     }
     return false;
   }
@@ -205,6 +212,7 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
    * Get the delta pixel threshold required to qualify it as a move gesture.
    *
    * @return delta pixel threshold
+   * @see #getMoveThresholdRect()
    */
   public float getMoveThreshold() {
     return moveThreshold;
@@ -216,9 +224,33 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
    * We encourage to set those values from dimens to accommodate for various screen sizes.
    *
    * @param moveThreshold delta threshold
+   * @see #setMoveThresholdRect(RectF)
    */
   public void setMoveThreshold(float moveThreshold) {
     this.moveThreshold = moveThreshold;
+  }
+
+  /**
+   * Get the screen area in which the move gesture cannot be started.
+   * If the gesture is already in progress, this value is ignored.
+   * This condition is evaluated before {@link #setMoveThreshold(float)}.
+   *
+   * @return the screen area in which the gesture cannot be started
+   */
+  @Nullable
+  public RectF getMoveThresholdRect() {
+    return moveThresholdRect;
+  }
+
+  /**
+   * Set the screen area in which the move gesture cannot be started.
+   * If the gesture is already in progress, this value is ignored.
+   * This condition is evaluated before {@link #setMoveThreshold(float)}.
+   *
+   * @param moveThresholdRect the screen area in which the gesture cannot be started
+   */
+  public void setMoveThresholdRect(@Nullable RectF moveThresholdRect) {
+    this.moveThresholdRect = moveThresholdRect;
   }
 
   /**

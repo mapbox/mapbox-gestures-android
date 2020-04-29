@@ -458,7 +458,7 @@ object GesturesUiTestUtils {
         pointerCoords, 0, 0, 1f, 1f, 0, 0, 0, 0)
       injectMotionEventToUiController(uiController, event)
     } catch (ex: InjectEventSecurityException) {
-      throw RuntimeException("Could not perform quick scale", ex)
+      throw RuntimeException("Could not perform move", ex)
     }
   }
 
