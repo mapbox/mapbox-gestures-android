@@ -1,5 +1,9 @@
 # Changelog for the Mapbox Gestures for Android
 
+## 0.7.0 - April 30, 2020
+#### Minor features
+ - Expose a `MoveGestureDetector#moveThresholdRect`. When set, the defined screen area prohibits move gesture to be started. [#96](https://github.com/mapbox/mapbox-gestures-android/pull/96)
+
 ## 0.6.0 - January 8, 2020
 #### Major changes
  - Replace appcompat dependencies with AndroidX [#94](https://github.com/mapbox/mapbox-gestures-android/pull/94)
