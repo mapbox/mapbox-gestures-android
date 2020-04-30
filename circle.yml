@@ -13,22 +13,20 @@ jobs:
   build:
     working_directory: ~/code
     docker:
-      - image: mbgl/android-ndk-r19:8e91a7ebab
+      - image: mbgl/android-ndk-r20:7b7c4b42cf
     environment:
       JVM_OPTS: -Xmx3200m
-      BUILDTYPE: Debug
-      IS_LOCAL_DEVELOPMENT: false
     steps:
       - checkout
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}-{{ checksum  "library/build.gradle" }}-{{ checksum  "gradle/dependencies.gradle" }}
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
       - save_cache:
           paths:
             - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}-{{ checksum  "library/build.gradle" }}-{{ checksum  "gradle/dependencies.gradle" }}
       - run:
           name: Check code style
           command: make checkstyle
@@ -38,13 +36,6 @@ jobs:
       - run:
           name: Run unit-test in Android libraries
           command: make test
-      - run:
-          name: Log in to Google Cloud Platform
-          shell: /bin/bash -euo pipefail
-          command: |
-            echo "${GCLOUD_SERVICE_ACCOUNT_JSON}" > secret.json
-            gcloud auth activate-service-account --key-file secret.json --project mapbox-events-android
-            rm secret.json
       - store_artifacts:
           path: app/build/reports
           destination: reports
@@ -57,11 +48,8 @@ jobs:
       only:
       - master
     docker:
-      - image: mbgl/android-ndk-r19:8e91a7ebab
+      - image: mbgl/android-ndk-r20:7b7c4b42cf
     working_directory: ~/code
-    environment:
-      BUILDTYPE: Release
-      IS_LOCAL_DEVELOPMENT: false
     steps:
       - checkout
       - run:
