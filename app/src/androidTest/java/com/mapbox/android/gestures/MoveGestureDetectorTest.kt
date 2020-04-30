@@ -122,4 +122,64 @@ class MoveGestureDetectorTest {
       Assert.fail("move was not called")
     }
   }
+
+  @Test
+  fun move_whenOutsideOfRect_executeWhenMoveThresholdMet() {
+    val latch = CountDownLatch(1)
+    val rect = RectF(400f, 400f, 600f, 600f)
+    gesturesManager.setMoveGestureListener(object : MoveGestureDetector.OnMoveGestureListener {
+      override fun onMoveBegin(detector: MoveGestureDetector) = true
+
+      override fun onMove(
+        detector: MoveGestureDetector,
+        distanceX: Float,
+        distanceY: Float
+      ): Boolean {
+        Assert.assertFalse(rect.contains(detector.focalPoint.x, detector.focalPoint.y))
+        latch.countDown()
+        return true
+      }
+
+      override fun onMoveEnd(detector: MoveGestureDetector, velocityX: Float, velocityY: Float) = Unit
+
+    })
+    gesturesManager.moveGestureDetector.moveThresholdRect = rect
+    gesturesManager.moveGestureDetector.moveThreshold = 50f
+    Espresso.onView(ViewMatchers.withId(R.id.content)).perform(
+      move(
+        deltaX = 100f,
+        deltaY = 100f,
+        startPoint = PointF(rect.right + 50f, rect.bottom + 50f)
+      )
+    )
+    if (!latch.await(DEFAULT_GESTURE_DURATION, TimeUnit.MILLISECONDS)) {
+      Assert.fail("move was not called")
+    }
+  }
+
+  @Test
+  fun move_whenOutsideOfRect_ignoredWhenMoveThreshold() {
+    val rect = RectF(400f, 400f, 600f, 600f)
+    gesturesManager.setMoveGestureListener(object : MoveGestureDetector.OnMoveGestureListener {
+      override fun onMoveBegin(detector: MoveGestureDetector) = true
+
+      override fun onMove(
+        detector: MoveGestureDetector,
+        distanceX: Float,
+        distanceY: Float
+      ): Boolean = throw AssertionError("onMove shouldn't be called if threshold was not met")
+
+      override fun onMoveEnd(detector: MoveGestureDetector, velocityX: Float, velocityY: Float) = Unit
+
+    })
+    gesturesManager.moveGestureDetector.moveThresholdRect = rect
+    gesturesManager.moveGestureDetector.moveThreshold = 50f
+    Espresso.onView(ViewMatchers.withId(R.id.content)).perform(
+      move(
+        deltaX = 25f,
+        deltaY = 25f,
+        startPoint = PointF(rect.right + 50f, rect.bottom + 50f)
+      )
+    )
+  }
 }
