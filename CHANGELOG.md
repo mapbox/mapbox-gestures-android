@@ -1,6 +1,8 @@
 # Changelog for the Mapbox Gestures for Android
 
-## 0.8.0 - 
+## 0.8.0 - August 19, 2022
+#### Minor features
+ - Updated dependencies : Maps 10.7.0, targetSdk 31, compileSdk 30. [#101](https://github.com/mapbox/mapbox-gestures-android/pull/101)
 #### Breaking changes
  - Remove NonNull annotations from SimpleStandardOnGestureListener that have no such annotations in Android sources. [#101](https://github.com/mapbox/mapbox-gestures-android/pull/101)
 

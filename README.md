@@ -6,7 +6,7 @@ Mapbox Gestures for Android was inspired by [Android Gesture Detector Framework]
 
 The library is implemented in the projects found below, where you can head for more examples:
 
-- [The Mapbox Maps SDK for Android](https://github.com/mapbox/mapbox-gl-native)
+- [The Mapbox Maps SDK for Android](https://github.com/mapbox/mapbox-maps-android)
 - [This library's sample app](https://github.com/mapbox/mapbox-gestures-android/tree/master/app/src/main/java/com/mapbox/android/gestures/testapp) included in this repository
 
 Are you using the library in your project as well? Let us know or create a PR, we'll be more than happy to add it to the list!
@@ -14,12 +14,12 @@ Are you using the library in your project as well? Let us know or create a PR, w
 
 ## Documentation
 
-You'll find all of this library's documentation on [our Mapbox Gestures page](https://www.mapbox.com/android-docs/map-sdk/overview/gestures). This includes information on installation, using the API, and links to the API reference.
+You'll find all of this library's documentation on [our Maps Guides user interaction page](https://docs.mapbox.com/android/maps/guides/user-interaction/). This includes information on installation, using the API, and links to the API reference.
 
 
 ## Getting Started
 
-If you are looking to include Mapbox Gestures for Android inside of your project, please take a look at [the detailed instructions](https://www.mapbox.com/android-docs/map-sdk/overview/gestures/) found in our docs. If you are interested in building from source, read the contributing guide inside of this project.
+If you are looking to include Mapbox Gestures for Android inside of your project, please take a look at [the detailed instructions](https://docs.mapbox.com/android/maps/guides/user-interaction/) found in our docs. If you are interested in building from source, read the contributing guide inside of this project.
 
 To use the Gestures library, include it in your app-level `build.gradle` file.
 
@@ -53,7 +53,11 @@ dependencies {
 }
 ```
 
-To run the specific Mapbox activity in this repo's test application, include your [developer access token](https://www.mapbox.com/help/define-access-token/) in the `developer-config.xml` file. An access token is not required to run this repo's test application.
+#### Mapbox access tokens
+
+To build test application you need to configure Mapbox access tokens as described at https://docs.mapbox.com/android/maps/guides/install/#configure-credentials.
+To build the project you need to specify SDK_REGISTRY_TOKEN as an environmental variable or a gradle property. It is a secret token used to access the SDK Registry (Mapbox Maven instance) during compile time, with a scope set to `DOWNLOADS:READ`.
+To run the specific Mapbox activity in this repo's test application, you need to include public token in the [app/src/main/res/values/developer-config.xml] resource file.
 
 ## Getting Help
 
