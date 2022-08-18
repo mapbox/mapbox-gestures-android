@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.mapbox.android.gestures.testapp.MapboxActivity">
 
-    <com.mapbox.mapboxsdk.maps.MapView
+    <com.mapbox.maps.MapView
         android:id="@+id/map_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
