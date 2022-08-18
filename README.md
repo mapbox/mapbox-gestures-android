@@ -33,7 +33,7 @@ repositories {
 ```java
 // In the app build.gradle file
 dependencies {
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.7.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.8.0'
 }
 ```
 
@@ -49,7 +49,7 @@ repositories {
 ```java
 // In the app build.gradle file
 dependencies {
-	implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.8.0-SNAPSHOT'
+	implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.9.0-SNAPSHOT'
 }
 ```
 
