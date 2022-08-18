@@ -13,7 +13,7 @@ jobs:
   build:
     working_directory: ~/code
     docker:
-      - image: mbgl/android-ndk-r20:7b7c4b42cf
+      - image: mbgl/android-ndk-r21e:latest
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
@@ -48,7 +48,7 @@ jobs:
       only:
       - master
     docker:
-      - image: mbgl/android-ndk-r20:7b7c4b42cf
+      - image: mbgl/android-ndk-r21e:latest
     working_directory: ~/code
     steps:
       - checkout
