@@ -1,5 +1,9 @@
 # Changelog for the Mapbox Gestures for Android
 
+## 0.8.0 - 
+#### Breaking changes
+ - Remove NonNull annotations from SimpleStandardOnGestureListener that have no such annotations in Android sources. [#101](https://github.com/mapbox/mapbox-gestures-android/pull/101)
+
 ## 0.7.0 - April 30, 2020
 #### Minor features
  - Expose a `MoveGestureDetector#moveThresholdRect`. When set, the defined screen area prohibits move gesture to be started. [#96](https://github.com/mapbox/mapbox-gestures-android/pull/96)
