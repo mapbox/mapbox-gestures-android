@@ -41,7 +41,7 @@ dependencies {
     implementation dependenciesList.kotlinLib
     implementation dependenciesList.supportAppcompatV7
     implementation dependenciesList.timber
-    implementation(dependenciesList.mapboxSdk) {
+    implementation(dependenciesList.mapboxMaps) {
         exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-gestures'
     }
 
