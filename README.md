@@ -21,35 +21,15 @@ You'll find all of this library's documentation on [our Maps Guides user interac
 
 If you are looking to include Mapbox Gestures for Android inside of your project, please take a look at [the detailed instructions](https://docs.mapbox.com/android/maps/guides/user-interaction/) found in our docs. If you are interested in building from source, read the contributing guide inside of this project.
 
-To use the Gestures library, include it in your app-level `build.gradle` file.
+To use the Gestures library, you need to set the SDK registry (own Mapbox Maven repo) first. 
+Please follow the instructions provided at the general [Maps install page](https://docs.mapbox.com/android/maps/guides/install/#add-the-dependency). 
 
-```java
-// In the root build.gradle file
-repositories {
-    mavenCentral()
-}
-```
+Then add the Mapbox Android Gestures library : 
 
 ```java
 // In the app build.gradle file
 dependencies {
     implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.8.0'
-}
-```
-
-The library is published to Maven Central and SNAPSHOTS are available whenever new code is pushed to this repo's `master` branch for testing the latest build:
-
-```java
-// In the root build.gradle file
-repositories {
-	jcenter()
-	maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local/' }
-}
-```
-```java
-// In the app build.gradle file
-dependencies {
-	implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.9.0-SNAPSHOT'
 }
 ```
 
