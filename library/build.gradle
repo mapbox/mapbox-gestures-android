@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply from: "../gradle/dependencies.gradle"
+apply from: "${rootDir}/gradle/dependencies.gradle"
+apply from: "${rootDir}/gradle/sdk-registry.gradle"
 
 android {
     compileSdkVersion androidVersions.compileSdkVersion
@@ -45,5 +46,4 @@ dependencies {
     androidTestImplementation dependenciesList.testEspressoCore
 }
 
-apply from: "${rootDir}/gradle/gradle-bintray.gradle"
 apply from: "${rootDir}/gradle/javadoc.gradle"
