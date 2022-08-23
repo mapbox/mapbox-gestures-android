@@ -11,8 +11,8 @@ test:
 release:
 	./gradlew :library:assembleRelease
 
-publish-stable:
-	./gradlew :library:bintrayUpload
+sdkRegistryUpload:
+	./gradlew :library:mapboxSDKRegistryUpload
 
-publish-snapshot-to-artifactory:
-	./gradlew :library:artifactoryPublish
+sdkRegistryPublish:
+	./gradlew :library:mapboxSDKRegistryPublish

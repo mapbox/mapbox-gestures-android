@@ -2,7 +2,6 @@ buildscript {
     apply from: "gradle/dependencies.gradle"
     repositories {
         google()
-        jcenter()
         mavenCentral()
         maven {
             url 'https://api.mapbox.com/downloads/v2/releases/maven'
@@ -17,10 +16,9 @@ buildscript {
     }
     dependencies {
         classpath pluginDependencies.gradle
-        classpath pluginDependencies.bintrayPlugin
         classpath pluginDependencies.androidPublishPlugin
-        classpath pluginDependencies.artifactory
         classpath pluginDependencies.kotlinPlugin
+        classpath pluginDependencies.mapboxSdkRegistry
     }
 }
 
@@ -38,7 +36,6 @@ allprojects {
                 password = password = System.getenv("SDK_REGISTRY_TOKEN") ?: project.property("SDK_REGISTRY_TOKEN") as String
             }
         }
-        maven { url 'https://mapbox.bintray.com/mapbox' }
     }
 }
 
