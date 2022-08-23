@@ -8,8 +8,7 @@ workflows:
       - release:
           filters:
             branches:
-              only:
-                - master
+              only: master
             tags:
               only: /^v.*/
 
