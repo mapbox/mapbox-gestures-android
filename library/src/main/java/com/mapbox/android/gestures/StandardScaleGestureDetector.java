@@ -5,7 +5,6 @@ import android.graphics.PointF;
 import androidx.annotation.DimenRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.UiThread;
-import androidx.core.view.GestureDetectorCompat;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
@@ -30,7 +29,7 @@ public class StandardScaleGestureDetector extends
 
   private static final float QUICK_SCALE_MULTIPLIER = 0.5f;
 
-  private final GestureDetectorCompat innerGestureDetector;
+  private final GestureDetector innerGestureDetector;
 
   private boolean quickScale;
   private PointF quickScaleFocalPoint;
@@ -61,7 +60,7 @@ public class StandardScaleGestureDetector extends
         return true;
       }
     };
-    innerGestureDetector = new GestureDetectorCompat(context, doubleTapEventListener);
+    innerGestureDetector = new GestureDetector(context, doubleTapEventListener);
   }
 
   @Override

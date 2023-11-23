@@ -4,7 +4,7 @@ import android.content.Context;
 
 import androidx.annotation.UiThread;
 import androidx.annotation.NonNull;
-import androidx.core.view.GestureDetectorCompat;
+
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
@@ -19,17 +19,17 @@ import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_SI
 import static com.mapbox.android.gestures.AndroidGesturesManager.GESTURE_TYPE_SINGLE_TAP_UP;
 
 /**
- * Detector that wraps {@link GestureDetectorCompat}.
+ * Detector that wraps {@link GestureDetector}.
  */
 @UiThread
 public class StandardGestureDetector extends BaseGesture<StandardGestureDetector.StandardOnGestureListener> {
 
-  private final GestureDetectorCompat gestureDetector;
+  private final GestureDetector gestureDetector;
 
   public StandardGestureDetector(Context context, AndroidGesturesManager androidGesturesManager) {
     super(context, androidGesturesManager);
 
-    this.gestureDetector = new GestureDetectorCompat(context, innerListener);
+    this.gestureDetector = new GestureDetector(context, innerListener);
   }
 
   final StandardOnGestureListener innerListener = new StandardOnGestureListener() {
@@ -149,7 +149,7 @@ public class StandardGestureDetector extends BaseGesture<StandardGestureDetector
 
   /**
    * @return True if longpress in enabled, false otherwise.
-   * @see GestureDetectorCompat#isLongpressEnabled()
+   * @see GestureDetector#isLongpressEnabled()
    */
   public boolean isLongpressEnabled() {
     return gestureDetector.isLongpressEnabled();
@@ -157,7 +157,7 @@ public class StandardGestureDetector extends BaseGesture<StandardGestureDetector
 
   /**
    * @param enabled True if longpress should be enabled, false otherwise.
-   * @see GestureDetectorCompat#setIsLongpressEnabled(boolean)
+   * @see GestureDetector#setIsLongpressEnabled(boolean)
    */
   public void setIsLongpressEnabled(boolean enabled) {
     gestureDetector.setIsLongpressEnabled(enabled);
