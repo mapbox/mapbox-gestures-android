@@ -1,5 +1,11 @@
 # Changelog for the Mapbox Gestures for Android
 
+## 0.9.0 - November 24, 2023
+#### Breaking changes
+ - Increase minimum supported Android SDK version to 19 (KITKAT)
+#### Minor features
+ - Support compile SDK 30
+
 ## 0.8.0 - August 19, 2022
 #### Minor features
  - Updated dependencies : Maps 10.7.0, targetSdk 31, compileSdk 30. [#101](https://github.com/mapbox/mapbox-gestures-android/pull/101)

@@ -44,6 +44,17 @@ dependencies {
     implementation(dependenciesList.mapboxMaps) {
         exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-gestures'
     }
+    implementation("androidx.core:core-ktx") {
+        version {
+            strictly("1.6.0")
+        }
+    }
+    implementation("androidx.core:core") {
+        version {
+            strictly("1.6.0")
+        }
+    }
+
 
     testImplementation dependenciesList.junit
     testImplementation dependenciesList.mockito

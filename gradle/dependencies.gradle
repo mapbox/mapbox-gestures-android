@@ -1,12 +1,12 @@
 ext {
     androidVersions = [
-            minSdkVersion    : 14,
+            minSdkVersion    : 19,
             targetSdkVersion : 30,
             compileSdkVersion: 31,
     ]
 
     version = [
-            mapboxMaps       : '10.7.0',
+            mapboxMaps       : '10.16.2',
             timber           : '4.7.1',
             junit            : '4.13.2',
             mockito          : '3.2.4',
@@ -15,7 +15,6 @@ ext {
             espresso         : '3.4.0',
             kotlin           : '1.5.31',
             appCompat        : '1.3.0',
-            core             : '1.7.0', // last version compatible with kotlin 1.5.31
             annotation       : '1.1.0',
     ]
 
@@ -33,7 +32,6 @@ ext {
 
             // support
             supportAppcompatV7 : "androidx.appcompat:appcompat:${version.appCompat}",
-            supportCompat      : "androidx.core:core:${version.core}",
             annotations        : "androidx.annotation:annotation:${version.annotation}",
 
             // timber
