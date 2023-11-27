@@ -22,7 +22,7 @@ ext {
             checkstyle    : '8.4',
             gradle        : '7.0.4',
             androidPublish: '3.6.3',
-            sdkRegistry   : '0.8.0',
+            sdkRegistry   : '1.2.1',
     ]
 
     dependenciesList = [
