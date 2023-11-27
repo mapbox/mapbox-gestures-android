@@ -68,6 +68,9 @@ jobs:
       - deploy:
           name: Publish to the SDK registry
           command: |
+            git config --global user.email "MapboxCI@users.noreply.github.com"
+            git config --global user.name "MapboxCI"
+            export GITHUB_TOKEN=$(./mbx-ci github writer private token)
             if [[ $CIRCLE_BRANCH == master ]] || [[ $CIRCLE_TAG == v* ]]; then
               make sdkRegistryUpload
             fi
