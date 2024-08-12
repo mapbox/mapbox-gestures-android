@@ -40,7 +40,7 @@
             android:layout_weight="1"
             android:background="?android:attr/selectableItemBackground"
             android:gravity="center"
-            android:text="@string/mapbox_button"
+            android:text="@string/maplibre_button"
             android:textColor="@color/colorAccent" />
 
     </LinearLayout>

@@ -1,22 +1,18 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+plugins {
+    id 'com.android.application'
+    alias libs.plugins.kotlinAndroid
+}
 
 android {
-    compileSdkVersion androidVersions.compileSdkVersion
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.mapbox.android.gestures.testapp"
-        minSdkVersion androidVersions.minSdkVersion
-        targetSdkVersion androidVersions.targetSdkVersion
+        minSdkVersion 21
+        compileSdk 34
         versionCode 1
         versionName "0.1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     buildTypes {
@@ -35,34 +31,24 @@ android {
             includeAndroidResources = true
         }
     }
+
+    namespace 'com.mapbox.android.gestures.testapp'
 }
 
 dependencies {
-    implementation dependenciesList.kotlinLib
-    implementation dependenciesList.supportAppcompatV7
-    implementation dependenciesList.timber
-    implementation(dependenciesList.mapboxMaps) {
+    implementation(libs.appcompat)
+    implementation(libs.timber)
+    implementation(libs.maplibre) {
         exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-gestures'
     }
-    implementation("androidx.core:core-ktx") {
-        version {
-            strictly("1.6.0")
-        }
-    }
-    implementation("androidx.core:core") {
-        version {
-            strictly("1.6.0")
-        }
-    }
 
-
-    testImplementation dependenciesList.junit
-    testImplementation dependenciesList.mockito
-    testImplementation dependenciesList.robolectric
-    androidTestImplementation dependenciesList.mockitoAndroid
-    androidTestImplementation dependenciesList.testRunner
-    androidTestImplementation dependenciesList.testEspressoCore
-    androidTestImplementation dependenciesList.testEspressoIntents
+    testImplementation(libs.junit)
+    testImplementation(libs.mockitoCore)
+    testImplementation(libs.robolectric)
+    androidTestImplementation(libs.mockitoAndroid)
+    androidTestImplementation(libs.testRunner)
+    androidTestImplementation(libs.espressoCore)
+    androidTestImplementation(libs.espressoIntents)
 
     implementation project(":library")
 }

@@ -1,24 +1,10 @@
 buildscript {
-    apply from: "gradle/dependencies.gradle"
     repositories {
         google()
         mavenCentral()
-        maven {
-            url 'https://api.mapbox.com/downloads/v2/releases/maven'
-            authentication {
-                basic(BasicAuthentication)
-            }
-            credentials {
-                username = "mapbox"
-                password = System.getenv("SDK_REGISTRY_TOKEN") ?: project.property("SDK_REGISTRY_TOKEN") as String
-            }
-        }
     }
     dependencies {
-        classpath pluginDependencies.gradle
-        classpath pluginDependencies.androidPublishPlugin
-        classpath pluginDependencies.kotlinPlugin
-        classpath pluginDependencies.mapboxSdkRegistry
+        classpath libs.androidGradlePlugin
     }
 }
 
@@ -26,16 +12,6 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        maven {
-            url 'https://api.mapbox.com/downloads/v2/releases/maven'
-            authentication {
-                basic(BasicAuthentication)
-            }
-            credentials {
-                username = "mapbox"
-                password = password = System.getenv("SDK_REGISTRY_TOKEN") ?: project.property("SDK_REGISTRY_TOKEN") as String
-            }
-        }
     }
 }
 

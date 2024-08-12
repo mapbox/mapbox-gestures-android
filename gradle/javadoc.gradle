@@ -1,5 +1,3 @@
-apply from: "${rootDir}/gradle/dependencies.gradle"
-
 android.libraryVariants.all { variant ->
   def name = variant.name
   task "javadoc$name"(type: Javadoc) {

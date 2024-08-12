@@ -1,0 +1,32 @@
+[versions]
+androidGradlePlugin = "8.5.2"
+appcompat = "1.7.0"
+maplibre = "11.1.0"
+annotation = "1.8.2"
+coreKtx = "1.13.1"
+espresso = "3.6.1"
+mockito = "5.12.0"
+robolectric = "4.13"
+testRunner = "1.2.1"
+junit = "4.13.2"
+timber = "5.0.1"
+kotlin = "2.0.10"
+
+[libraries]
+androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin"}
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+maplibre = { module = "org.maplibre.gl:android-sdk", version.ref = "maplibre" }
+annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
+coreKtx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+espressoCore = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
+espressoIntents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espresso" }
+kotlinStdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+mockitoCore = { module = "org.mockito:mockito-core", version.ref = "mockito" }
+mockitoAndroid = { module = "org.mockito:mockito-android", version.ref = "mockito" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+testRunner = { module = "androidx.test.ext:junit", version.ref = "testRunner" }
+junit = { module = "junit:junit", version.ref = "junit" }
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+
+[plugins]
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
