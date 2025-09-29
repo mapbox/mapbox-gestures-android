@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Entry point for all of the detectors. Set listener for gestures you'd like to be notified about
@@ -58,7 +59,7 @@ public class AndroidGesturesManager {
   public static final int GESTURE_TYPE_QUICK_SCALE = 15;
 
   private final List<Set<Integer>> mutuallyExclusiveGestures = new ArrayList<>();
-  private final List<BaseGesture> detectors = new ArrayList<>();
+  private final List<BaseGesture> detectors = new CopyOnWriteArrayList<>();
 
   private final StandardGestureDetector standardGestureDetector;
   private final StandardScaleGestureDetector standardScaleGestureDetector;

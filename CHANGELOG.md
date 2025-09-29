@@ -1,5 +1,8 @@
 # Changelog for the Mapbox Gestures for Android
 
+## Main
+* Fix concurrent modification exception for detectors
+
 ## 0.9.1 - November 27, 2023
 Minor release with internal fixes for publishing library
 
