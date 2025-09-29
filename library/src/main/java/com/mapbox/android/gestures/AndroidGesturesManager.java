@@ -59,7 +59,7 @@ public class AndroidGesturesManager {
   public static final int GESTURE_TYPE_QUICK_SCALE = 15;
 
   private final List<Set<Integer>> mutuallyExclusiveGestures = new ArrayList<>();
-  private final List<BaseGesture> detectors = new CopyOnWriteArrayList<>();
+  private final List<BaseGesture> detectors;
 
   private final StandardGestureDetector standardGestureDetector;
   private final StandardScaleGestureDetector standardScaleGestureDetector;
@@ -129,13 +129,15 @@ public class AndroidGesturesManager {
     moveGestureDetector = new MoveGestureDetector(context, this);
     standardGestureDetector = new StandardGestureDetector(context, this);
 
-    detectors.add(rotateGestureDetector);
-    detectors.add(standardScaleGestureDetector);
-    detectors.add(shoveGestureDetector);
-    detectors.add(sidewaysShoveGestureDetector);
-    detectors.add(multiFingerTapGestureDetector);
-    detectors.add(moveGestureDetector);
-    detectors.add(standardGestureDetector);
+    detectors = new CopyOnWriteArrayList<BaseGesture>(Arrays.asList(
+            rotateGestureDetector,
+            standardScaleGestureDetector,
+            shoveGestureDetector,
+            sidewaysShoveGestureDetector,
+            multiFingerTapGestureDetector,
+            moveGestureDetector,
+            standardGestureDetector
+    ));
 
     if (applyDefaultThresholds) {
       initDefaultThresholds();
