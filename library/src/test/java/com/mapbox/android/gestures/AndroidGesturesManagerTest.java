@@ -75,7 +75,10 @@ public class AndroidGesturesManagerTest {
 
   @Test
   public void onSingleTapModifyDetectorsTest() {
-    final StandardGestureDetector standardGestureDetector = new StandardGestureDetector(RuntimeEnvironment.getApplication().getApplicationContext(), androidGesturesManager);
+    final StandardGestureDetector standardGestureDetector = new StandardGestureDetector(
+            RuntimeEnvironment.getApplication().getApplicationContext(),
+            androidGesturesManager
+    );
 
     androidGesturesManager.setStandardGestureListener(new StandardGestureDetector.SimpleStandardOnGestureListener() {
       @Override
