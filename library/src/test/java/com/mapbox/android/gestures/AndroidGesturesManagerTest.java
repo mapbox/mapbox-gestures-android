@@ -1,5 +1,11 @@
 package com.mapbox.android.gestures;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import android.view.MotionEvent;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,9 +16,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
 
 @RunWith(RobolectricTestRunner.class)
 public class AndroidGesturesManagerTest {
@@ -44,9 +47,9 @@ public class AndroidGesturesManagerTest {
     mutuallyExclusivesList.add(set3);
 
     androidGesturesManager =
-      new AndroidGesturesManager(
-        RuntimeEnvironment.application.getApplicationContext(),
-        mutuallyExclusivesList, true);
+            new AndroidGesturesManager(
+                    RuntimeEnvironment.application.getApplicationContext(),
+                    mutuallyExclusivesList, true);
   }
 
   @Test
@@ -68,5 +71,25 @@ public class AndroidGesturesManagerTest {
 
     androidGesturesManager.setMutuallyExclusiveGestures(mutuallyExclusivesList);
     assertEquals(androidGesturesManager.getMutuallyExclusiveGestures(), mutuallyExclusivesList);
+  }
+
+  @Test
+  public void onSingleTapModifyDetectorsTest() {
+    final StandardGestureDetector standardGestureDetector = new StandardGestureDetector(
+            RuntimeEnvironment.getApplication().getApplicationContext(),
+            androidGesturesManager
+    );
+
+    androidGesturesManager.setStandardGestureListener(new StandardGestureDetector.SimpleStandardOnGestureListener() {
+      @Override
+      public boolean onDown(MotionEvent e) {
+        androidGesturesManager.getDetectors().add(standardGestureDetector);
+        return true;
+      }
+    });
+
+    MotionEvent downEvent = TestUtils.INSTANCE.getMotionEvent(MotionEvent.ACTION_DOWN, 0, 0, null);
+    androidGesturesManager.onTouchEvent(downEvent);
+    assertTrue(androidGesturesManager.getDetectors().contains(standardGestureDetector));
   }
 }
