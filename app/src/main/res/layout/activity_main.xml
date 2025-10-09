@@ -33,16 +33,6 @@
             android:layout_weight="1.25"
             android:gravity="center" />
 
-        <Button
-            android:id="@+id/button_mapbox"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:text="@string/mapbox_button"
-            android:textColor="@color/colorAccent" />
-
     </LinearLayout>
 
     <LinearLayout

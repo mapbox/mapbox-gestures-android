@@ -1,9 +1,6 @@
 package com.mapbox.android.gestures.testapp;
 
-import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,10 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.mapbox.android.gestures.AndroidGesturesManager;
 import com.mapbox.android.gestures.MoveGestureDetector;
@@ -35,7 +34,6 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity {
 
   private ImageView icon;
-  private Button mapboxButton;
   private Spinner mutuallyExclusiveSpinner;
   private SeekBar rotateThresholdProgress;
   private SeekBar scaleThresholdProgress;
@@ -131,16 +129,6 @@ public class MainActivity extends AppCompatActivity {
 
       @Override
       public void onNothingSelected(AdapterView<?> parent) {
-      }
-    });
-
-    mapboxButton = (Button) findViewById(R.id.button_mapbox);
-    mapboxButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        mapboxButton.setEnabled(false);
-        Intent intent = new Intent(MainActivity.this, MapboxActivity.class);
-        startActivity(intent);
       }
     });
 
@@ -277,12 +265,6 @@ public class MainActivity extends AppCompatActivity {
 
       }
     };
-
-  @Override
-  protected void onStart() {
-    super.onStart();
-    mapboxButton.setEnabled(true);
-  }
 
   @Override
   public boolean onTouchEvent(MotionEvent event) {

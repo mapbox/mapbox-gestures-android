@@ -29,14 +29,13 @@ Then add the Mapbox Android Gestures library :
 ```java
 // In the app build.gradle file
 dependencies {
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:0.8.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-gestures:x.y.z'
 }
 ```
 
 #### Mapbox access tokens
 
 To build test application you need to configure Mapbox access tokens as described at https://docs.mapbox.com/android/maps/guides/install/#configure-credentials.
-To build the project you need to specify SDK_REGISTRY_TOKEN as an environmental variable or a gradle property. It is a secret token used to access the SDK Registry (Mapbox Maven instance) during compile time, with a scope set to `DOWNLOADS:READ`.
 To run the specific Mapbox activity in this repo's test application, you need to include public token in the [app/src/main/res/values/developer-config.xml] resource file.
 
 ## Getting Help
@@ -44,6 +43,13 @@ To run the specific Mapbox activity in this repo's test application, you need to
 - **Need help with your code?**: Look for previous questions on the [#mapbox tag](https://stackoverflow.com/questions/tagged/mapbox+android) — or [ask a new question](https://stackoverflow.com/questions/tagged/mapbox+android).
 - **Have a bug to report?** [Open an issue](https://github.com/mapbox/mapbox-gestures-android/issues). If possible, include the version of Mapbox Core that you're using, a full log, and a project that shows the issue.
 - **Have a feature request?** [Open an issue](https://github.com/mapbox/mapbox-gestures-android/issues/new). Tell us what the feature should do and why you want the feature.
+
+## Building
+
+To build the library and the sample app you need to remove or adapt the following files to your environment:
+- [gradlew](./gradlew)
+- [gradlew.bat](./gradlew.bat)
+- [gradle/wrapper](./gradle/wrapper)
 
 ## Sample code
 
@@ -56,6 +62,3 @@ We welcome feedback, translations, and code contributions! Please see [CONTRIBUT
 ## Version
 
 Noting here, that `0.x` versions series of `Mapbox Gestures for Android` is still in an experimental phase. Breaking changes can occur with every iteration.
-
-
-

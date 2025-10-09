@@ -4,17 +4,24 @@ apply from: "${rootDir}/gradle/artifact-settings.gradle"
 
 version = project.ext.versionName
 group = project.ext.mapboxArtifactGroupId
+
+def variantToPublish = "release"
+
+android.publishing {
+    singleVariant(variantToPublish) {
+        withSourcesJar()
+        withJavadocJar()
+    }
+}
+
 afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
-                from components.release
+                from components.getByName(variantToPublish)
                 groupId this.group
                 artifactId project.ext.mapboxArtifactId
                 version this.version
-
-                artifact(androidSourcesJar)
-                artifact(androidJavadocsJar)
 
                 pom.withXml {
                     final mainNode = asNode()
@@ -43,41 +50,10 @@ afterEvaluate {
 
 registry {
     sdkName = project.ext.mapboxRegistrySdkName
-    override = project.ext.versionName.endsWith("-SNAPSHOT")
+    override = version.endsWith("-SNAPSHOT")
     dryRun = false
     publish = true
-    snapshot = project.ext.versionName.endsWith("-SNAPSHOT")
+    snapshot = version.endsWith("-SNAPSHOT")
     publishMessage = "cc @mapbox/maps-android"
     publications = ["release"]
-}
-
-task androidJavadocs(type: Javadoc) {
-    source = android.sourceSets.main.java.sourceFiles
-    classpath = files(android.bootClasspath)
-    failOnError = false
-}
-
-task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
-    classifier = 'javadoc'
-    from androidJavadocs.destinationDir
-}
-
-task androidSourcesJar(type: Jar) {
-    classifier "sources"
-    from android.sourceSets.main.java.srcDirs
-    from android.sourceSets.main.kotlin.srcDirs
-}
-
-tasks.withType(Javadoc) {
-    options.addStringOption('encoding', 'UTF-8')
-    options.addStringOption('docencoding', 'UTF-8')
-    options.addStringOption('charset', 'UTF-8')
-}
-
-afterEvaluate { project ->
-    android.libraryVariants.all { variant ->
-        tasks.androidJavadocs.doFirst {
-            classpath += files(variant.javaCompile.classpath.files)
-        }
-    }
 }
