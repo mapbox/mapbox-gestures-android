@@ -9,11 +9,12 @@ apply(from = "${rootDir}/gradle/checkstyle.gradle")
 android {
     compileSdk = libs.versions.compileSdk.get().toInt()
     namespace = "com.mapbox.android.gestures"
+    lint {
+        targetSdk = libs.versions.targetSdkVersion.get().toInt()
+    }
 
     defaultConfig {
         minSdk =  libs.versions.minSdk.get().toInt()
-        //noinspection ExpiredTargetSdkVersion
-        targetSdk = libs.versions.targetSdkVersion.get().toInt()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -30,6 +31,7 @@ android {
     }
 
     testOptions {
+        targetSdk = libs.versions.targetSdkVersion.get().toInt()
         unitTests {
             isIncludeAndroidResources = true
         }
