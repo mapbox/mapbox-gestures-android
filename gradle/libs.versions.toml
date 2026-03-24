@@ -17,7 +17,7 @@ robolectric = "4.14"
 espresso = "3.4.0"
 
 mapboxMaps = "10.16.2"
-sdkRegistry = "1.4.3"
+sdkRegistry = "1.5.6"
 
 [libraries]
 mapbox-maps = { group = "com.mapbox.maps", name = "android", version.ref = "mapboxMaps" }
