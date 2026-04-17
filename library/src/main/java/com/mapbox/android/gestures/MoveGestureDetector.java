@@ -44,6 +44,8 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
   @Nullable
   private RectF moveThresholdRect;
   private float moveThreshold;
+  @Nullable
+  private Float multiFingerMoveThreshold;
 
   private final Map<Integer, MoveDistancesObject> moveDistancesObjectMap = new HashMap<>();
 
@@ -118,6 +120,9 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
           motionEvent.getPointerId(motionEvent.getActionIndex()),
           new MoveDistancesObject(x, y)
         );
+        // Reset accumulated distances for existing pointers so the new finger
+        // configuration doesn't immediately exceed the threshold.
+        resetMoveDistancesExcept(motionEvent.getPointerId(motionEvent.getActionIndex()), motionEvent);
         break;
 
       case MotionEvent.ACTION_UP:
@@ -128,6 +133,9 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
         resetFocal = true; //recalculating focal point
 
         moveDistancesObjectMap.remove(motionEvent.getPointerId(motionEvent.getActionIndex()));
+        // Reset accumulated distances for remaining pointers so lifting a finger
+        // doesn't immediately exceed the single-finger threshold.
+        resetMoveDistancesExcept(-1, motionEvent);
         break;
 
       case MotionEvent.ACTION_CANCEL:
@@ -167,6 +175,26 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
     return false;
   }
 
+  /**
+   * Resets the "since start" accumulated distances for all pointers currently in the map,
+   * except the one with {@code excludedPointerId} (pass -1 to reset all).
+   * This prevents previously accumulated distances from triggering a false threshold
+   * crossing after the pointer configuration changes (finger added or removed).
+   */
+  private void resetMoveDistancesExcept(int excludedPointerId, MotionEvent motionEvent) {
+    for (int i = 0; i < motionEvent.getPointerCount(); i++) {
+      int pointerId = motionEvent.getPointerId(i);
+      if (pointerId == excludedPointerId) {
+        continue;
+      }
+      if (moveDistancesObjectMap.containsKey(pointerId)) {
+        float cx = motionEvent.getX(i);
+        float cy = motionEvent.getY(i);
+        moveDistancesObjectMap.put(pointerId, new MoveDistancesObject(cx, cy));
+      }
+    }
+  }
+
   private void updateMoveDistancesObjects() {
     for (int pointerId : pointerIdList) {
       moveDistancesObjectMap.get(pointerId).addNewPosition(
@@ -177,14 +205,23 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
   }
 
   boolean checkAnyMoveAboveThreshold() {
+    float threshold = getCurrentMoveThreshold();
+    boolean isInRect = moveThresholdRect != null && moveThresholdRect.contains(getFocalPoint().x, getFocalPoint().y);
     for (MoveDistancesObject moveDistancesObject : moveDistancesObjectMap.values()) {
-      boolean thresholdExceeded = Math.abs(moveDistancesObject.getDistanceXSinceStart()) >= moveThreshold
-        || Math.abs(moveDistancesObject.getDistanceYSinceStart()) >= moveThreshold;
-
-      boolean isInRect = moveThresholdRect != null && moveThresholdRect.contains(getFocalPoint().x, getFocalPoint().y);
-      return !isInRect && thresholdExceeded;
+      boolean thresholdExceeded = Math.abs(moveDistancesObject.getDistanceXSinceStart()) >= threshold
+        || Math.abs(moveDistancesObject.getDistanceYSinceStart()) >= threshold;
+      if (!isInRect && thresholdExceeded) {
+        return true;
+      }
     }
     return false;
+  }
+
+  private float getCurrentMoveThreshold() {
+    if (getPointersCount() > 1 && multiFingerMoveThreshold != null) {
+      return multiFingerMoveThreshold;
+    }
+    return moveThreshold;
   }
 
   @Override
@@ -260,6 +297,34 @@ public class MoveGestureDetector extends ProgressiveGesture<MoveGestureDetector.
    */
   public void setMoveThresholdResource(@DimenRes int moveThresholdDimen) {
     setMoveThreshold(context.getResources().getDimension(moveThresholdDimen));
+  }
+
+  /**
+   * Get the delta pixel threshold required to qualify it as a multi-finger move gesture.
+   * If not explicitly set, this value falls back to {@link #getMoveThreshold()}.
+   *
+   * @return multi-finger delta pixel threshold
+   */
+  public float getMultiFingerMoveThreshold() {
+    return multiFingerMoveThreshold != null ? multiFingerMoveThreshold : moveThreshold;
+  }
+
+  /**
+   * Set the delta pixel threshold required to qualify it as a multi-finger move gesture.
+   *
+   * @param multiFingerMoveThreshold delta threshold
+   */
+  public void setMultiFingerMoveThreshold(float multiFingerMoveThreshold) {
+    this.multiFingerMoveThreshold = multiFingerMoveThreshold;
+  }
+
+  /**
+   * Set the delta dp threshold required to qualify it as a multi-finger move gesture.
+   *
+   * @param multiFingerMoveThresholdDimen delta threshold
+   */
+  public void setMultiFingerMoveThresholdResource(@DimenRes int multiFingerMoveThresholdDimen) {
+    setMultiFingerMoveThreshold(context.getResources().getDimension(multiFingerMoveThresholdDimen));
   }
 
   /**

@@ -2,6 +2,9 @@
 
 ## Main
 
+## 0.10.0 - April 16, 2026
+* Add `multiFingerMoveThreshold` to `MoveGestureDetector`
+
 ## 0.9.2 - October 09, 2025
 * Fix concurrent modification exception for detectors
 
